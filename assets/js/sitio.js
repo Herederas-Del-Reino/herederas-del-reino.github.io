@@ -250,14 +250,7 @@
     return { x: 7 + Math.random() * 86, prof: Math.random() };
   }
 
-  async function cargarJardin(primera) {
-    let lista;
-    try { lista = await HR_PETICIONES.cargarPeticiones({ max: 30 }); }
-    catch (err) {
-      console.error('Jardín de oración:', err);
-      if (primera) contadorJ.textContent = 'No pudimos cargar el jardín en este momento. Seguimos orando.';
-      return;
-    }
+  function cargarJardin(lista, primera) {
     const claves = new Set(lista.map(p => p.clave));
     flores.forEach((f, k) => { if (!claves.has(k)) { f.el.remove(); flores.delete(k); } });
     const ocupadas = [...flores.values()].map(f => f.pos);
@@ -302,14 +295,36 @@
   const ajustarEscala = () => escena.style.setProperty('--k', Math.max(.62, Math.min(1, escena.clientWidth / 820)).toFixed(2));
   ajustarEscala(); addEventListener('resize', ajustarEscala, { passive: true });
 
-  // Carga diferida: solo cuando el jardín se acerca a la pantalla
-  let jardinIniciado = false;
-  new IntersectionObserver(([en], obs) => {
-    if (en.isIntersecting && !jardinIniciado) {
-      jardinIniciado = true; obs.disconnect();
-      cargarJardin(true); setInterval(() => cargarJardin(false), 120e3);
+  /* ---------- Franja "Estamos orando por…" del inicio y contador del menú ---------- */
+  function pintarOrando(lista) {
+    const n = lista.length;
+    $('#orando-texto').innerHTML = n
+      ? `Estamos orando por <strong>${n}</strong> ${n === 1 ? 'corazón' : 'corazones'}`
+      : 'Sé la primera en dejar tu petición';
+    const nombres = lista.slice(0, 12).map(p => `<span>👑 ${esc(p.nombre)}</span>`).join('');
+    $('#orando-nombres').innerHTML = n ? `<span class="orando__cinta">${nombres}${nombres}</span>` : '';
+    $$('[data-total-peticiones]').forEach(el => { el.textContent = n; el.hidden = !n; });
+  }
+
+  /* ---------- Carga de peticiones con reintento automático ---------- */
+  let primeraCarga = true, fallos = 0;
+  async function cicloPeticiones() {
+    let lista = null;
+    try { lista = await HR_PETICIONES.cargarPeticiones({ max: 30 }); }
+    catch (err) { console.warn('Peticiones: reintentando…', err); }
+    if (lista) {
+      fallos = 0;
+      pintarOrando(lista);
+      cargarJardin(lista, primeraCarga);
+      primeraCarga = false;
+      setTimeout(cicloPeticiones, 120e3);                         // actualización silenciosa cada 2 min
+    } else {
+      fallos++;
+      if (primeraCarga) contadorJ.textContent = 'Conectando con el jardín…';
+      setTimeout(cicloPeticiones, Math.min(60e3, 4e3 * fallos));  // 4 s, 8 s, 12 s… hasta 1 min
     }
-  }, { rootMargin: '300px' }).observe(escena);
+  }
+  cicloPeticiones();
 
   /* =====================================================================
      PALABRA Y PROMESAS (Reina-Valera 1960)

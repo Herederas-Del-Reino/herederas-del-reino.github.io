@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
 <link rel="preload" as="image" href="assets/img/fondo-flores-1600.webp" media="(min-width: 701px)">
 <link rel="preload" as="image" href="assets/img/fondo-flores-900.webp" media="(max-width: 700px)">
-<link rel="stylesheet" href="assets/css/sitio.css?v=5">
+<link rel="stylesheet" href="assets/css/sitio.css?v=7">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -70,15 +70,16 @@
     </a>
     <nav aria-label="Principal">
       <ul class="nav__enlaces" id="nav-enlaces">
+        <li><a href="#jardin">Jardín de oración</a></li>
         <li><a href="#quienes-somos">Quiénes somos</a></li>
         <li><a href="#encuentros">Encuentros</a></li>
-        <li><a href="#jardin">Jardín de oración</a></li>
         <li><a href="#palabra">Palabra</a></li>
         <li><a href="#recursos">Recursos</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li><a class="boton" href="#conectate">Conéctate</a></li>
+        <li><a href="#conectate">Conéctate</a></li>
+        <li><a class="boton boton--muro" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Muro de oración<span class="nav__contador" data-total-peticiones hidden></span></a></li>
       </ul>
     </nav>
+    <a class="boton boton--muro nav__muro-movil" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Muro<span class="nav__contador" data-total-peticiones hidden></span></a>
     <button class="nav__menu" id="nav-menu" type="button" aria-expanded="false" aria-controls="nav-enlaces" aria-label="Abrir menú">
       <svg aria-hidden="true"><use href="#i-menu"/></svg>
     </button>
@@ -97,11 +98,48 @@
     <h1 id="titulo-inicio" class="revelar" data-retraso="1">este espacio es para ti</h1>
     <p class="hero__texto revelar" data-retraso="2">Un lugar para acercarnos más a Dios, fortalecer nuestra fe y caminar juntas.</p>
     <div class="acciones revelar" data-retraso="3">
-      <a class="boton" href="#encuentros"><svg aria-hidden="true"><use href="#i-calendario"/></svg>Nuestros encuentros</a>
-      <a class="boton boton--claro" href="#jardin"><svg aria-hidden="true"><use href="#i-corazon"/></svg>Deja tu petición</a>
+      <a class="boton boton--muro boton--grande" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Entrar al muro de oración</a>
+      <a class="boton boton--claro" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-corazon"/></svg>Deja tu petición</a>
+    </div>
+    <a class="orando revelar" data-retraso="3" href="#jardin" aria-live="polite">
+      <span class="orando__pulso" aria-hidden="true"></span>
+      <span class="orando__texto" id="orando-texto">Uniendo nuestras oraciones…</span>
+      <span class="orando__nombres" id="orando-nombres" aria-hidden="true"></span>
+    </a>
+  </div>
+  <a class="hero__bajar" href="#jardin" aria-label="Bajar al jardín de oración"></a>
+</section>
+
+<!-- ================= JARDÍN DE ORACIÓN ================= -->
+<section class="seccion jardin" id="jardin" aria-labelledby="titulo-jardin">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Jardín de oración</span>
+      <h2 id="titulo-jardin" class="revelar" data-retraso="1">Oramos juntas, <em>porque ninguna camina sola</em></h2>
+      <p class="revelar" data-retraso="2">Cada flor es una petición que alguien confió a Dios. Toca una flor para sostenerla en oración.</p>
+    </header>
+
+    <div class="jardin__escena revelar" id="jardin-escena">
+      <div class="jardin__suelo" aria-hidden="true"></div>
+      <div class="mariposas" data-mariposas="2" aria-hidden="true"></div>
+      <div class="jardin__flores" id="jardin-flores" role="list" aria-label="Peticiones de oración recientes"></div>
+      <div class="jardin__tarjeta vidrio" aria-live="polite">
+        <span class="antetitulo" id="jardin-subtitulo">El poder de la oración unida</span>
+        <p class="jardin__verso" id="jardin-verso">“Pedid, y se os dará; buscad, y hallaréis; llamad, y se os abrirá.”<cite>Mateo 7:7</cite></p>
+        <p class="jardin__contador" id="jardin-contador">Cargando el jardín…</p>
+      </div>
+    </div>
+
+    <div class="privacidad vidrio revelar">
+      <svg aria-hidden="true"><use href="#i-candado"/></svg>
+      <p><strong>Tu petición está protegida.</strong> Nunca publicamos lo que escribes. Solo mostramos un nombre corto de quien no pidió confidencialidad; si elegiste <em>“Solo el equipo de oración (confidencial)”</em> o dejaste el nombre en blanco, apareces como “Una hija del Rey”.</p>
+    </div>
+
+    <div class="acciones revelar">
+      <a class="boton" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-formulario"/></svg>Dejar mi petición</a>
+      <a class="boton boton--muro" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Ver el muro de oración en pantalla completa</a>
     </div>
   </div>
-  <a class="hero__bajar" href="#quienes-somos" aria-label="Bajar a Quiénes somos"></a>
 </section>
 
 <!-- ================= QUIÉNES SOMOS ================= -->
@@ -160,38 +198,6 @@
     <div class="encuentros__pie revelar">
       <a class="boton" data-enlace="zoom" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-zoom"/></svg>Entrar por Zoom</a>
       <small>💗 ¡Estás invitada! No te lo pierdas. · ID de reunión: <strong data-texto="zoom-id"></strong></small>
-    </div>
-  </div>
-</section>
-
-<!-- ================= JARDÍN DE ORACIÓN ================= -->
-<section class="seccion jardin" id="jardin" aria-labelledby="titulo-jardin">
-  <div class="contenedor">
-    <header class="cabecera">
-      <span class="antetitulo revelar">Jardín de oración</span>
-      <h2 id="titulo-jardin" class="revelar" data-retraso="1">Oramos juntas, <em>porque ninguna camina sola</em></h2>
-      <p class="revelar" data-retraso="2">Cada flor es una petición que alguien confió a Dios. Toca una flor para sostenerla en oración.</p>
-    </header>
-
-    <div class="jardin__escena revelar" id="jardin-escena">
-      <div class="jardin__suelo" aria-hidden="true"></div>
-      <div class="mariposas" data-mariposas="2" aria-hidden="true"></div>
-      <div class="jardin__flores" id="jardin-flores" role="list" aria-label="Peticiones de oración recientes"></div>
-      <div class="jardin__tarjeta vidrio" aria-live="polite">
-        <span class="antetitulo" id="jardin-subtitulo">El poder de la oración unida</span>
-        <p class="jardin__verso" id="jardin-verso">“Pedid, y se os dará; buscad, y hallaréis; llamad, y se os abrirá.”<cite>Mateo 7:7</cite></p>
-        <p class="jardin__contador" id="jardin-contador">Cargando el jardín…</p>
-      </div>
-    </div>
-
-    <div class="privacidad vidrio revelar">
-      <svg aria-hidden="true"><use href="#i-candado"/></svg>
-      <p><strong>Tu petición está protegida.</strong> Nunca publicamos lo que escribes. Solo mostramos un nombre corto de quien no pidió confidencialidad; si elegiste <em>“Solo el equipo de oración (confidencial)”</em> o dejaste el nombre en blanco, apareces como “Una hija del Rey”.</p>
-    </div>
-
-    <div class="acciones revelar">
-      <a class="boton" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-formulario"/></svg>Dejar mi petición</a>
-      <a class="boton boton--claro" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Muro de oración en pantalla completa</a>
     </div>
   </div>
 </section>
@@ -366,8 +372,8 @@
   </div>
 </footer>
 
-<script src="assets/js/config.js?v=5"></script>
-<script src="assets/js/peticiones.js?v=5"></script>
-<script src="assets/js/sitio.js?v=5" defer></script>
+<script src="assets/js/config.js?v=7"></script>
+<script src="assets/js/peticiones.js?v=7"></script>
+<script src="assets/js/sitio.js?v=7" defer></script>
 </body>
 </html>
