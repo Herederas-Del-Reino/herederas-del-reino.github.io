@@ -2,793 +2,372 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Peticiones de Oración · Herederas del Reino</title>
-<meta name="description" content="Intenciones unidas en fe el día de hoy. Muro de oración de Herederas del Reino.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herederas del Reino · Comunidad de mujeres a los pies de Jesús</title>
+<meta name="description" content="Herederas del Reino: una comunidad de mujeres que aman a Jesús. Devocional de madrugada, Entre Amigas, Salmos, jardín de oración y promesas de la Palabra. Con la Pastora Jennyfer de Amarales.">
+<meta name="theme-color" content="#FFF6EF">
+<link rel="canonical" href="https://herederas-del-reino.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<meta property="og:title" content="Herederas del Reino · Hija del Rey, este espacio es para ti">
+<meta property="og:description" content="Un lugar para acercarnos más a Dios, fortalecer nuestra fe y caminar juntas.">
+<meta property="og:url" content="https://herederas-del-reino.github.io/">
+<meta property="og:image" content="https://herederas-del-reino.github.io/assets/img/og-herederas.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/img/favicon.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --rosa: #CBA6AE;
-    --rosa-claro: #EBD3D8;
-    --rosa-brillo: rgba(203, 166, 174, 0.55);
-    --vino: #3A2327;
-    --noche: #1A0F11;
-    --texto: #F4E6E9;
-    --texto-suave: rgba(244, 230, 233, 0.68);
-    --serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-    --sans: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body { height: 100%; }
-
-  body {
-    min-height: 100vh;
-    overflow: hidden;
-    color: var(--texto);
-    font-family: var(--sans);
-    background: radial-gradient(ellipse at 50% 45%, var(--vino) 0%, #2A181B 45%, var(--noche) 100%);
-    background-color: var(--noche);
-    -webkit-font-smoothing: antialiased;
-  }
-
-  /* ---------- Polvo de luz de fondo ---------- */
-  .polvo { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
-  .polvo i {
-    position: absolute;
-    width: 3px; height: 3px;
-    border-radius: 50%;
-    background: var(--rosa-claro);
-    box-shadow: 0 0 8px 2px var(--rosa-brillo);
-    opacity: 0;
-    animation: chispa var(--d, 9s) ease-in-out infinite;
-    animation-delay: var(--r, 0s);
-  }
-  @keyframes chispa {
-    0%   { opacity: 0;   transform: translateY(0) scale(.6); }
-    40%  { opacity: .7; }
-    100% { opacity: 0;   transform: translateY(-60px) scale(1); }
-  }
-
-  /* Halo central */
-  body::before {
-    content: "";
-    position: fixed;
-    left: 50%; top: 48%;
-    width: 70vmin; height: 70vmin;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(203,166,174,.13) 0%, transparent 65%);
-    pointer-events: none;
-    animation: respirar 9s ease-in-out infinite;
-  }
-  @keyframes respirar {
-    0%, 100% { opacity: .7; transform: translate(-50%, -50%) scale(1); }
-    50%      { opacity: 1;  transform: translate(-50%, -50%) scale(1.08); }
-  }
-
-  /* ---------- Logo HR ---------- */
-  .logo {
-    position: fixed;
-    top: 22px; left: 26px;
-    z-index: 5;
-    display: flex; flex-direction: column; align-items: center;
-    color: var(--rosa);
-    text-decoration: none;
-  }
-  .logo svg { width: 34px; height: 20px; fill: var(--rosa); filter: drop-shadow(0 0 6px var(--rosa-brillo)); }
-  .logo span {
-    font-family: var(--serif);
-    font-size: 1.55rem;
-    font-weight: 500;
-    letter-spacing: .14em;
-    line-height: 1;
-    margin-top: 2px;
-  }
-
-  /* Botón de sonido (discreto) */
-  .sonido {
-    position: fixed;
-    top: 26px; right: 26px;
-    z-index: 5;
-    width: 38px; height: 38px;
-    border-radius: 50%;
-    border: 1px solid rgba(203,166,174,.35);
-    background: rgba(58,35,39,.35);
-    color: var(--rosa);
-    cursor: pointer;
-    display: grid; place-items: center;
-    opacity: 0; pointer-events: none;
-    transition: opacity .8s ease, border-color .3s;
-  }
-  .sonido.visible { opacity: .75; pointer-events: auto; }
-  .sonido:hover, .sonido:focus-visible { opacity: 1; border-color: var(--rosa); outline: none; }
-  .sonido svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; }
-  .sonido .off { display: none; }
-  .sonido.silencio .on { display: none; }
-  .sonido.silencio .off { display: block; }
-
-  /* ---------- Encabezado ---------- */
-  header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 4;
-    text-align: center;
-    padding: 30px 90px 0;
-    pointer-events: none;
-  }
-  header h1 {
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: clamp(1.5rem, 3.4vw, 2.6rem);
-    letter-spacing: .28em;
-    color: var(--rosa-claro);
-    text-shadow: 0 0 24px rgba(203,166,174,.35);
-  }
-  header p {
-    margin-top: 8px;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: clamp(1rem, 1.6vw, 1.2rem);
-    color: var(--texto-suave);
-    letter-spacing: .04em;
-  }
-  .filete {
-    width: 160px; height: 1px;
-    margin: 14px auto 0;
-    background: linear-gradient(90deg, transparent, var(--rosa), transparent);
-    position: relative;
-  }
-  .filete::after {
-    content: ""; position: absolute; left: 50%; top: 50%;
-    width: 6px; height: 6px;
-    background: var(--rosa);
-    transform: translate(-50%, -50%) rotate(45deg);
-  }
-
-  /* ---------- Lienzo de coronas ---------- */
-  #espacio-peticiones {
-    position: fixed;
-    inset: 0;
-    z-index: 2;
-  }
-
-  .corona-peticion {
-    position: absolute;
-    transform: translate(-50%, -50%);
-    display: flex; flex-direction: column; align-items: center;
-    gap: 6px;
-    background: none; border: 0;
-    color: inherit; font: inherit;
-    cursor: pointer;
-    padding: 8px 10px;
-    border-radius: 14px;
-    opacity: 0;
-    animation: aparecer 2.4s ease forwards;
-    animation-delay: var(--entrada, 0s);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .corona-peticion .flota {
-    display: flex; flex-direction: column; align-items: center; gap: 6px;
-    animation: flotar var(--duracion, 6s) ease-in-out infinite;
-    animation-delay: var(--retraso, 0s);
-  }
-  .corona-peticion svg {
-    width: 42px; height: 26px;
-    fill: var(--rosa);
-    filter: drop-shadow(0 0 6px var(--rosa-brillo)) drop-shadow(0 0 16px rgba(203,166,174,.25));
-    animation: brillar var(--duracion, 6s) ease-in-out infinite;
-    animation-delay: var(--retraso, 0s);
-    transition: transform .5s ease, filter .5s ease;
-  }
-  .corona-peticion span {
-    font-family: var(--serif);
-    font-size: 1.02rem;
-    font-style: italic;
-    letter-spacing: .05em;
-    color: var(--texto-suave);
-    white-space: nowrap;
-    transition: color .5s ease;
-  }
-  .corona-peticion:hover svg,
-  .corona-peticion:focus-visible svg,
-  .corona-peticion.activa svg {
-    transform: scale(1.25);
-    filter: drop-shadow(0 0 10px var(--rosa)) drop-shadow(0 0 26px rgba(235,211,216,.6));
-  }
-  .corona-peticion:hover span,
-  .corona-peticion:focus-visible span,
-  .corona-peticion.activa span { color: var(--rosa-claro); }
-  .corona-peticion:focus-visible { outline: 1px solid rgba(203,166,174,.5); outline-offset: 2px; }
-
-  @keyframes aparecer {
-    from { opacity: 0; filter: blur(6px); }
-    to   { opacity: 1; filter: blur(0); }
-  }
-  @keyframes flotar {
-    0%   { transform: translate(0, 0); }
-    25%  { transform: translate(6px, -10px); }
-    50%  { transform: translate(-3px, -16px); }
-    75%  { transform: translate(-7px, -6px); }
-    100% { transform: translate(0, 0); }
-  }
-  @keyframes brillar {
-    0%, 100% { opacity: .78; }
-    50%      { opacity: 1; }
-  }
-
-  /* ---------- Tarjeta central ---------- */
-  .tarjeta {
-    position: fixed;
-    left: 50%; top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 3;
-    width: min(440px, 86vw);
-    padding: 34px 36px 32px;
-    text-align: center;
-    border-radius: 26px;
-    background: linear-gradient(160deg, rgba(203,166,174,.14), rgba(58,35,39,.30));
-    border: 1px solid rgba(203,166,174,.28);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    box-shadow: 0 20px 60px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
-    pointer-events: none;
-  }
-  .tarjeta .icono { width: 30px; height: 18px; fill: var(--rosa); margin: 0 auto 14px; display: block; opacity: .9; }
-  #subtitulo-estado {
-    font-family: var(--sans);
-    font-size: .72rem;
-    font-weight: 500;
-    letter-spacing: .26em;
-    text-transform: uppercase;
-    color: var(--rosa);
-    min-height: 1.1em;
-  }
-  #texto-promesa-biblica {
-    margin-top: 16px;
-    font-family: var(--serif);
-    font-size: clamp(1.15rem, 2vw, 1.4rem);
-    line-height: 1.5;
-    color: var(--texto);
-  }
-  #texto-promesa-biblica cite {
-    display: block;
-    margin-top: 16px;
-    font-style: normal;
-    font-family: var(--sans);
-    font-size: .74rem;
-    letter-spacing: .22em;
-    text-transform: uppercase;
-    color: var(--rosa);
-  }
-  .contenido { transition: opacity .6s ease; }
-  .contenido.cambiando { opacity: 0; }
-  .contador {
-    margin-top: 18px;
-    font-size: .74rem;
-    letter-spacing: .12em;
-    color: var(--texto-suave);
-  }
-
-  /* ---------- Pie / llamado a la acción ---------- */
-  footer {
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 4;
-    padding: 0 16px 22px;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    pointer-events: none;
-  }
-  .invitacion {
-    pointer-events: auto;
-    max-width: 760px;
-    padding: 14px 28px;
-    border-radius: 999px;
-    background: rgba(26,15,17,.55);
-    border: 1px solid rgba(203,166,174,.3);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    text-align: center;
-    font-family: var(--serif);
-    font-size: clamp(1rem, 1.6vw, 1.15rem);
-    line-height: 1.45;
-    color: var(--texto);
-  }
-  .invitacion strong { color: var(--rosa-claro); font-weight: 600; }
-  .invitacion a {
-    color: var(--rosa);
-    text-decoration: none;
-    border-bottom: 1px solid rgba(203,166,174,.5);
-    white-space: nowrap;
-    transition: color .3s, border-color .3s;
-  }
-  .invitacion a:hover, .invitacion a:focus-visible { color: var(--rosa-claro); border-color: var(--rosa-claro); outline: none; }
-  .creditos {
-    pointer-events: auto;
-    font-size: .62rem;
-    letter-spacing: .06em;
-    color: rgba(244,230,233,.35);
-  }
-  .creditos a { color: inherit; }
-
-  /* ---------- Overlay de bienvenida ---------- */
-  #bienvenida {
-    position: fixed; inset: 0;
-    z-index: 10;
-    display: grid; place-items: center;
-    padding: 24px;
-    text-align: center;
-    background: radial-gradient(ellipse at center, rgba(58,35,39,.97), rgba(26,15,17,.995));
-    transition: opacity 1.6s ease, visibility 1.6s ease;
-  }
-  #bienvenida.oculto { opacity: 0; visibility: hidden; }
-  #bienvenida .corona-grande {
-    width: 72px; height: 44px; fill: var(--rosa);
-    filter: drop-shadow(0 0 14px var(--rosa-brillo));
-    animation: brillar 5s ease-in-out infinite;
-  }
-  #bienvenida h2 {
-    margin-top: 16px;
-    font-family: var(--serif);
-    font-weight: 500;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    letter-spacing: .22em;
-    color: var(--rosa-claro);
-  }
-  #bienvenida h2 small { display: block; font-size: .5em; letter-spacing: .4em; margin-top: 6px; color: var(--rosa); }
-  #bienvenida p {
-    max-width: 440px;
-    margin: 22px auto 34px;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 1.15rem;
-    line-height: 1.55;
-    color: var(--texto-suave);
-  }
-  .boton-unirme {
-    font-family: var(--sans);
-    font-size: .8rem;
-    font-weight: 500;
-    letter-spacing: .28em;
-    text-transform: uppercase;
-    color: var(--rosa-claro);
-    background: rgba(203,166,174,.08);
-    border: 1px solid var(--rosa);
-    border-radius: 999px;
-    padding: 16px 38px;
-    cursor: pointer;
-    box-shadow: 0 0 0 0 rgba(203,166,174,.35);
-    animation: latido 3.2s ease-out infinite;
-    transition: background .4s, color .4s;
-  }
-  .boton-unirme:hover, .boton-unirme:focus-visible {
-    background: var(--rosa);
-    color: var(--noche);
-    outline: none;
-  }
-  @keyframes latido {
-    0%   { box-shadow: 0 0 0 0 rgba(203,166,174,.35); }
-    70%  { box-shadow: 0 0 0 18px rgba(203,166,174,0); }
-    100% { box-shadow: 0 0 0 0 rgba(203,166,174,0); }
-  }
-
-  /* ---------- Responsive ---------- */
-  @media (max-width: 640px) {
-    header { padding: 74px 16px 0; }
-    header h1 { letter-spacing: .16em; }
-    .logo { top: 16px; left: 16px; }
-    .sonido { top: 18px; right: 16px; }
-    .tarjeta { padding: 20px 20px 18px; width: min(320px, 84vw); top: 52%; }
-    .tarjeta .icono { margin-bottom: 8px; }
-    #subtitulo-estado { font-size: .64rem; letter-spacing: .18em; }
-    #texto-promesa-biblica { margin-top: 10px; font-size: 1.08rem; line-height: 1.4; }
-    #texto-promesa-biblica cite { margin-top: 10px; }
-    .contador { margin-top: 10px; }
-    .invitacion { padding: 12px 18px; border-radius: 20px; }
-    .corona-peticion svg { width: 34px; height: 21px; }
-    .corona-peticion span { font-size: .92rem; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
-    .corona-peticion { opacity: 1; }
-  }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
+<link rel="preload" as="image" href="assets/img/fondo-flores-1600.webp" media="(min-width: 701px)">
+<link rel="preload" as="image" href="assets/img/fondo-flores-900.webp" media="(max-width: 700px)">
+<link rel="stylesheet" href="assets/css/sitio.css?v=5">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Herederas del Reino",
+  "url": "https://herederas-del-reino.github.io/",
+  "logo": "https://herederas-del-reino.github.io/assets/img/apple-touch-icon.png",
+  "sameAs": ["https://www.instagram.com/herederasdelreino.oficial/"]
+}
+</script>
 </head>
 <body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
 
-  <!-- Corona reutilizable (emula el logotipo) -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="corona" viewBox="0 0 100 60">
-      <path d="M8 46 L18 14 L36 32 L50 6 L64 32 L82 14 L92 46 Z"/>
-      <circle cx="18" cy="12" r="4"/><circle cx="50" cy="5" r="4.5"/><circle cx="82" cy="12" r="4"/>
-      <rect x="10" y="50" width="80" height="5" rx="2.5"/>
-    </symbol>
-  </svg>
+<!-- Iconos (una sola definición, reutilizados en todo el sitio) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-corona" viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 26 7 8l10 9 7-13 7 13 10-9 3 18Z"/><path d="M6 30h36"/></symbol>
+    <symbol id="i-biblia" viewBox="0 0 48 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M24 8c-5-4-13-5-20-4v28c7-1 15 0 20 4 5-4 13-5 20-4V4c-7-1-15 0-20 4Z"/><path d="M24 8v28"/></symbol>
+    <symbol id="i-amigas" viewBox="0 0 48 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="16" cy="11" r="7"/><circle cx="33" cy="12" r="6"/><path d="M3 38c0-8 6-14 13-14s11 4 12 8"/><path d="M38 31c-1.5-2-5-2-5 1 0 2.5 5 5 5 5s5-2.5 5-5c0-3-3.5-3-5-1Z"/></symbol>
+    <symbol id="i-corazon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="#B3263E"/><path d="m10 9 5 3-5 3Z" fill="#fff"/></symbol>
+    <symbol id="i-zoom" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2.5" y="6" width="13" height="12" rx="3"/><path d="m15.5 10.5 6-3.5v10l-6-3.5"/></symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7Z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1.2-1.4-2-1-1 .8a4 4 0 0 1-2.1-2.1l.8-1-1-2Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-formulario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h3"/></symbol>
+    <symbol id="i-candado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="10" width="14" height="10" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-calendario" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7Z" fill="currentColor"/></symbol>
+    <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></symbol>
+    <symbol id="i-flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+    <symbol id="i-copiar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
+    <symbol id="b-col" viewBox="0 0 6 4"><path fill="#FCD116" d="M0 0h6v2H0z"/><path fill="#003893" d="M0 2h6v1H0z"/><path fill="#CE1126" d="M0 3h6v1H0z"/></symbol>
+    <symbol id="b-esp" viewBox="0 0 6 4"><path fill="#AA151B" d="M0 0h6v4H0z"/><path fill="#F1BF00" d="M0 1h6v2H0z"/></symbol>
+    <symbol id="b-arg" viewBox="0 0 6 4"><path fill="#74ACDF" d="M0 0h6v4H0z"/><path fill="#fff" d="M0 1.33h6v1.34H0z"/><circle cx="3" cy="2" r=".38" fill="#F6B40E"/></symbol>
+  </defs>
+</svg>
 
-  <div class="polvo" id="polvo" aria-hidden="true"></div>
+<!-- ================= NAVEGACIÓN ================= -->
+<header class="nav" id="nav">
+  <div class="contenedor nav__barra">
+    <a class="marca" href="#inicio" aria-label="Herederas del Reino, ir al inicio">
+      <img src="assets/img/hr-insignia.webp" alt="" width="42" height="38">
+      <span>Herederas<small>del Reino</small></span>
+    </a>
+    <nav aria-label="Principal">
+      <ul class="nav__enlaces" id="nav-enlaces">
+        <li><a href="#quienes-somos">Quiénes somos</a></li>
+        <li><a href="#encuentros">Encuentros</a></li>
+        <li><a href="#jardin">Jardín de oración</a></li>
+        <li><a href="#palabra">Palabra</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><a class="boton" href="#conectate">Conéctate</a></li>
+      </ul>
+    </nav>
+    <button class="nav__menu" id="nav-menu" type="button" aria-expanded="false" aria-controls="nav-enlaces" aria-label="Abrir menú">
+      <svg aria-hidden="true"><use href="#i-menu"/></svg>
+    </button>
+  </div>
+</header>
 
-  <a class="logo" href="#" aria-label="Herederas del Reino">
-    <svg><use href="#corona"/></svg>
-    <span>HR</span>
-  </a>
+<main id="contenido">
 
-  <button class="sonido" id="boton-sonido" type="button" aria-label="Silenciar música">
-    <svg class="on" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>
-    <svg class="off" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>
-  </button>
-
-  <header>
-    <h1>PETICIONES DE ORACIÓN</h1>
-    <p>Intenciones unidas en fe el día de hoy</p>
-    <div class="filete"></div>
-  </header>
-
-  <main id="espacio-peticiones" aria-label="Coronas de las personas por quienes oramos hoy"></main>
-
-  <section class="tarjeta" aria-live="polite">
-    <svg class="icono" aria-hidden="true"><use href="#corona"/></svg>
-    <div class="contenido" id="contenido-tarjeta">
-      <p id="subtitulo-estado">El poder de la oración unida</p>
-      <div id="texto-promesa-biblica">
-        Cada corona es una hija del Rey que hoy confió su corazón a Dios.
-        Cuando oramos juntas, el cielo se mueve.
-        <cite>Acércate a una corona y sostén su petición</cite>
-      </div>
-      <p class="contador" id="contador"></p>
-    </div>
-  </section>
-
-  <footer>
-    <div class="invitacion">
-      <strong>Déjanos tu petición.</strong>
-      Recuerda llenar el <a id="enlace-formulario" href="#" target="_blank" rel="noopener">formulario de oración</a>
-      para que podamos estar orando por ti
-    </div>
-    <div class="creditos">
-      Música: “Healing” — Kevin MacLeod (<a href="https://incompetech.com" target="_blank" rel="noopener">incompetech.com</a>) · Licencia CC BY 4.0
-    </div>
-  </footer>
-
-  <div id="bienvenida">
-    <div>
-      <svg class="corona-grande" aria-hidden="true"><use href="#corona"/></svg>
-      <h2>HEREDERAS<small>DEL REINO</small></h2>
-      <p>“Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.”<br>— Mateo 18:20</p>
-      <button class="boton-unirme" id="boton-unirme" type="button">Unirme en oración</button>
+<!-- ================= INICIO ================= -->
+<section class="hero" id="inicio" aria-labelledby="titulo-inicio">
+  <div class="hero__fondo" data-paralaje="0.28" role="img" aria-label="Escritorio con flores rosadas, una taza con el logo HR y una Biblia, bajo el logotipo de Herederas del Reino"></div>
+  <div class="hero__luz" aria-hidden="true"></div>
+  <div class="mariposas" data-mariposas="4" aria-hidden="true"></div>
+  <div class="hero__contenido">
+    <p class="hero__script revelar">Hija del Rey,</p>
+    <h1 id="titulo-inicio" class="revelar" data-retraso="1">este espacio es para ti</h1>
+    <p class="hero__texto revelar" data-retraso="2">Un lugar para acercarnos más a Dios, fortalecer nuestra fe y caminar juntas.</p>
+    <div class="acciones revelar" data-retraso="3">
+      <a class="boton" href="#encuentros"><svg aria-hidden="true"><use href="#i-calendario"/></svg>Nuestros encuentros</a>
+      <a class="boton boton--claro" href="#jardin"><svg aria-hidden="true"><use href="#i-corazon"/></svg>Deja tu petición</a>
     </div>
   </div>
+  <a class="hero__bajar" href="#quienes-somos" aria-label="Bajar a Quiénes somos"></a>
+</section>
 
-  <!-- Música instrumental suave, libre de derechos (CC BY 4.0, requiere el crédito del pie de página) -->
-  <audio id="musica-ambiente" loop preload="none"
-         src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Healing.mp3"></audio>
+<!-- ================= QUIÉNES SOMOS ================= -->
+<section class="seccion somos" id="quienes-somos" aria-labelledby="titulo-somos">
+  <div class="contenedor">
+    <div class="somos__grid">
+      <div class="somos__foto revelar">
+        <img class="somos__retrato" src="assets/img/mujeres-proposito.webp" alt="Mujeres de distintas edades sonriendo con el rostro hacia la luz" width="899" height="700" loading="lazy" decoding="async">
+        <img class="somos__mariposa" src="assets/img/mariposa-2.webp" alt="" width="120" height="116" loading="lazy" aria-hidden="true">
+      </div>
+      <div class="somos__texto">
+        <span class="antetitulo revelar">Quiénes somos</span>
+        <h2 id="titulo-somos" class="revelar" data-retraso="1">Una comunidad de mujeres que aman a Jesús</h2>
+        <p class="revelar" data-retraso="1">Un mismo propósito: acercarnos más a Dios, fortalecer nuestra fe y caminar juntas.</p>
+        <div class="pilares">
+          <article class="pilar vidrio revelar inclinar" data-retraso="2">
+            <span class="pilar__etiqueta"><svg aria-hidden="true"><use href="#i-corona"/></svg>Visión</span>
+            <h3>Mujeres transformadas, generaciones impactadas.</h3>
+            <p>Levantar una generación de mujeres firmes en Cristo, conscientes de su identidad como hijas y herederas del Reino de Dios; mujeres sanas, restauradas y fortalecidas en la Palabra, que florezcan en su propósito, reflejen el carácter de Jesús y dejen un legado de fe que transforme sus hogares, familias y generaciones.</p>
+          </article>
+          <article class="pilar vidrio revelar inclinar" data-retraso="3">
+            <span class="pilar__etiqueta"><svg aria-hidden="true"><use href="#i-corazon"/></svg>Misión</span>
+            <h3>Guiar, edificar y acompañar mujeres a los pies de Jesús.</h3>
+            <p>Crear una comunidad de mujeres que aman a Jesús, donde a través de la Palabra de Dios, los devocionales, la oración, la enseñanza bíblica y el acompañamiento espiritual, cada mujer pueda crecer en su relación con Dios, fortalecer su fe, renovar su mente, sanar su corazón y descubrir el propósito para el cual fue llamada.</p>
+          </article>
+        </div>
+      </div>
+    </div>
 
-<script>
-  /* =====================================================================
-     CONFIGURACIÓN — solo necesitas tocar esta sección
-     ===================================================================== */
+    <article class="pastora revelar" aria-labelledby="titulo-pastora">
+      <div class="pastora__foto"><img src="assets/img/pastora-foto.webp" alt="Pastora Jennyfer de Amarales" width="220" height="220" loading="lazy"></div>
+      <div class="pastora__texto">
+        <span class="antetitulo">Con la pastora</span>
+        <h3 id="titulo-pastora">Jennyfer de Amarales</h3>
+        <p class="pastora__lema">Llamada para transformar</p>
+        <p>Acompaña a la comunidad en los devocionales, los encuentros Entre Amigas y los Salmos.</p>
+        <div class="acciones" style="justify-content:flex-start;margin-top:18px">
+          <a class="boton boton--claro" data-enlace="youtube" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-youtube"/></svg>Su canal de YouTube</a>
+        </div>
+      </div>
+      <img class="pastora__logo" src="assets/img/pastora-ja.webp" alt="Logotipo Pastora Jennyfer Amarales — Llamada para transformar" width="640" height="686" loading="lazy" decoding="async">
+    </article>
+  </div>
+</section>
 
-  // 1. Enlace CSV publicado de tu Google Sheet:
-  //    Hoja de respuestas → Archivo → Compartir → Publicar en la Web →
-  //    elige SOLO la pestaña "Muro" y formato "Valores separados por comas (.csv)".
-  //    IMPORTANTE: publica SOLO una pestaña con fecha y nombre (nunca la hoja completa,
-  //    porque este enlace queda visible para cualquiera).
-  //    Mientras esté vacío, el muro no muestra coronas (agrega ?demo a la dirección para ver ejemplos).
-  const URL_HOJA = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTTJYyIXGyDc7Qcjbj4Q9naSF3Yp-y1C02NDhqHwZnZYFYTs8ygxMsJksseB3vFQnLJyzAMVguyMyPi/pub?gid=915962882&single=true&output=csv";
+<!-- ================= ENCUENTROS ================= -->
+<section class="seccion encuentros" id="encuentros" aria-labelledby="titulo-encuentros">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Nuestros encuentros</span>
+      <h2 id="titulo-encuentros" class="revelar" data-retraso="1">Un mismo propósito, <em>juntas</em></h2>
+      <p class="revelar" data-retraso="2">Acercarnos más a Dios, fortalecer nuestra fe y caminar juntas. Los horarios se muestran también en tu hora local.</p>
+      <div class="filete"></div>
+    </header>
+    <div class="encuentros__lista" id="lista-encuentros"><!-- generado desde config.js --></div>
+    <div class="encuentros__pie revelar">
+      <a class="boton" data-enlace="zoom" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-zoom"/></svg>Entrar por Zoom</a>
+      <small>💗 ¡Estás invitada! No te lo pierdas. · ID de reunión: <strong data-texto="zoom-id"></strong></small>
+    </div>
+  </div>
+</section>
 
-  // 2. Enlace público del formulario de oración (el que se comparte con las princesas).
-  const URL_FORMULARIO = "https://docs.google.com/forms/d/1RDzBU8FyOKMrvH_dZsYgSBcgDusPadXHiQlIaFUqkN4/viewform";
+<!-- ================= JARDÍN DE ORACIÓN ================= -->
+<section class="seccion jardin" id="jardin" aria-labelledby="titulo-jardin">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Jardín de oración</span>
+      <h2 id="titulo-jardin" class="revelar" data-retraso="1">Oramos juntas, <em>porque ninguna camina sola</em></h2>
+      <p class="revelar" data-retraso="2">Cada flor es una petición que alguien confió a Dios. Toca una flor para sostenerla en oración.</p>
+    </header>
 
-  // 3. Columnas de la hoja (0 = primera columna).
-  //    Columna 0 = "Marca temporal", columna 1 = "Tu nombre, princesa".
-  //    Ajusta estos números si tu hoja tiene otro orden.
-  const COLUMNA_NOMBRE = 1;
-  const COLUMNA_FECHA  = 0;
+    <div class="jardin__escena revelar" id="jardin-escena">
+      <div class="jardin__suelo" aria-hidden="true"></div>
+      <div class="mariposas" data-mariposas="2" aria-hidden="true"></div>
+      <div class="jardin__flores" id="jardin-flores" role="list" aria-label="Peticiones de oración recientes"></div>
+      <div class="jardin__tarjeta vidrio" aria-live="polite">
+        <span class="antetitulo" id="jardin-subtitulo">El poder de la oración unida</span>
+        <p class="jardin__verso" id="jardin-verso">“Pedid, y se os dará; buscad, y hallaréis; llamad, y se os abrirá.”<cite>Mateo 7:7</cite></p>
+        <p class="jardin__contador" id="jardin-contador">Cargando el jardín…</p>
+      </div>
+    </div>
 
-  // 4. Opciones del muro
-  const SOLO_HOY            = false;  // true: solo peticiones de hoy · false: todas las más recientes (hasta MAX_CORONAS)
-  const MAX_CORONAS         = 30;     // límite para que la pantalla respire
-  const SOLO_PRIMER_NOMBRE  = true;   // "María Fernanda López" → "María F." (protege la privacidad)
-  const NOMBRE_ANONIMO      = "Una hija del Rey";  // cuando dejan el nombre en blanco
-  const VOLUMEN_MUSICA      = 0.3;
-  const REFRESCO_MS         = 120000; // 2 minutos
+    <div class="privacidad vidrio revelar">
+      <svg aria-hidden="true"><use href="#i-candado"/></svg>
+      <p><strong>Tu petición está protegida.</strong> Nunca publicamos lo que escribes. Solo mostramos un nombre corto de quien no pidió confidencialidad; si elegiste <em>“Solo el equipo de oración (confidencial)”</em> o dejaste el nombre en blanco, apareces como “Una hija del Rey”.</p>
+    </div>
 
-  /* ===================================================================== */
+    <div class="acciones revelar">
+      <a class="boton" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-formulario"/></svg>Dejar mi petición</a>
+      <a class="boton boton--claro" href="muro/"><svg aria-hidden="true"><use href="#i-corona"/></svg>Muro de oración en pantalla completa</a>
+    </div>
+  </div>
+</section>
 
-  const promesasOracion = [
-    { cita: "Jeremías 33:3",  texto: "“Clama a mí, y yo te responderé, y te enseñaré cosas grandes y ocultas que tú no conoces.”" },
-    { cita: "Mateo 21:22",    texto: "“Y todo lo que pidiereis en oración, creyendo, lo recibiréis.”" },
-    { cita: "Mateo 7:7-8",    texto: "“Pedid, y se os dará; buscad, y hallaréis; llamad, y se os abrirá. Porque cualquiera que pide, recibe.”" },
-    { cita: "Santiago 5:16",  texto: "“La oración eficaz del justo puede mucho.”" },
-    { cita: "Marcos 11:24",   texto: "“Por tanto, os digo que todo lo que pidiereis orando, creed que lo recibiréis, y os vendrá.”" }
-  ];
+<!-- ================= PALABRA Y PROMESAS ================= -->
+<section class="seccion palabra" id="palabra" aria-labelledby="titulo-palabra">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Palabra y promesas</span>
+      <h2 id="titulo-palabra" class="revelar" data-retraso="1">Promesas para <em>cada día</em></h2>
+      <div class="filete"></div>
+    </header>
 
-  const NOMBRES_DEMO = ["María F.", "Daniela", "Luisa", NOMBRE_ANONIMO, "Carolina", "Sofía", "Valentina R.",
-                        "Ana", "Gabriela", "Paola", "Lucía", "Camila", "Isabel", "Natalia"];
+    <figure class="promesa-dia revelar" aria-labelledby="promesa-etiqueta">
+      <figcaption class="promesa-dia__etiqueta" id="promesa-etiqueta">Promesa de hoy</figcaption>
+      <blockquote id="promesa-texto"></blockquote>
+      <cite id="promesa-cita"></cite>
+      <div class="acciones">
+        <button class="boton boton--claro" id="promesa-copiar" type="button"><svg aria-hidden="true"><use href="#i-copiar"/></svg>Copiar para compartir</button>
+      </div>
+    </figure>
 
-  const lienzo       = document.getElementById('espacio-peticiones');
-  const subtitulo    = document.getElementById('subtitulo-estado');
-  const textoPromesa = document.getElementById('texto-promesa-biblica');
-  const contenido    = document.getElementById('contenido-tarjeta');
-  const contador     = document.getElementById('contador');
-  const tarjeta      = document.querySelector('.tarjeta');
+    <div class="versos" id="versos"></div>
 
-  const MENSAJE_INICIAL = textoPromesa.innerHTML;
-  const SUBTITULO_INICIAL = subtitulo.textContent;
+    <div class="declaracion">
+      <img class="revelar" src="assets/img/afiches/declaracion-nueva-criatura.webp" alt="Afiche Declaración de mi Casa: Las cosas viejas pasaron en mí, ahora soy nueva criatura en Él. Recuérdalo diariamente." width="1080" height="1080" loading="lazy" decoding="async">
+      <div class="revelar" data-retraso="1">
+        <span class="antetitulo">Declaraciones diarias</span>
+        <h3>Declaración de mi Casa</h3>
+        <p>Cada día declaramos sobre nuestra vida lo que Dios ya dijo de nosotras. Recuérdalo diariamente.</p>
+        <blockquote>“Las cosas viejas pasaron en mí, ahora soy nueva criatura en Él.”</blockquote>
+        <p style="margin-top:12px;font-size:.9rem">Basada en 2 Corintios 5:17</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-  document.getElementById('enlace-formulario').href = URL_FORMULARIO;
+<!-- ================= CONÉCTATE ================= -->
+<section class="seccion conecta" id="conectate" aria-labelledby="titulo-conecta">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Conéctate</span>
+      <h2 id="titulo-conecta" class="revelar" data-retraso="1">¡Síguenos!</h2>
+      <p class="revelar" data-retraso="2">Devocionales · Entre amigas · Salmos · Declaraciones diarias</p>
+    </header>
+    <div class="canales" id="canales"><!-- generado desde config.js --></div>
+  </div>
+</section>
 
-  /* ---------- Polvo de luz decorativo ---------- */
-  (function crearPolvo() {
-    const polvo = document.getElementById('polvo');
-    for (let i = 0; i < 40; i++) {
-      const p = document.createElement('i');
-      p.style.left = Math.random() * 100 + '%';
-      p.style.top  = Math.random() * 100 + '%';
-      p.style.setProperty('--d', (7 + Math.random() * 8).toFixed(1) + 's');
-      p.style.setProperty('--r', (-Math.random() * 12).toFixed(1) + 's');
-      polvo.appendChild(p);
-    }
-  })();
+<!-- ================= TESTIMONIOS ================= -->
+<section class="seccion testimonios" id="testimonios" aria-labelledby="titulo-testimonios">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Testimonios</span>
+      <h2 id="titulo-testimonios" class="revelar" data-retraso="1">Historias de <em>restauración</em></h2>
+    </header>
+    <div id="testimonios-contenido"></div>
+  </div>
+</section>
 
-  /* ---------- Lectura del CSV (respeta comas y saltos de línea dentro de comillas) ---------- */
-  function parsearCSV(texto) {
-    const filas = [];
-    let fila = [], campo = '', enComillas = false;
-    for (let i = 0; i < texto.length; i++) {
-      const c = texto[i];
-      if (enComillas) {
-        if (c === '"') {
-          if (texto[i + 1] === '"') { campo += '"'; i++; }
-          else enComillas = false;
-        } else campo += c;
-      } else if (c === '"') enComillas = true;
-      else if (c === ',') { fila.push(campo); campo = ''; }
-      else if (c === '\n' || c === '\r') {
-        if (c === '\r' && texto[i + 1] === '\n') i++;
-        fila.push(campo); filas.push(fila); fila = []; campo = '';
-      } else campo += c;
-    }
-    if (campo !== '' || fila.length) { fila.push(campo); filas.push(fila); }
-    return filas;
-  }
+<!-- ================= RECURSOS ================= -->
+<section class="seccion recursos" id="recursos" aria-labelledby="titulo-recursos">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Recursos</span>
+      <h2 id="titulo-recursos" class="revelar" data-retraso="1">Para tu tiempo con Dios</h2>
+      <div class="filete"></div>
+    </header>
 
-  // Tu hoja escribe la fecha como día/mes/año: "5/11/2026 8:18:38".
-  // Si algún día cambia a mes/día/año (configuración regional de EE. UU.), pon false.
-  const FECHA_DIA_PRIMERO = true;
+    <div class="recursos__destacados">
+      <article class="cancion vidrio revelar">
+        <div class="cancion__portada"><img src="assets/img/hr-insignia.webp" alt="" width="204" height="184"></div>
+        <div>
+          <small>Canción</small>
+          <h3>Herederas del Reino</h3>
+          <div class="reproductor" id="reproductor">
+            <button type="button" aria-label="Reproducir la canción Herederas del Reino"><svg aria-hidden="true"><use href="#i-play"/></svg></button>
+            <input type="range" min="0" max="100" value="0" step="0.1" aria-label="Avance de la canción">
+            <time>0:00</time>
+          </div>
+          <audio preload="none" src="assets/audio/herederas-del-reino.mp3"></audio>
+        </div>
+      </article>
+      <figure class="proximamente revelar" data-retraso="1">
+        <img src="assets/img/perlas-de-sabiduria.webp" alt="Mi cuaderno de notas: Perlas de sabiduría" width="419" height="509" loading="lazy">
+        <span>Próximamente</span>
+      </figure>
+    </div>
 
-  // Acepta "5/11/2026 10:23:11" y "2026-11-05"
-  function esDeHoy(marca) {
-    if (!marca) return false;
-    const hoy = new Date();
-    const d = hoy.getDate(), m = hoy.getMonth() + 1, a = hoy.getFullYear();
-    let x = marca.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
-    if (x) return +x[1] === a && +x[2] === m && +x[3] === d;
-    x = marca.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/);
-    if (!x) return false;
-    const anio = x[3].length === 2 ? 2000 + +x[3] : +x[3];
-    const [dia, mes] = FECHA_DIA_PRIMERO ? [+x[1], +x[2]] : [+x[2], +x[1]];
-    return anio === a && dia === d && mes === m;
-  }
+    <div class="galeria" id="galeria">
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/encuentros.webp">
+        <img src="assets/img/afiches/encuentros-thumb.webp" alt="Afiche Nuestros Encuentros con horarios por país" width="480" height="525" loading="lazy"><figcaption>Nuestros encuentros</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/encuentros-historia.webp">
+        <img src="assets/img/afiches/encuentros-historia-thumb.webp" alt="Historia: Nuestros Encuentros con la Pastora Jennyfer de Amarales" width="360" height="640" loading="lazy"><figcaption>Un mismo propósito</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/invitacion.webp">
+        <img src="assets/img/afiches/invitacion-thumb.webp" alt="Afiche Hija del Rey, este espacio es para ti" width="480" height="600" loading="lazy"><figcaption>Invitación</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/vision-mision.webp">
+        <img src="assets/img/afiches/vision-mision-thumb.webp" alt="Afiche Visión y Misión de Herederas del Reino" width="480" height="480" loading="lazy"><figcaption>Visión y misión</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/tarea-identidad.webp">
+        <img src="assets/img/afiches/tarea-identidad-thumb.webp" alt="Tarea: Descubriendo mi identidad" width="480" height="480" loading="lazy"><figcaption>Tarea: Descubriendo mi identidad</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/declaracion-nueva-criatura.webp">
+        <img src="assets/img/afiches/declaracion-nueva-criatura-thumb.webp" alt="Declaración de mi Casa" width="480" height="480" loading="lazy"><figcaption>Declaración de mi Casa</figcaption>
+      </button>
+      <button class="afiche revelar" type="button" data-grande="assets/img/afiches/redes.webp">
+        <img src="assets/img/afiches/redes-thumb.webp" alt="Afiche Síguenos en Instagram y YouTube" width="480" height="600" loading="lazy"><figcaption>¡Síguenos!</figcaption>
+      </button>
+    </div>
+    <p class="recursos__youtube revelar"><a class="boton boton--claro" data-enlace="youtube" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-youtube"/></svg>Más prédicas y devocionales en YouTube</a></p>
+  </div>
+</section>
 
-  function nombreVisible(bruto) {
-    const limpio = (bruto || '').replace(/["“”]/g, '').replace(/\s+/g, ' ').trim();
-    if (!limpio) return NOMBRE_ANONIMO;
-    const capital = s => s.charAt(0).toLocaleUpperCase('es') + s.slice(1).toLocaleLowerCase('es');
-    const partes = limpio.split(' ').map(capital);
-    if (!SOLO_PRIMER_NOMBRE || partes.length === 1) return partes.join(' ').slice(0, 28);
-    return `${partes[0]} ${partes[1].charAt(0)}.`;
-  }
+<dialog class="visor" id="visor" aria-label="Afiche ampliado">
+  <img src="" alt="" id="visor-img">
+  <div class="visor__barra">
+    <a class="boton" id="visor-descargar" href="#" download>Descargar</a>
+    <button class="boton boton--claro" type="button" id="visor-cerrar">Cerrar</button>
+  </div>
+</dialog>
 
-  async function obtenerPeticiones() {
-    if (!URL_HOJA || URL_HOJA.includes('TU_ENLACE')) {
-      if (!new URLSearchParams(location.search).has('demo')) return [];
-      return NOMBRES_DEMO.map((n, i) => ({ clave: 'demo-' + i, nombre: n }));
-    }
-    const respuesta = await fetch(URL_HOJA + (URL_HOJA.includes('?') ? '&' : '?') + 't=' + Date.now(), { cache: 'no-store' });
-    if (!respuesta.ok) throw new Error('HTTP ' + respuesta.status);
-    const filas = parsearCSV(await respuesta.text()).slice(1);   // fila 0 = encabezados
-    return filas
-      .filter(f => f.some(c => c.trim() !== ''))
-      .filter(f => !SOLO_HOY || esDeHoy(f[COLUMNA_FECHA]))
-      .reverse()                                                 // las más recientes primero
-      .slice(0, MAX_CORONAS)
-      .map((f, i) => ({
-        clave: (f[COLUMNA_FECHA] || '') + '|' + (f[COLUMNA_NOMBRE] || '') + '|' + i,
-        nombre: nombreVisible(f[COLUMNA_NOMBRE])
-      }));
-  }
+<!-- ================= CONTACTO ================= -->
+<section class="seccion contacto" id="contacto" aria-labelledby="titulo-contacto">
+  <div class="contenedor contacto__grid">
+    <div class="contacto__info revelar">
+      <span class="antetitulo">Contacto</span>
+      <h2 id="titulo-contacto">Escríbenos, <em>princesa</em></h2>
+      <p>¿Quieres unirte a los encuentros, compartir un testimonio o hablar con alguien del equipo? Déjanos tu mensaje y te responderemos con amor.</p>
+      <ul class="contacto__lista" id="contacto-lista"></ul>
+    </div>
+    <form class="formulario vidrio revelar" id="formulario-contacto" data-retraso="1" novalidate>
+      <div class="campo">
+        <label for="c-nombre">Tu nombre</label>
+        <input id="c-nombre" name="nombre" autocomplete="given-name" required>
+      </div>
+      <div class="campo">
+        <label for="c-mensaje">Tu mensaje</label>
+        <textarea id="c-mensaje" name="mensaje" required></textarea>
+      </div>
+      <button class="boton" type="submit"><svg aria-hidden="true"><use href="#i-flecha"/></svg><span id="c-boton">Enviar mensaje</span></button>
+      <p class="formulario__nota" id="c-nota"></p>
+      <p class="formulario__estado" id="c-estado" role="status"></p>
+    </form>
+  </div>
+</section>
 
-  /* ---------- Posiciones orgánicas sin amontonarse ---------- */
-  const coronas = new Map();   // clave -> { el, x, y }  (x, y en %)
+</main>
 
-  function zonasProhibidas() {
-    const ancho = innerWidth, alto = innerHeight;
-    const r = tarjeta.getBoundingClientRect();
-    const cabecera = document.querySelector('header').getBoundingClientRect().bottom;
-    const pie = document.querySelector('footer').getBoundingClientRect().top;
-    return { ancho, alto, tarjeta: r, cabecera, pie };
-  }
+<!-- ================= PIE ================= -->
+<footer class="pie">
+  <div class="contenedor">
+    <div class="pie__marca">
+      <img src="assets/img/hr-insignia.webp" alt="" width="70" height="63" loading="lazy">
+      <strong>Herederas</strong><span>del Reino</span>
+    </div>
+    <p class="pie__lema">¡Te esperamos, princesa!</p>
+    <nav aria-label="Pie de página">
+      <ul>
+        <li><a href="#quienes-somos">Quiénes somos</a></li>
+        <li><a href="#encuentros">Encuentros</a></li>
+        <li><a href="#jardin">Jardín de oración</a></li>
+        <li><a href="muro/">Muro de oración</a></li>
+        <li><a href="#palabra">Palabra</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a data-enlace="instagram" href="#" target="_blank" rel="noopener">Instagram</a></li>
+      </ul>
+    </nav>
+    <p class="pie__legal">© <span id="anio"></span> Herederas del Reino · Pastora Jennyfer de Amarales · Versículos: Reina-Valera 1960</p>
+  </div>
+</footer>
 
-  function buscarLugar(zonas, ocupados) {
-    const { ancho, alto, tarjeta: t, cabecera, pie } = zonas;
-    const margenX = ancho < 640 ? 52 : 70;               // que el nombre no se corte en el borde
-    const arriba = cabecera + 34, abajo = pie - 34;
-    // Cada corona necesita más espacio a lo ancho (por el nombre) que a lo alto
-    let sepX = ancho < 640 ? 112 : 150, sepY = ancho < 640 ? 64 : 80;
-    for (let ronda = 0; ronda < 6; ronda++) {
-      for (let intento = 0; intento < 150; intento++) {
-        const x = margenX + Math.random() * (ancho - margenX * 2);
-        const y = arriba + Math.random() * Math.max(10, abajo - arriba);
-        const dentroTarjeta = x > t.left - 60 && x < t.right + 60 && y > t.top - 40 && y < t.bottom + 46;
-        if (dentroTarjeta) continue;
-        const choca = ocupados.some(p => ((p.x - x) / sepX) ** 2 + ((p.y - y) / sepY) ** 2 < 1);
-        if (!choca) return { x, y };
-      }
-      sepX *= 0.85; sepY *= 0.85;   // si no hay espacio, se acercan un poco
-    }
-    return { x: margenX + Math.random() * (ancho - margenX * 2), y: arriba + Math.random() * (abajo - arriba) };
-  }
-
-  function ocupadosEnPx(excluir) {
-    const lista = [];
-    coronas.forEach((c, k) => { if (k !== excluir) lista.push({ x: c.x / 100 * innerWidth, y: c.y / 100 * innerHeight }); });
-    return lista;
-  }
-
-  /* ---------- Tarjeta central ---------- */
-  let temporizadorRegreso = null;
-  let activa = null;
-
-  function cambiarTarjeta(sub, html) {
-    contenido.classList.add('cambiando');
-    setTimeout(() => {
-      subtitulo.textContent = sub;
-      textoPromesa.innerHTML = html;
-      contenido.classList.remove('cambiando');
-    }, 350);
-  }
-
-  function sostenerPeticion(el, nombre, promesa) {
-    clearTimeout(temporizadorRegreso);
-    if (activa === el) return;
-    if (activa) activa.classList.remove('activa');
-    activa = el;
-    el.classList.add('activa');
-    const cita = document.createElement('cite');
-    cita.textContent = promesa.cita;
-    cambiarTarjeta(`Sosteniendo la petición de ${nombre}`, promesa.texto + cita.outerHTML);
-  }
-
-  function volverAlInicio() {
-    clearTimeout(temporizadorRegreso);
-    temporizadorRegreso = setTimeout(() => {
-      if (activa) activa.classList.remove('activa');
-      activa = null;
-      cambiarTarjeta(SUBTITULO_INICIAL, MENSAJE_INICIAL);
-    }, 7000);
-  }
-
-  /* ---------- Dibujar / actualizar coronas ---------- */
-  let indiceVersiculo = Math.floor(Math.random() * promesasOracion.length);
-
-  function crearCorona(peticion, orden) {
-    const promesa = promesasOracion[indiceVersiculo++ % promesasOracion.length];
-    const el = document.createElement('button');
-    el.type = 'button';
-    el.className = 'corona-peticion';
-    el.setAttribute('aria-label', `Orar por ${peticion.nombre}`);
-    el.style.setProperty('--duracion', (5.5 + Math.random() * 4).toFixed(2) + 's');
-    el.style.setProperty('--retraso', (-Math.random() * 8).toFixed(2) + 's');
-    el.style.setProperty('--entrada', (orden * 0.18).toFixed(2) + 's');
-
-    const flota = document.createElement('div');
-    flota.className = 'flota';
-    flota.innerHTML = '<svg aria-hidden="true"><use href="#corona"/></svg>';
-    const etiqueta = document.createElement('span');
-    etiqueta.textContent = peticion.nombre;          // textContent: nunca se interpreta como HTML
-    flota.appendChild(etiqueta);
-    el.appendChild(flota);
-
-    const mostrar = () => sostenerPeticion(el, peticion.nombre, promesa);
-    el.addEventListener('mouseenter', mostrar);
-    el.addEventListener('focus', mostrar);
-    el.addEventListener('click', mostrar);
-    el.addEventListener('mouseleave', volverAlInicio);
-    el.addEventListener('blur', volverAlInicio);
-    return el;
-  }
-
-  function ubicar(c) {
-    c.el.style.left = c.x + '%';
-    c.el.style.top  = c.y + '%';
-  }
-
-  function actualizarContador() {
-    const n = coronas.size;
-    contador.textContent = n === 0
-      ? 'Aún no hay peticiones hoy. Sé la primera en dejar la tuya.'
-      : `Hoy oramos por ${n} ${n === 1 ? 'corazón' : 'corazones'}`;
-  }
-
-  async function cargarPeticionesDesdeFormulario() {
-    let peticiones;
-    try {
-      peticiones = await obtenerPeticiones();
-    } catch (error) {
-      console.error('Error conectando con el formulario:', error);
-      return;   // se conserva lo que ya está en pantalla; se reintenta en 2 minutos
-    }
-
-    const nuevasClaves = new Set(peticiones.map(p => p.clave));
-
-    // Retira las que ya no están (p. ej. al cambiar de día)
-    coronas.forEach((c, k) => {
-      if (!nuevasClaves.has(k)) { c.el.remove(); coronas.delete(k); }
-    });
-
-    // Agrega solo las nuevas, sin mover las existentes
-    const zonas = zonasProhibidas();
-    let orden = 0;
-    peticiones.forEach(p => {
-      if (coronas.has(p.clave)) return;
-      const lugar = buscarLugar(zonas, ocupadosEnPx());
-      const c = { el: crearCorona(p, orden++), x: lugar.x / innerWidth * 100, y: lugar.y / innerHeight * 100 };
-      ubicar(c);
-      coronas.set(p.clave, c);
-      lienzo.appendChild(c.el);
-    });
-
-    actualizarContador();
-  }
-
-  // Reacomoda al cambiar el tamaño de la ventana (p. ej. girar el celular)
-  let temporizadorResize;
-  addEventListener('resize', () => {
-    clearTimeout(temporizadorResize);
-    temporizadorResize = setTimeout(() => {
-      const zonas = zonasProhibidas();
-      const colocados = [];
-      coronas.forEach(c => {
-        const l = buscarLugar(zonas, colocados);
-        colocados.push(l);
-        c.x = l.x / innerWidth * 100; c.y = l.y / innerHeight * 100;
-        ubicar(c);
-      });
-    }, 300);
-  });
-
-  /* ---------- Música ---------- */
-  const musica = document.getElementById('musica-ambiente');
-  const botonSonido = document.getElementById('boton-sonido');
-
-  function subirVolumen() {
-    musica.volume = 0;
-    const paso = setInterval(() => {
-      musica.volume = Math.min(VOLUMEN_MUSICA, musica.volume + 0.01);
-      if (musica.volume >= VOLUMEN_MUSICA) clearInterval(paso);
-    }, 120);
-  }
-
-  botonSonido.addEventListener('click', () => {
-    musica.muted = !musica.muted;
-    botonSonido.classList.toggle('silencio', musica.muted);
-    botonSonido.setAttribute('aria-label', musica.muted ? 'Activar música' : 'Silenciar música');
-  });
-
-  /* ---------- Bienvenida ---------- */
-  document.getElementById('boton-unirme').addEventListener('click', () => {
-    document.getElementById('bienvenida').classList.add('oculto');
-    musica.play().then(() => {
-      subirVolumen();
-      botonSonido.classList.add('visible');
-    }).catch(err => console.warn('No se pudo reproducir la música:', err));
-
-    cargarPeticionesDesdeFormulario();
-    setInterval(cargarPeticionesDesdeFormulario, REFRESCO_MS);
-  }, { once: true });
-</script>
+<script src="assets/js/config.js?v=5"></script>
+<script src="assets/js/peticiones.js?v=5"></script>
+<script src="assets/js/sitio.js?v=5" defer></script>
 </body>
 </html>
