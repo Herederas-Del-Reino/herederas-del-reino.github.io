@@ -67,7 +67,7 @@ window.HR_CONFIG = {
       id: "salmos",
       titulo: "Salmos",
       descripcion: "Juntas en adoración a través de la Palabra.",
-      dias: "Lunes a Viernes", diasSemana: [1, 2, 3, 4, 5],
+      dias: "Viernes", diasSemana: [5],
       hora: "20:00",
       icono: "corona"
     }
