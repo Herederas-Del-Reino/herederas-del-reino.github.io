@@ -274,7 +274,7 @@
       flores.set(p.clave, { el, pos });
     });
     const n = flores.size;
-    contadorJ.textContent = n ? `${n} ${n === 1 ? 'petición sostenida' : 'peticiones sostenidas'} en oración` : 'El jardín espera tu primera petición.';
+    contadorJ.textContent = n ? `Hoy oramos por ${n} ${n === 1 ? 'corazón' : 'corazones'}` : 'El muro espera tu primera petición.';
   }
 
   if (!movimientoReducido && punteroFino) {
@@ -287,6 +287,28 @@
   // Las flores se adaptan al ancho del jardín (celular → más pequeñas)
   const ajustarEscala = () => escena.style.setProperty('--k', Math.max(.62, Math.min(1, escena.clientWidth / 820)).toFixed(2));
   ajustarEscala(); addEventListener('resize', ajustarEscala, { passive: true });
+
+  /* ---------- Música para orar y pantalla completa ---------- */
+  const audioMuro = $('#muro-audio'), bMusica = $('#muro-musica'), bCompleta = $('#muro-completa');
+  bMusica.addEventListener('click', () => {
+    if (audioMuro.paused) {
+      audioMuro.volume = 0.3;
+      audioMuro.play().then(() => { bMusica.setAttribute('aria-pressed', 'true'); bMusica.lastChild.textContent = 'Pausar música'; })
+        .catch(() => { bMusica.lastChild.textContent = 'Música no disponible'; });
+    } else {
+      audioMuro.pause(); bMusica.setAttribute('aria-pressed', 'false'); bMusica.lastChild.textContent = 'Orar con música';
+    }
+  });
+  if (!escena.requestFullscreen) bCompleta.hidden = true;
+  bCompleta.addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else escena.requestFullscreen().catch(() => {});
+  });
+  document.addEventListener('fullscreenchange', () => {
+    const activo = document.fullscreenElement === escena;
+    bCompleta.lastChild.textContent = activo ? 'Salir' : 'Pantalla completa';
+    ajustarEscala();
+  });
 
   /* ---------- Franja "Estamos orando por…" del inicio y contador del menú ---------- */
   function pintarOrando(lista) {
@@ -313,7 +335,7 @@
       setTimeout(cicloPeticiones, 120e3);                         // actualización silenciosa cada 2 min
     } else {
       fallos++;
-      if (primeraCarga) contadorJ.textContent = 'Conectando con el jardín…';
+      if (primeraCarga) contadorJ.textContent = 'Conectando con el muro…';
       setTimeout(cicloPeticiones, Math.min(60e3, 4e3 * fallos));  // 4 s, 8 s, 12 s… hasta 1 min
     }
   }

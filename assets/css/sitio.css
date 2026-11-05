@@ -243,6 +243,15 @@ p { margin: 0; }
     radial-gradient(ellipse 60% 45% at 50% 68%, rgba(255,246,239,.86), rgba(255,246,239,0) 70%),
     linear-gradient(180deg, rgba(255,246,239,0) 55%, var(--marfil) 100%);
 }
+@media (min-width: 1700px) {
+  .hero__fondo {
+    left: 50%; right: auto; width: 1672px; transform: translateX(-50%);
+    background-size: 1672px auto;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .hero { padding-top: calc(64px + 300px); }
+}
 @media (max-width: 700px) {
   .hero { min-height: 100svh; padding-top: calc(64px + 33vw); }
   .hero__fondo { background-image: url("../img/fondo-flores-900.webp"); background-size: 185% auto; background-position: center top; }
@@ -445,6 +454,24 @@ p { margin: 0; }
 .jardin__verso { margin-top: 10px; font: italic 500 clamp(1.05rem, 2vw, 1.25rem)/1.45 var(--f-titulo); color: var(--vino); transition: opacity .4s; }
 .jardin__verso cite { display: block; margin-top: 8px; font: 500 .74rem/1 var(--f-texto); font-style: normal; letter-spacing: .22em; text-transform: uppercase; color: var(--vino-suave); }
 .jardin__contador { margin-top: 10px; font-size: .84rem; color: var(--texto-suave); }
+.jardin__controles { position: absolute; right: 14px; bottom: 14px; z-index: 6; display: flex; gap: 8px; }
+.control {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 14px; border-radius: 999px;
+  border: 1px solid rgba(122,51,70,.2); background: rgba(255,255,255,.82); color: var(--vino);
+  font: 500 .85rem/1 var(--f-texto); cursor: pointer; backdrop-filter: blur(6px); transition: background .3s, color .3s;
+}
+.control svg { width: 18px; height: 18px; }
+.control:hover, .control[aria-pressed="true"] { background: var(--vino); color: #fff; }
+.jardin__titulo-pc { display: none; }
+.jardin__escena:fullscreen { height: 100vh; border-radius: 0; background-color: var(--marfil); }
+.jardin__escena:fullscreen .jardin__titulo-pc {
+  display: block; position: absolute; left: 0; right: 0; top: 18px; text-align: center; z-index: 5;
+  font: 600 clamp(1.6rem, 3vw, 2.4rem)/1.1 var(--f-marca); letter-spacing: .24em; text-transform: uppercase; color: var(--vino);
+}
+.jardin__escena:fullscreen .jardin__titulo-pc small { display: block; margin-top: 6px; font: italic 500 1.1rem/1 var(--f-titulo); letter-spacing: .02em; text-transform: none; color: var(--vino-suave); }
+.jardin__escena:fullscreen .jardin__tarjeta { top: 110px; }
+.creditos-musica { margin-top: 14px; text-align: center; font-size: .72rem; color: var(--texto-suave); opacity: .8; }
+@media (max-width: 560px) { .control span { display: none; } .control { padding: 8px 11px; } }
 .jardin__estado { position: absolute; inset: auto 0 40% 0; text-align: center; color: var(--texto-suave); font-style: italic; }
 .privacidad {
   display: flex; gap: 14px; align-items: flex-start; max-width: 760px; margin: 28px auto 0; padding: 18px 22px;
