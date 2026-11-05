@@ -196,118 +196,235 @@
   setInterval(() => pintarEncuentros($('#lista-encuentros .visible') !== null), 60e3); // refresca "Hoy · en 2 h"
 
   /* =====================================================================
-     JARDÍN DE ORACIÓN
+     JARDÍN DE ORACIÓN — cada petición es una flor con una pequeña corona
      ===================================================================== */
-  /* Cada petición es una pequeña corona rosada (emula el logotipo) */
   const ROSAS = [
-    { p: '#F2B8C6', b: '#C9798D' }, { p: '#F7CAD5', b: '#D58C9F' },
-    { p: '#E8A3B5', b: '#B86A80' }, { p: '#F9D9E1', b: '#D99BAB' }
+    { p: '#F4D6DE', b: '#D99BAB', c: '#E8B4C2' }, { p: '#E8B4C2', b: '#B86A80', c: '#F4D6DE' },
+    { p: '#F3C7B5', b: '#C98E7A', c: '#F4D6DE' }, { p: '#FFF6EF', b: '#D9B9AE', c: '#F3C7B5' }
   ];
-  function svgCorona(semilla) {
-    const c = ROSAS[semilla % ROSAS.length];
-    return `<svg viewBox="0 0 40 30" aria-hidden="true">
-      <path d="M3 22 6 7l8 8 6-12 6 12 8-8 3 15Z" fill="${c.p}" stroke="${c.b}" stroke-width="1.2" stroke-linejoin="round"/>
-      <rect x="3.5" y="23" width="33" height="4.5" rx="2.2" fill="${c.b}"/>
-      <circle cx="6" cy="6" r="2.1" fill="#D4AF37"/><circle cx="20" cy="2.8" r="2.4" fill="#D4AF37"/><circle cx="34" cy="6" r="2.1" fill="#D4AF37"/>
-      <circle cx="20" cy="17" r="1.9" fill="#fff" opacity=".85"/>
+  const azar = (semilla, n) => { const x = Math.sin(semilla * 9301 + n * 49297) * 233280; return x - Math.floor(x); };
+
+  // Flor de la petición: tallo, hojas, flor y una corona pequeña posada sobre ella
+  function svgPeticion(semilla) {
+    const c = ROSAS[semilla % ROSAS.length], curva = (azar(semilla, 1) - .5) * 10;
+    let petalos = '';
+    for (let i = 0; i < 6; i++) {
+      petalos += `<ellipse cx="22" cy="31" rx="6.2" ry="9.5" fill="${i % 2 ? c.p : c.c}" stroke="${c.b}" stroke-width=".7" transform="rotate(${i * 60 + azar(semilla, 2) * 20} 22 40)"/>`;
+    }
+    return `<svg viewBox="0 0 44 100" aria-hidden="true">
+      <path d="M22 100 C ${22 + curva} 82, ${22 - curva} 62, 22 44" fill="none" stroke="#9AA57C" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M22 80 q -12 -4 -15 -14 q 11 1 15 14Z" fill="#B3BC93"/>
+      <path d="M22 70 q 11 -3 14 -12 q -10 0 -14 12Z" fill="#A4AF84"/>
+      <g class="flor__capullo">${petalos}<circle cx="22" cy="40" r="4.2" fill="#D4AF37"/></g>
+      <g class="flor__corona"><path d="M12.5 30 14 19.5l4.5 4.5L22 16l3.5 8 4.5-4.5L31.5 30Z" fill="#F7CAD5" stroke="#B86A80" stroke-width=".9" stroke-linejoin="round"/>
+      <rect x="12.5" y="30" width="19" height="3" rx="1.5" fill="#C9798D"/>
+      <circle cx="14" cy="18.6" r="1.4" fill="#D4AF37"/><circle cx="22" cy="15" r="1.6" fill="#D4AF37"/><circle cx="30" cy="18.6" r="1.4" fill="#D4AF37"/></g>
     </svg>`;
   }
-
-  const escena = $('#jardin-escena'), floresCont = $('#jardin-flores');
-  const subJ = $('#jardin-subtitulo'), versoJ = $('#jardin-verso'), contadorJ = $('#jardin-contador');
-  const subInicialJ = subJ.textContent, versoInicialJ = versoJ.innerHTML;
-  const flores = new Map(); let activa = null, regreso = null;
-
-  function sostener(el, nombre, v) {
-    clearTimeout(regreso);
-    if (activa) activa.classList.remove('activa');
-    activa = el; el.classList.add('activa');
-    subJ.textContent = `Sosteniendo la petición de ${nombre}`;
-    versoJ.innerHTML = `${esc(v.texto)}<cite>${esc(v.cita)}</cite>`;
-    regreso = setTimeout(() => {
-      if (activa) activa.classList.remove('activa'); activa = null;
-      subJ.textContent = subInicialJ; versoJ.innerHTML = versoInicialJ;
-    }, 9000);
+  // Flores decorativas (sin corona) para dar profundidad al paisaje
+  function svgDeco(semilla) {
+    const c = ROSAS[semilla % ROSAS.length];
+    let p = '';
+    for (let i = 0; i < 5; i++) p += `<ellipse cx="20" cy="22" rx="6" ry="9" fill="${c.c}" opacity=".9" transform="rotate(${i * 72} 20 30)"/>`;
+    return `<svg viewBox="0 0 40 90" aria-hidden="true"><path d="M20 90 C 23 70, 17 52, 20 34" fill="none" stroke="#B3BC93" stroke-width="1.5"/>${p}<circle cx="20" cy="30" r="3.4" fill="#E7DCC6"/></svg>`;
   }
 
-  function ubicarFlor(ocupadas) {
-    // x en %, profundidad 0 (fondo) → 1 (frente); la base va del 64% al 97% de la altura
-    let sep = .26;
-    for (let ronda = 0; ronda < 6; ronda++, sep *= .82) {
-      for (let k = 0; k < 120; k++) {
-        const margen = escena.clientWidth < 600 ? 16 : 8;
-        const x = margen + Math.random() * (100 - 2 * margen), prof = Math.random();
-        if (!ocupadas.some(o => Math.hypot((o.x - x) / 100, (o.prof - prof) * .55) < sep)) return { x, prof };
-      }
+  const escena = $('#jardin-escena'), marco = $('#jardin-marco'), floresCont = $('#jardin-flores');
+  const decoCont = $('#jardin-deco'), petalosCont = $('#jardin-petalos'), contadorJ = $('#jardin-contador');
+  const tarjeta = $('#oracion-tarjeta'), tInicio = $('#oracion-inicio'), tDetalle = $('#oracion-detalle');
+  const tNombre = $('#oracion-nombre'), tFecha = $('#oracion-fecha'), tVerso = $('#oracion-verso');
+  const bUnirme = $('#oracion-unirme'), tGracias = $('#oracion-gracias');
+  const flores = new Map(); let seleccion = null;
+
+  // Oraciones de esta visitante (solo en su dispositivo; evita duplicados)
+  const CLAVE_LOCAL = 'hr-oraciones-unidas';
+  const leerUnidas = () => { try { return new Set(JSON.parse(localStorage.getItem(CLAVE_LOCAL) || '[]')); } catch (_) { return new Set(); } };
+  const unidas = leerUnidas();
+  const guardarUnidas = () => { try { localStorage.setItem(CLAVE_LOCAL, JSON.stringify([...unidas])); } catch (_) {} };
+  const pintarMias = () => { $('#ind-mias').textContent = unidas.size; };
+  pintarMias();
+
+  const fmtFecha = new Intl.DateTimeFormat('es-CO', { day: 'numeric', month: 'long' });
+  function textoFecha(f) {
+    if (!f) return '';
+    const hoy = new Date(), ayer = new Date(Date.now() - 864e5);
+    if (f.toDateString() === hoy.toDateString()) return 'Compartida hoy';
+    if (f.toDateString() === ayer.toDateString()) return 'Compartida ayer';
+    return 'Compartida el ' + fmtFecha.format(f);
+  }
+
+  function pintarBoton(clave) {
+    const ya = unidas.has(clave);
+    bUnirme.disabled = ya;
+    bUnirme.classList.toggle('unida', ya);
+    bUnirme.innerHTML = ya ? `${icono('i-check')}<span>Te uniste en oración</span>` : `${icono('i-corazon')}<span>Me uno en oración</span>`;
+    tGracias.hidden = !ya;
+  }
+
+  function seleccionar(clave) {
+    const f = flores.get(clave); if (!f) return;
+    if (seleccion) flores.get(seleccion)?.el.classList.remove('activa');
+    seleccion = clave; f.el.classList.add('activa');
+    tInicio.hidden = true; tDetalle.hidden = false;
+    tNombre.textContent = f.p.nombre;
+    tFecha.textContent = textoFecha(f.p.fecha);
+    tVerso.innerHTML = `${esc(f.v.texto)}<cite>${esc(f.v.cita)}</cite>`;
+    pintarBoton(clave);
+    tarjeta.classList.remove('cambio'); void tarjeta.offsetWidth; tarjeta.classList.add('cambio');
+    // En celular la tarjeta queda debajo del jardín: la acercamos con suavidad
+    if (innerWidth < 900 && !document.fullscreenElement) {
+      const r = tarjeta.getBoundingClientRect();
+      if (r.top > innerHeight - 120) tarjeta.scrollIntoView({ behavior: movimientoReducido ? 'auto' : 'smooth', block: 'nearest' });
     }
-    return { x: 7 + Math.random() * 86, prof: Math.random() };
+  }
+
+  function lluviaDePetalos(el) {
+    if (movimientoReducido) return;
+    const re = escena.getBoundingClientRect(), rf = el.getBoundingClientRect();
+    const x = rf.left + rf.width / 2 - re.left, y = rf.top + rf.height * .3 - re.top;
+    const halo = document.createElement('span');
+    halo.className = 'halo'; halo.style.left = x + 'px'; halo.style.top = y + 'px';
+    petalosCont.appendChild(halo);
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('i');
+      const ang = (Math.PI * 2 * i) / 18 + Math.random() * .4, dist = 50 + Math.random() * 90;
+      p.style.left = x + 'px'; p.style.top = y + 'px';
+      p.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
+      p.style.setProperty('--dy', Math.sin(ang) * dist - 40 + 'px');
+      p.style.setProperty('--giro', (Math.random() * 360 - 180) + 'deg');
+      p.style.setProperty('--color', ['#E8B4C2', '#F4D6DE', '#F3C7B5', '#D4AF37'][i % 4]);
+      p.style.animationDelay = (Math.random() * .15) + 's';
+      petalosCont.appendChild(p);
+    }
+    setTimeout(() => { petalosCont.innerHTML = ''; }, 2600);
+  }
+
+  bUnirme.addEventListener('click', () => {
+    if (!seleccion || unidas.has(seleccion)) return;      // una sola vez por petición y dispositivo
+    unidas.add(seleccion); guardarUnidas(); pintarMias();
+    const f = flores.get(seleccion);
+    f.el.classList.add('acompanada');
+    lluviaDePetalos(f.el);
+    pintarBoton(seleccion);
+  });
+
+  // Distribución equilibrada por planos (fondo → frente), adaptable a cualquier cantidad
+  function distribuir(lista) {
+    const ancho = escena.clientWidth || 800;
+    const maxFila = Math.max(2, Math.floor(ancho / (ancho < 600 ? 92 : 112)));
+    // Siempre al menos 2-3 planos para que el jardín tenga profundidad, aunque haya pocas peticiones
+    const filas = Math.max(1, Math.ceil(lista.length / maxFila), Math.min(3, Math.ceil(lista.length / 3)));
+    const porFila = Math.ceil(lista.length / filas);
+    const posiciones = [];
+    lista.forEach((p, i) => {
+      const fila = Math.floor(i / porFila);                          // 0 = frente (las más recientes)
+      const enFila = Math.min(porFila, lista.length - fila * porFila);
+      const k = i % porFila;
+      const prof = filas === 1 ? 1 : 1 - fila / (filas - 1);         // 1 frente · 0 fondo
+      const desfase = fila % 2 ? .5 : 0;
+      const semilla = [...p.clave].reduce((a, c) => a + c.charCodeAt(0), 0);
+      // filas pares: centradas en su espacio · filas impares: intercaladas entre las de adelante
+      const t = desfase ? (k + 1) / (enFila + 1) : (k + .5) / enFila;
+      const x = 8 + 84 * t + (azar(semilla, 3) - .5) * Math.min(4, 50 / enFila);
+      const y = filas === 1 ? 84 : 52 + prof * 38;
+      posiciones.push({ x: Math.max(6, Math.min(94, x)), y, prof, semilla });
+    });
+    return posiciones;
+  }
+
+  function pintarDeco() {
+    if (decoCont.childElementCount) return;
+    const sitios = [
+      [4, 66, .5, 1.2], [15, 58, .3, 1.6], [27, 62, .25, 1.4], [44, 57, .2, 1.8], [61, 60, .25, 1.5], [78, 57, .3, 1.6], [93, 64, .45, 1.2],
+      [10, 82, .6, .6], [52, 79, .5, .7], [88, 84, .6, .6],
+      [2, 99, 1.25, 2.4], [97, 101, 1.35, 2.6]
+    ];
+    decoCont.innerHTML = sitios.map(([x, y, s, b], i) =>
+      `<span class="deco" style="left:${x}%;top:${y}%;--s:${s};--b:${b}px;--retraso:${-i * .9}s">${svgDeco(i * 7 + 3)}</span>`).join('');
   }
 
   function cargarJardin(lista, primera) {
+    pintarDeco();
     const claves = new Set(lista.map(p => p.clave));
     flores.forEach((f, k) => { if (!claves.has(k)) { f.el.remove(); flores.delete(k); } });
-    const ocupadas = [...flores.values()].map(f => f.pos);
+    const pos = distribuir(lista);
     lista.forEach((p, i) => {
-      if (flores.has(p.clave)) return;
-      const pos = ubicarFlor(ocupadas); ocupadas.push(pos);
-      const v = HR_PETICIONES.VERSICULOS[(flores.size + i) % HR_PETICIONES.VERSICULOS.length];
-      const el = document.createElement('button');
-      el.type = 'button'; el.className = 'flor' + (primera ? '' : ' brotar');
-      el.setAttribute('role', 'listitem');
-      el.setAttribute('aria-label', `Sostener en oración la petición de ${p.nombre}`);
-      el.style.left = pos.x + '%';
-      el.style.top = (54 + pos.prof * 40) + '%';
-      el.style.zIndex = Math.round(pos.prof * 100);
-      el.style.setProperty('--escala', (.75 + pos.prof * .45).toFixed(2));
-      el.style.setProperty('--prof', (pos.prof - .5).toFixed(2));
-      el.style.setProperty('--desenfoque', ((1 - pos.prof) * .9).toFixed(2) + 'px');
-      el.style.setProperty('--mecer', (5 + Math.random() * 3).toFixed(2) + 's');
-      el.style.setProperty('--retraso', (-Math.random() * 6).toFixed(2) + 's');
-      const semilla = [...p.clave].reduce((a, c) => a + c.charCodeAt(0), 0);
-      el.innerHTML = `<span class="flor__planta">${svgCorona(semilla)}</span><span class="flor__nombre"></span>`;
-      el.querySelector('.flor__nombre').textContent = p.nombre;
-      const mostrar = () => sostener(el, p.nombre, v);
-      el.addEventListener('click', mostrar);
-      el.addEventListener('focus', mostrar);
-      if (punteroFino) el.addEventListener('mouseenter', mostrar);
-      floresCont.appendChild(el);
-      flores.set(p.clave, { el, pos });
+      let f = flores.get(p.clave);
+      if (!f) {
+        const el = document.createElement('button');
+        el.type = 'button'; el.className = 'flor' + (primera ? '' : ' brotar');
+        el.setAttribute('role', 'listitem');
+        el.setAttribute('aria-label', `Sostener en oración la petición de ${p.nombre}`);
+        el.innerHTML = `<span class="flor__planta">${svgPeticion(pos[i].semilla)}</span><span class="flor__nombre"></span>`;
+        el.querySelector('.flor__nombre').textContent = p.nombre;
+        el.style.setProperty('--mecer', (5 + azar(pos[i].semilla, 4) * 3).toFixed(2) + 's');
+        el.style.setProperty('--retraso', (-azar(pos[i].semilla, 5) * 6).toFixed(2) + 's');
+        el.addEventListener('click', () => seleccionar(p.clave));
+        if (unidas.has(p.clave)) el.classList.add('acompanada');
+        floresCont.appendChild(el);
+        f = { el, p, v: HR_PETICIONES.VERSICULOS[pos[i].semilla % HR_PETICIONES.VERSICULOS.length] };
+        flores.set(p.clave, f);
+      }
+      f.p = p;
+      const q = pos[i];
+      f.el.style.left = q.x + '%';
+      f.el.style.top = q.y + '%';
+      f.el.style.zIndex = 10 + Math.round(q.prof * 80);
+      f.el.style.setProperty('--escala', (.72 + q.prof * .38).toFixed(2));
+      f.el.style.setProperty('--prof', (q.prof - .5).toFixed(2));
+      f.el.style.setProperty('--desenfoque', ((1 - q.prof) * .6).toFixed(2) + 'px');
+      f.el.classList.toggle('lejana', q.prof < .34 && lista.length > 8);
     });
-    const n = flores.size;
-    contadorJ.textContent = n ? `Hoy oramos por ${n} ${n === 1 ? 'corazón' : 'corazones'}` : 'El muro espera tu primera petición.';
+    const n = lista.length;
+    const hoy = lista.filter(p => p.fecha && p.fecha.toDateString() === new Date().toDateString()).length;
+    $('#ind-total').textContent = n;
+    $('#ind-hoy').textContent = hoy;
+    contadorJ.textContent = n ? '' : 'El jardín espera su primera petición.';
+    contadorJ.hidden = !!n;
+    escena.dataset.cantidad = n;
   }
 
   if (!movimientoReducido && punteroFino) {
     escena.addEventListener('pointermove', e => {
       const r = escena.getBoundingClientRect();
-      floresCont.style.setProperty('--mx', (((e.clientX - r.left) / r.width - .5) * 2).toFixed(3));
+      escena.style.setProperty('--mx', (((e.clientX - r.left) / r.width - .5) * 2).toFixed(3));
     });
-    escena.addEventListener('pointerleave', () => floresCont.style.setProperty('--mx', 0));
+    escena.addEventListener('pointerleave', () => escena.style.setProperty('--mx', 0));
   }
-  // Las flores se adaptan al ancho del jardín (celular → más pequeñas)
-  const ajustarEscala = () => escena.style.setProperty('--k', Math.max(.62, Math.min(1, escena.clientWidth / 820)).toFixed(2));
-  ajustarEscala(); addEventListener('resize', ajustarEscala, { passive: true });
+  // Las plantas se adaptan al ancho (celular → más pequeñas) y se redistribuyen
+  let ultimaLista = null;
+  const ajustarEscala = () => {
+    escena.style.setProperty('--k', Math.max(.7, Math.min(1.1, escena.clientWidth / 760)).toFixed(2));
+    if (ultimaLista) cargarJardin(ultimaLista, false);
+  };
+  addEventListener('resize', () => { clearTimeout(ajustarEscala.t); ajustarEscala.t = setTimeout(ajustarEscala, 200); }, { passive: true });
+  ajustarEscala();
 
-  /* ---------- Música para orar y pantalla completa ---------- */
-  const audioMuro = $('#muro-audio'), bMusica = $('#muro-musica'), bCompleta = $('#muro-completa');
+  /* ---------- Música para orar (opcional) y pantalla completa ---------- */
+  const audioMuro = $('#muro-audio'), bMusica = $('#muro-musica'), volumen = $('#muro-volumen'), bCompleta = $('#muro-completa');
   bMusica.addEventListener('click', () => {
     if (audioMuro.paused) {
-      audioMuro.volume = 0.3;
-      audioMuro.play().then(() => { bMusica.setAttribute('aria-pressed', 'true'); bMusica.lastChild.textContent = 'Pausar música'; })
-        .catch(() => { bMusica.lastChild.textContent = 'Música no disponible'; });
+      audioMuro.volume = parseFloat(volumen.value);
+      audioMuro.play().then(() => {
+        bMusica.setAttribute('aria-pressed', 'true'); bMusica.setAttribute('aria-label', 'Pausar la música');
+        bMusica.innerHTML = icono('i-pausa'); volumen.hidden = false;
+      }).catch(() => { bMusica.title = 'Música no disponible en este momento'; });
     } else {
-      audioMuro.pause(); bMusica.setAttribute('aria-pressed', 'false'); bMusica.lastChild.textContent = 'Orar con música';
+      audioMuro.pause();
+      bMusica.setAttribute('aria-pressed', 'false'); bMusica.setAttribute('aria-label', 'Activar música para orar');
+      bMusica.innerHTML = icono('i-nota'); volumen.hidden = true;
     }
   });
-  if (!escena.requestFullscreen) bCompleta.hidden = true;
+  volumen.addEventListener('input', () => { audioMuro.volume = parseFloat(volumen.value); });
+  if (!marco.requestFullscreen) bCompleta.hidden = true;
   bCompleta.addEventListener('click', () => {
     if (document.fullscreenElement) document.exitFullscreen();
-    else escena.requestFullscreen().catch(() => {});
+    else marco.requestFullscreen().catch(() => {});
   });
   document.addEventListener('fullscreenchange', () => {
-    const activo = document.fullscreenElement === escena;
-    bCompleta.lastChild.textContent = activo ? 'Salir' : 'Pantalla completa';
-    ajustarEscala();
+    const activo = document.fullscreenElement === marco;
+    bCompleta.setAttribute('aria-label', activo ? 'Salir de pantalla completa' : 'Ver el jardín en pantalla completa');
+    setTimeout(ajustarEscala, 120);
   });
 
   /* ---------- Franja "Estamos orando por…" del inicio y contador del menú ---------- */
@@ -330,12 +447,13 @@
     if (lista) {
       fallos = 0;
       pintarOrando(lista);
+      ultimaLista = lista;
       cargarJardin(lista, primeraCarga);
       primeraCarga = false;
       setTimeout(cicloPeticiones, 120e3);                         // actualización silenciosa cada 2 min
     } else {
       fallos++;
-      if (primeraCarga) contadorJ.textContent = 'Conectando con el muro…';
+      if (primeraCarga) contadorJ.textContent = 'Conectando con el jardín…';
       setTimeout(cicloPeticiones, Math.min(60e3, 4e3 * fallos));  // 4 s, 8 s, 12 s… hasta 1 min
     }
   }
@@ -371,6 +489,29 @@
   versos.innerHTML = PROMESAS.filter(p => p !== promesaHoy).slice(0, 6).map((p, i) =>
     `<figure class="verso vidrio revelar" data-retraso="${i % 4}"><p>${esc(p.texto)}</p><cite>${esc(p.cita)}</cite></figure>`).join('');
   $$('.verso', versos).forEach(el => activarInclinacion(el, 8));
+
+  /* =====================================================================
+     NUESTROS LIBROS (desde config.js)
+     ===================================================================== */
+  const listaLibros = $('#libros-lista');
+  listaLibros.innerHTML = (C.libros || []).map((l, i) => `
+    <article class="libro revelar" data-retraso="${i % 3}">
+      <a class="libro__portada" href="${esc(l.enlace)}" target="_blank" rel="noopener" aria-label="${esc(l.boton)}: ${esc(l.titulo)}">
+        <span class="libro__3d">
+          <img src="${esc(l.portada)}" alt="Portada de ${esc(l.titulo)}" width="${l.ancho}" height="${l.alto}" loading="lazy" decoding="async">
+        </span>
+        <span class="libro__sombra" aria-hidden="true"></span>
+      </a>
+      <div class="libro__texto">
+        <span class="libro__tipo">${esc(l.tipo)}</span>
+        <h3>${esc(l.titulo)}</h3>
+        ${l.subtitulo ? `<p class="libro__subtitulo">${esc(l.subtitulo)}</p>` : ''}
+        ${l.autora ? `<p class="libro__autora">${esc(l.autora)}</p>` : ''}
+        <p class="libro__descripcion">${esc(l.descripcion)}</p>
+        <a class="boton boton--muro" href="${esc(l.enlace)}" target="_blank" rel="noopener">${icono('i-biblia')}${esc(l.boton)}</a>
+      </div>
+    </article>`).join('');
+  $$('.libro__portada', listaLibros).forEach(el => activarInclinacion(el, 10));
 
   /* =====================================================================
      CONÉCTATE

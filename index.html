@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
 <link rel="preload" as="image" href="assets/img/fondo-flores-1600.webp" media="(min-width: 701px)">
 <link rel="preload" as="image" href="assets/img/fondo-flores-900.webp" media="(max-width: 700px)">
-<link rel="stylesheet" href="assets/css/sitio.css?v=10">
+<link rel="stylesheet" href="assets/css/sitio.css?v=12">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -56,6 +56,7 @@
     <symbol id="i-copiar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></symbol>
     <symbol id="i-nota" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/></symbol>
     <symbol id="i-expandir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></symbol>
     <symbol id="b-col" viewBox="0 0 6 4"><path fill="#FCD116" d="M0 0h6v2H0z"/><path fill="#003893" d="M0 2h6v1H0z"/><path fill="#CE1126" d="M0 3h6v1H0z"/></symbol>
     <symbol id="b-esp" viewBox="0 0 6 4"><path fill="#AA151B" d="M0 0h6v4H0z"/><path fill="#F1BF00" d="M0 1h6v2H0z"/></symbol>
@@ -75,6 +76,7 @@
         <li><a href="#quienes-somos">Quiénes somos</a></li>
         <li><a href="#encuentros">Encuentros</a></li>
         <li><a href="#palabra">Palabra</a></li>
+        <li><a href="#libros">Libros</a></li>
         <li><a href="#recursos">Recursos</a></li>
         <li><a href="#conectate">Conéctate</a></li>
         <li><a class="boton boton--muro" href="#muro"><svg aria-hidden="true"><use href="#i-corona"/></svg>Muro de oración<span class="nav__contador" data-total-peticiones hidden></span></a></li>
@@ -111,38 +113,61 @@
   <a class="hero__bajar" href="#muro" aria-label="Bajar al muro de oración"></a>
 </section>
 
-<!-- ================= MURO DE ORACIÓN (módulo principal) ================= -->
+<!-- ================= MURO DE ORACIÓN — JARDÍN DE ORACIÓN ================= -->
 <section class="seccion jardin" id="muro" aria-labelledby="titulo-muro">
   <div class="contenedor">
-    <header class="cabecera">
+    <header class="cabecera cabecera--jardin">
       <span class="antetitulo revelar">Muro de oración</span>
-      <h2 id="titulo-muro" class="revelar" data-retraso="1">Peticiones de <em>oración</em></h2>
-      <p class="revelar" data-retraso="2">Intenciones unidas en fe. Cada corona es una hija del Rey que confió su corazón a Dios: tócala y sostén su petición en oración.</p>
+      <h2 id="titulo-muro" class="jardin__titulo revelar" data-retraso="1">Jardín de <em>Oración</em></h2>
+      <p class="revelar" data-retraso="2">Cada flor coronada es una hija del Rey que confió su corazón a Dios. Elige una y acompáñala en oración.</p>
+      <ul class="indicadores revelar" data-retraso="3" aria-label="Indicadores de oración">
+        <li><strong id="ind-total">–</strong><span>peticiones en el jardín</span></li>
+        <li><strong id="ind-hoy">–</strong><span>compartidas hoy</span></li>
+        <li><strong id="ind-mias">0</strong><span>tus oraciones</span></li>
+      </ul>
     </header>
 
-    <div class="jardin__escena revelar" id="jardin-escena">
-      <p class="jardin__titulo-pc" aria-hidden="true">Peticiones de oración<small>Intenciones unidas en fe</small></p>
-      <div class="jardin__suelo" aria-hidden="true"></div>
-      <div class="mariposas" data-mariposas="2" aria-hidden="true"></div>
-      <div class="jardin__flores" id="jardin-flores" role="list" aria-label="Peticiones de oración recientes"></div>
-      <div class="jardin__tarjeta vidrio" aria-live="polite">
-        <span class="antetitulo" id="jardin-subtitulo">El poder de la oración unida</span>
-        <p class="jardin__verso" id="jardin-verso">Cada corona es una hija del Rey que hoy confió su corazón a Dios. Cuando oramos juntas, el cielo se mueve.<cite>Acércate a una corona y sostén su petición</cite></p>
-        <p class="jardin__contador" id="jardin-contador">Cargando el muro…</p>
+    <div class="jardin__marco revelar" id="jardin-marco">
+      <p class="jardin__titulo-pc" aria-hidden="true">Jardín de Oración<small>Herederas del Reino</small></p>
+
+      <div class="jardin__escena" id="jardin-escena">
+        <div class="jardin__luz" aria-hidden="true"></div>
+        <div class="jardin__colina jardin__colina--fondo" aria-hidden="true"></div>
+        <div class="jardin__colina jardin__colina--medio" aria-hidden="true"></div>
+        <div class="jardin__colina jardin__colina--frente" aria-hidden="true"></div>
+        <div class="jardin__deco" id="jardin-deco" aria-hidden="true"></div>
+        <div class="mariposas" data-mariposas="2" aria-hidden="true"></div>
+        <div class="jardin__flores" id="jardin-flores" role="list" aria-label="Peticiones de oración"></div>
+        <div class="jardin__petalos" id="jardin-petalos" aria-hidden="true"></div>
+        <p class="jardin__estado" id="jardin-contador">Preparando el jardín…</p>
+        <div class="jardin__controles" role="group" aria-label="Música y pantalla completa">
+          <button class="control" type="button" id="muro-musica" aria-pressed="false" aria-label="Activar música para orar" title="Música para orar"><svg aria-hidden="true"><use href="#i-nota"/></svg></button>
+          <input class="control__volumen" id="muro-volumen" type="range" min="0" max="1" step="0.05" value="0.3" aria-label="Volumen de la música" hidden>
+          <button class="control" type="button" id="muro-completa" aria-label="Ver el jardín en pantalla completa" title="Pantalla completa"><svg aria-hidden="true"><use href="#i-expandir"/></svg></button>
+        </div>
+        <audio id="muro-audio" loop preload="none" src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Healing.mp3"></audio>
       </div>
-      <div class="jardin__controles">
-        <button class="control" type="button" id="muro-musica" aria-pressed="false"><svg aria-hidden="true"><use href="#i-nota"/></svg><span>Orar con música</span></button>
-        <button class="control" type="button" id="muro-completa"><svg aria-hidden="true"><use href="#i-expandir"/></svg><span>Pantalla completa</span></button>
-      </div>
-      <audio id="muro-audio" loop preload="none" src="https://incompetech.com/music/royalty-free/mp3-royaltyfree/Healing.mp3"></audio>
+
+      <aside class="oracion" id="oracion-tarjeta" aria-live="polite">
+        <div class="oracion__inicio" id="oracion-inicio">
+          <span class="antetitulo">El poder de la oración unida</span>
+          <p class="oracion__verso">“Porque donde están dos o tres congregados en mi nombre, allí estoy yo en medio de ellos.”<cite>Mateo 18:20</cite></p>
+          <p class="oracion__guia"><svg aria-hidden="true"><use href="#i-corona"/></svg>Toca una flor del jardín para sostener esa petición en oración.</p>
+        </div>
+        <div class="oracion__detalle" id="oracion-detalle" hidden>
+          <span class="antetitulo">Sosteniendo la petición de</span>
+          <h3 class="oracion__nombre" id="oracion-nombre"></h3>
+          <p class="oracion__fecha" id="oracion-fecha"></p>
+          <p class="oracion__verso" id="oracion-verso"></p>
+          <p class="oracion__privado"><svg aria-hidden="true"><use href="#i-candado"/></svg>Su petición es confidencial: la conocen Dios y nuestro equipo de oración.</p>
+          <button class="boton boton--muro oracion__unirme" type="button" id="oracion-unirme"><svg aria-hidden="true"><use href="#i-corazon"/></svg><span>Me uno en oración</span></button>
+          <p class="oracion__gracias" id="oracion-gracias" hidden>Tu oración se une a este jardín de fe.</p>
+        </div>
+      </aside>
     </div>
 
-    <div class="privacidad vidrio revelar">
-      <svg aria-hidden="true"><use href="#i-candado"/></svg>
-      <p><strong>Tu petición está protegida.</strong> Nunca publicamos lo que escribes. Solo mostramos un nombre corto de quien no pidió confidencialidad; si elegiste <em>“Solo el equipo de oración (confidencial)”</em> o dejaste el nombre en blanco, apareces como “Una hija del Rey”.</p>
-    </div>
-
-    <div class="acciones revelar">
+    <div class="jardin__pie revelar">
+      <p class="jardin__privacidad"><svg aria-hidden="true"><use href="#i-candado"/></svg>Nunca publicamos lo que escribes. Si elegiste <em>“Solo el equipo de oración (confidencial)”</em> o dejaste el nombre en blanco, apareces como “Una hija del Rey”.</p>
       <a class="boton boton--muro boton--grande" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-formulario"/></svg>Dejar mi petición</a>
     </div>
     <p class="creditos-musica">Música para orar: “Healing” — Kevin MacLeod (incompetech.com) · CC BY 4.0</p>
@@ -244,6 +269,19 @@
   </div>
 </section>
 
+<!-- ================= NUESTROS LIBROS ================= -->
+<section class="seccion libros" id="libros" aria-labelledby="titulo-libros">
+  <img class="libros__mariposa" src="assets/img/mariposa-2.webp" alt="" width="90" height="87" loading="lazy" aria-hidden="true">
+  <div class="contenedor">
+    <header class="cabecera">
+      <span class="antetitulo revelar">Nuestros libros</span>
+      <h2 id="titulo-libros" class="revelar" data-retraso="1">Páginas para <em>crecer en Él</em></h2>
+      <div class="filete"></div>
+    </header>
+    <div class="libros__lista" id="libros-lista"><!-- generado desde config.js --></div>
+  </div>
+</section>
+
 <!-- ================= CONÉCTATE ================= -->
 <section class="seccion conecta" id="conectate" aria-labelledby="titulo-conecta">
   <div class="contenedor">
@@ -289,12 +327,6 @@
           </div>
           <audio preload="none" src="assets/audio/herederas-del-reino.mp3"></audio>
         </div>
-      </article>
-      <article class="proximamente revelar" data-retraso="1">
-        <span class="proximamente__sello">Próximamente</span>
-        <p class="proximamente__ante">Mi cuaderno de notas</p>
-        <h3>Perlas de sabiduría</h3>
-        <p class="proximamente__nota">Muy pronto en Herederas del Reino</p>
       </article>
     </div>
 
@@ -364,6 +396,7 @@
         <li><a href="#encuentros">Encuentros</a></li>
         <li><a href="#muro">Muro de oración</a></li>
         <li><a href="#palabra">Palabra</a></li>
+        <li><a href="#libros">Libros</a></li>
         <li><a href="#recursos">Recursos</a></li>
         <li><a data-enlace="instagram" href="#" target="_blank" rel="noopener">Instagram</a></li>
       </ul>
@@ -372,8 +405,8 @@
   </div>
 </footer>
 
-<script src="assets/js/config.js?v=10"></script>
-<script src="assets/js/peticiones.js?v=10"></script>
-<script src="assets/js/sitio.js?v=10" defer></script>
+<script src="assets/js/config.js?v=12"></script>
+<script src="assets/js/peticiones.js?v=12"></script>
+<script src="assets/js/sitio.js?v=12" defer></script>
 </body>
 </html>

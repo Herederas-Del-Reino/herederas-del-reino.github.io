@@ -74,6 +74,35 @@ window.HR_CONFIG = {
   ],
   zonaHorariaBase: "America/Bogota",
 
+  /* ---------- Nuestros libros ----------
+     Para agregar un libro: copia un bloque, cambia los datos y pon la portada
+     en assets/img/libros/ (ideal: 600 px de ancho o más, formato .webp o .jpg).
+     Usa solo información confirmada del libro. */
+  libros: [
+    {
+      tipo: "Libro",
+      titulo: "Transformada por su Voz",
+      subtitulo: "Del Quebranto al Propósito",
+      autora: "Jennyfer Vásquez de Amarales",
+      descripcion: "De la pastora Jennyfer Vásquez de Amarales: un camino del quebranto al propósito.",
+      portada: "assets/img/libros/transformada-por-su-voz.webp",
+      ancho: 440, alto: 654,
+      enlace: "https://amzn.eu/d/0ehcYWz3",
+      boton: "Conócelo en Amazon"
+    },
+    {
+      tipo: "Cuaderno de notas",
+      titulo: "Perlas de Sabiduría",
+      subtitulo: "Mi Cuaderno de Notas",
+      autora: "",
+      descripcion: "“Porque Jehová da la sabiduría, y de su boca viene el conocimiento y la inteligencia.” — Proverbios 2:6",
+      portada: "assets/img/libros/perlas-de-sabiduria.webp",
+      ancho: 455, alto: 647,
+      enlace: "https://amzn.eu/d/01rzXo8T",
+      boton: "Conócelo en Amazon"
+    }
+  ],
+
   /* ---------- Testimonios ----------
      Publica SOLO testimonios con autorización expresa de la persona.
      Ejemplo: { nombre: "Ana M.", pais: "Colombia", texto: "…" }  */
