@@ -21,7 +21,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
 <link rel="preload" as="image" href="assets/img/fondo-flores-1600.webp" media="(min-width: 701px)">
 <link rel="preload" as="image" href="assets/img/fondo-flores-900.webp" media="(max-width: 700px)">
-<link rel="stylesheet" href="assets/css/sitio.css?v=7">
+<link rel="stylesheet" href="assets/css/sitio.css?v=9">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -170,9 +170,12 @@
     </div>
 
     <article class="pastora revelar" aria-labelledby="titulo-pastora">
-      <div class="pastora__foto"><img src="assets/img/pastora-foto.webp" alt="Pastora Jennyfer de Amarales" width="220" height="220" loading="lazy"></div>
+      <img class="pastora__logo" src="assets/img/pastora-ja.webp" alt="Logotipo Pastora Jennyfer Amarales — Llamada para transformar" width="640" height="686" loading="lazy" decoding="async">
       <div class="pastora__texto">
-        <span class="antetitulo">Con la pastora</span>
+        <div class="pastora__firma">
+          <img class="pastora__foto" src="assets/img/pastora-foto.webp" alt="Pastora Jennyfer de Amarales" width="72" height="72" loading="lazy">
+          <span class="antetitulo">Con la pastora</span>
+        </div>
         <h3 id="titulo-pastora">Jennyfer de Amarales</h3>
         <p class="pastora__lema">Llamada para transformar</p>
         <p>Acompaña a la comunidad en los devocionales, los encuentros Entre Amigas y los Salmos.</p>
@@ -180,7 +183,6 @@
           <a class="boton boton--claro" data-enlace="youtube" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-youtube"/></svg>Su canal de YouTube</a>
         </div>
       </div>
-      <img class="pastora__logo" src="assets/img/pastora-ja.webp" alt="Logotipo Pastora Jennyfer Amarales — Llamada para transformar" width="640" height="686" loading="lazy" decoding="async">
     </article>
   </div>
 </section>
@@ -281,10 +283,12 @@
           <audio preload="none" src="assets/audio/herederas-del-reino.mp3"></audio>
         </div>
       </article>
-      <figure class="proximamente revelar" data-retraso="1">
-        <img src="assets/img/perlas-de-sabiduria.webp" alt="Mi cuaderno de notas: Perlas de sabiduría" width="419" height="509" loading="lazy">
-        <span>Próximamente</span>
-      </figure>
+      <article class="proximamente revelar" data-retraso="1">
+        <span class="proximamente__sello">Próximamente</span>
+        <p class="proximamente__ante">Mi cuaderno de notas</p>
+        <h3>Perlas de sabiduría</h3>
+        <p class="proximamente__nota">Muy pronto en Herederas del Reino</p>
+      </article>
     </div>
 
     <div class="galeria" id="galeria">
@@ -322,28 +326,18 @@
   </div>
 </dialog>
 
-<!-- ================= CONTACTO ================= -->
+<!-- ================= PETICIONES (CONTACTO) ================= -->
 <section class="seccion contacto" id="contacto" aria-labelledby="titulo-contacto">
-  <div class="contenedor contacto__grid">
-    <div class="contacto__info revelar">
-      <span class="antetitulo">Contacto</span>
-      <h2 id="titulo-contacto">Escríbenos, <em>princesa</em></h2>
-      <p>¿Quieres unirte a los encuentros, compartir un testimonio o hablar con alguien del equipo? Déjanos tu mensaje y te responderemos con amor.</p>
-      <ul class="contacto__lista" id="contacto-lista"></ul>
+  <div class="contenedor">
+    <div class="peticion revelar">
+      <img class="peticion__mariposa" src="assets/img/mariposa-1.webp" alt="" width="90" height="82" loading="lazy">
+      <span class="antetitulo">Peticiones de oración</span>
+      <h2 id="titulo-contacto">Oramos juntas, <em>porque ninguna camina sola</em></h2>
+      <p>Déjanos tu petición. Recuerda llenar el formulario de oración para que podamos estar orando por ti.</p>
+      <div class="acciones">
+        <a class="boton boton--muro boton--grande" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-formulario"/></svg>Llenar el formulario de oración</a>
+      </div>
     </div>
-    <form class="formulario vidrio revelar" id="formulario-contacto" data-retraso="1" novalidate>
-      <div class="campo">
-        <label for="c-nombre">Tu nombre</label>
-        <input id="c-nombre" name="nombre" autocomplete="given-name" required>
-      </div>
-      <div class="campo">
-        <label for="c-mensaje">Tu mensaje</label>
-        <textarea id="c-mensaje" name="mensaje" required></textarea>
-      </div>
-      <button class="boton" type="submit"><svg aria-hidden="true"><use href="#i-flecha"/></svg><span id="c-boton">Enviar mensaje</span></button>
-      <p class="formulario__nota" id="c-nota"></p>
-      <p class="formulario__estado" id="c-estado" role="status"></p>
-    </form>
   </div>
 </section>
 
@@ -372,8 +366,8 @@
   </div>
 </footer>
 
-<script src="assets/js/config.js?v=7"></script>
-<script src="assets/js/peticiones.js?v=7"></script>
-<script src="assets/js/sitio.js?v=7" defer></script>
+<script src="assets/js/config.js?v=9"></script>
+<script src="assets/js/peticiones.js?v=9"></script>
+<script src="assets/js/sitio.js?v=9" defer></script>
 </body>
 </html>

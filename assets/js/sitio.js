@@ -198,25 +198,18 @@
   /* =====================================================================
      JARDÍN DE ORACIÓN
      ===================================================================== */
-  const COLORES_FLOR = [
-    { p: '#E8B4C2', b: '#C98E9C' }, { p: '#F4D6DE', b: '#E0A9B7' }, { p: '#F3C7B5', b: '#D99C86' },
-    { p: '#FFF6EF', b: '#E3C9BC' }, { p: '#D99AAA', b: '#B4707F' }
+  /* Cada petición es una pequeña corona rosada (emula el logotipo) */
+  const ROSAS = [
+    { p: '#F2B8C6', b: '#C9798D' }, { p: '#F7CAD5', b: '#D58C9F' },
+    { p: '#E8A3B5', b: '#B86A80' }, { p: '#F9D9E1', b: '#D99BAB' }
   ];
-  function svgFlor(semilla) {
-    const r = (n) => { const x = Math.sin(semilla * 9301 + n * 49297) * 233280; return x - Math.floor(x); };
-    const col = COLORES_FLOR[Math.floor(r(1) * COLORES_FLOR.length)];
-    const petalos = 5 + Math.floor(r(2) * 4), largo = 13 + r(3) * 5, ancho = 7 + r(4) * 3;
-    const curva = (r(5) - .5) * 14;
-    let p = '';
-    for (let i = 0; i < petalos; i++) {
-      const a = (360 / petalos) * i + r(6) * 30;
-      p += `<ellipse cx="35" cy="${32 - largo * .62}" rx="${ancho.toFixed(1)}" ry="${largo.toFixed(1)}" fill="${col.p}" stroke="${col.b}" stroke-width=".8" transform="rotate(${a.toFixed(1)} 35 32)"/>`;
-    }
-    return `<svg viewBox="0 0 70 120" aria-hidden="true">
-      <path d="M35 120 C ${35 + curva} 90, ${35 - curva} 60, 35 34" fill="none" stroke="#8C9A6E" stroke-width="2.2" stroke-linecap="round"/>
-      <path d="M35 ${86 + r(7) * 10} q -16 -6 -20 -18 q 14 2 20 18Z" fill="#A4AF84"/>
-      <path d="M35 ${74 + r(8) * 10} q 15 -5 19 -16 q -13 1 -19 16Z" fill="#B3BC93"/>
-      <g class="flor__petalos">${p}<circle cx="35" cy="32" r="${(4.5 + r(9) * 2).toFixed(1)}" fill="#D4AF37"/><circle cx="35" cy="32" r="2.2" fill="#B8862B"/></g>
+  function svgCorona(semilla) {
+    const c = ROSAS[semilla % ROSAS.length];
+    return `<svg viewBox="0 0 40 30" aria-hidden="true">
+      <path d="M3 22 6 7l8 8 6-12 6 12 8-8 3 15Z" fill="${c.p}" stroke="${c.b}" stroke-width="1.2" stroke-linejoin="round"/>
+      <rect x="3.5" y="23" width="33" height="4.5" rx="2.2" fill="${c.b}"/>
+      <circle cx="6" cy="6" r="2.1" fill="#D4AF37"/><circle cx="20" cy="2.8" r="2.4" fill="#D4AF37"/><circle cx="34" cy="6" r="2.1" fill="#D4AF37"/>
+      <circle cx="20" cy="17" r="1.9" fill="#fff" opacity=".85"/>
     </svg>`;
   }
 
@@ -263,15 +256,15 @@
       el.setAttribute('role', 'listitem');
       el.setAttribute('aria-label', `Sostener en oración la petición de ${p.nombre}`);
       el.style.left = pos.x + '%';
-      el.style.top = (64 + pos.prof * 33) + '%';
+      el.style.top = (54 + pos.prof * 40) + '%';
       el.style.zIndex = Math.round(pos.prof * 100);
-      el.style.setProperty('--escala', (.72 + pos.prof * .5).toFixed(2));
+      el.style.setProperty('--escala', (.75 + pos.prof * .45).toFixed(2));
       el.style.setProperty('--prof', (pos.prof - .5).toFixed(2));
       el.style.setProperty('--desenfoque', ((1 - pos.prof) * .9).toFixed(2) + 'px');
       el.style.setProperty('--mecer', (5 + Math.random() * 3).toFixed(2) + 's');
       el.style.setProperty('--retraso', (-Math.random() * 6).toFixed(2) + 's');
       const semilla = [...p.clave].reduce((a, c) => a + c.charCodeAt(0), 0);
-      el.innerHTML = `<span class="flor__planta">${svgFlor(semilla)}</span><span class="flor__nombre"></span>`;
+      el.innerHTML = `<span class="flor__planta">${svgCorona(semilla)}</span><span class="flor__nombre"></span>`;
       el.querySelector('.flor__nombre').textContent = p.nombre;
       const mostrar = () => sostener(el, p.nombre, v);
       el.addEventListener('click', mostrar);
@@ -375,8 +368,6 @@
       <span class="canal__nota">${esc(c.nota)}</span>
     </a>`).join('');
 
-  $('#contacto-lista').innerHTML = canales.filter(c => c.tipo !== 'Oración').map(c =>
-    `<li><a href="${esc(c.url)}" target="_blank" rel="noopener">${icono(c.icono)}<span><strong>${esc(c.tipo)}</strong> · ${esc(c.nombre)}</span></a></li>`).join('');
 
   /* =====================================================================
      TESTIMONIOS (solo los autorizados en config.js)
@@ -393,7 +384,7 @@
         <img src="assets/img/mariposa-3.webp" alt="" width="84" height="79" loading="lazy">
         <h3>Muy pronto, historias que transforman</h3>
         <p>Aquí compartiremos testimonios de restauración, siempre con la autorización de quien los vivió. ¿Dios hizo algo en tu vida? Nos encantaría escucharte.</p>
-        <a class="boton" href="#contacto">Compartir mi testimonio</a>
+        <a class="boton" href="${esc(C.instagram.url)}" target="_blank" rel="noopener">Compártelo por Instagram</a>
       </div>`;
   }
 
@@ -425,32 +416,6 @@
   }));
   $('#visor-cerrar').addEventListener('click', () => visor.close());
   visor.addEventListener('click', e => { if (e.target === visor) visor.close(); });
-
-  /* =====================================================================
-     CONTACTO — sin servidor: abre WhatsApp o un mensaje directo de Instagram
-     ===================================================================== */
-  const form = $('#formulario-contacto'), estado = $('#c-estado');
-  $('#c-boton').textContent = C.whatsapp ? 'Enviar por WhatsApp' : 'Enviar por Instagram';
-  $('#c-nota').textContent = C.whatsapp
-    ? 'Se abrirá WhatsApp con tu mensaje listo para enviar.'
-    : 'Copiaremos tu mensaje y abriremos nuestro Instagram para que lo pegues en un mensaje directo.';
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    const nombre = form.nombre.value.trim(), mensaje = form.mensaje.value.trim();
-    if (!nombre || !mensaje) {
-      estado.textContent = 'Por favor escribe tu nombre y tu mensaje.';
-      (nombre ? form.mensaje : form.nombre).focus(); return;
-    }
-    const texto = `Hola, soy ${nombre}. ${mensaje}`;
-    if (C.whatsapp) {
-      open(`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(texto)}`, '_blank', 'noopener');
-      estado.textContent = 'Abrimos WhatsApp con tu mensaje. ¡Gracias por escribirnos!';
-    } else {
-      try { await navigator.clipboard.writeText(texto); } catch (_) {}
-      open(`https://ig.me/m/${C.instagram.usuario}`, '_blank', 'noopener');
-      estado.textContent = 'Tu mensaje quedó copiado. Pégalo en el chat de Instagram que acabamos de abrir.';
-    }
-  });
 
   observarRevelados();
 })();
