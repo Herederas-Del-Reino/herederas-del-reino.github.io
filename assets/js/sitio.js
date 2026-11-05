@@ -198,39 +198,17 @@
   /* =====================================================================
      JARDÍN DE ORACIÓN — cada petición es una flor con una pequeña corona
      ===================================================================== */
-  const ROSAS = [
-    { p: '#F4D6DE', b: '#D99BAB', c: '#E8B4C2' }, { p: '#E8B4C2', b: '#B86A80', c: '#F4D6DE' },
-    { p: '#F3C7B5', b: '#C98E7A', c: '#F4D6DE' }, { p: '#FFF6EF', b: '#D9B9AE', c: '#F3C7B5' }
+  // Flores botánicas reales (recortadas de la fotografía oficial, con fondo transparente)
+  const FLORES = [
+    { src: 'assets/img/jardin/peonia-2.webp',  w: 202, h: 420, alto: 1.00 },
+    { src: 'assets/img/jardin/peonia-1.webp',  w: 252, h: 285, alto: .78 },
+    { src: 'assets/img/jardin/rosita.webp',    w: 132, h: 179, alto: .62 },
+    { src: 'assets/img/jardin/anemona.webp',   w: 229, h: 226, alto: .66 }
   ];
   const azar = (semilla, n) => { const x = Math.sin(semilla * 9301 + n * 49297) * 233280; return x - Math.floor(x); };
 
-  // Flor de la petición: tallo, hojas, flor y una corona pequeña posada sobre ella
-  function svgPeticion(semilla) {
-    const c = ROSAS[semilla % ROSAS.length], curva = (azar(semilla, 1) - .5) * 10;
-    let petalos = '';
-    for (let i = 0; i < 6; i++) {
-      petalos += `<ellipse cx="22" cy="31" rx="6.2" ry="9.5" fill="${i % 2 ? c.p : c.c}" stroke="${c.b}" stroke-width=".7" transform="rotate(${i * 60 + azar(semilla, 2) * 20} 22 40)"/>`;
-    }
-    return `<svg viewBox="0 0 44 100" aria-hidden="true">
-      <path d="M22 100 C ${22 + curva} 82, ${22 - curva} 62, 22 44" fill="none" stroke="#9AA57C" stroke-width="1.8" stroke-linecap="round"/>
-      <path d="M22 80 q -12 -4 -15 -14 q 11 1 15 14Z" fill="#B3BC93"/>
-      <path d="M22 70 q 11 -3 14 -12 q -10 0 -14 12Z" fill="#A4AF84"/>
-      <g class="flor__capullo">${petalos}<circle cx="22" cy="40" r="4.2" fill="#D4AF37"/></g>
-      <g class="flor__corona"><path d="M12.5 30 14 19.5l4.5 4.5L22 16l3.5 8 4.5-4.5L31.5 30Z" fill="#F7CAD5" stroke="#B86A80" stroke-width=".9" stroke-linejoin="round"/>
-      <rect x="12.5" y="30" width="19" height="3" rx="1.5" fill="#C9798D"/>
-      <circle cx="14" cy="18.6" r="1.4" fill="#D4AF37"/><circle cx="22" cy="15" r="1.6" fill="#D4AF37"/><circle cx="30" cy="18.6" r="1.4" fill="#D4AF37"/></g>
-    </svg>`;
-  }
-  // Flores decorativas (sin corona) para dar profundidad al paisaje
-  function svgDeco(semilla) {
-    const c = ROSAS[semilla % ROSAS.length];
-    let p = '';
-    for (let i = 0; i < 5; i++) p += `<ellipse cx="20" cy="22" rx="6" ry="9" fill="${c.c}" opacity=".9" transform="rotate(${i * 72} 20 30)"/>`;
-    return `<svg viewBox="0 0 40 90" aria-hidden="true"><path d="M20 90 C 23 70, 17 52, 20 34" fill="none" stroke="#B3BC93" stroke-width="1.5"/>${p}<circle cx="20" cy="30" r="3.4" fill="#E7DCC6"/></svg>`;
-  }
-
   const escena = $('#jardin-escena'), marco = $('#jardin-marco'), floresCont = $('#jardin-flores');
-  const decoCont = $('#jardin-deco'), petalosCont = $('#jardin-petalos'), contadorJ = $('#jardin-contador');
+  const petalosCont = $('#jardin-petalos'), contadorJ = $('#jardin-contador');
   const tarjeta = $('#oracion-tarjeta'), tInicio = $('#oracion-inicio'), tDetalle = $('#oracion-detalle');
   const tNombre = $('#oracion-nombre'), tFecha = $('#oracion-fecha'), tVerso = $('#oracion-verso');
   const bUnirme = $('#oracion-unirme'), tGracias = $('#oracion-gracias');
@@ -278,25 +256,17 @@
     }
   }
 
-  function lluviaDePetalos(el) {
+  // Al unirse: la flor se ilumina con una luz cálida y abre levemente sus pétalos
+  function iluminar(el) {
+    el.classList.remove('abriendo'); void el.offsetWidth; el.classList.add('abriendo');
     if (movimientoReducido) return;
-    const re = escena.getBoundingClientRect(), rf = el.getBoundingClientRect();
-    const x = rf.left + rf.width / 2 - re.left, y = rf.top + rf.height * .3 - re.top;
-    const halo = document.createElement('span');
-    halo.className = 'halo'; halo.style.left = x + 'px'; halo.style.top = y + 'px';
-    petalosCont.appendChild(halo);
-    for (let i = 0; i < 18; i++) {
-      const p = document.createElement('i');
-      const ang = (Math.PI * 2 * i) / 18 + Math.random() * .4, dist = 50 + Math.random() * 90;
-      p.style.left = x + 'px'; p.style.top = y + 'px';
-      p.style.setProperty('--dx', Math.cos(ang) * dist + 'px');
-      p.style.setProperty('--dy', Math.sin(ang) * dist - 40 + 'px');
-      p.style.setProperty('--giro', (Math.random() * 360 - 180) + 'deg');
-      p.style.setProperty('--color', ['#E8B4C2', '#F4D6DE', '#F3C7B5', '#D4AF37'][i % 4]);
-      p.style.animationDelay = (Math.random() * .15) + 's';
-      petalosCont.appendChild(p);
-    }
-    setTimeout(() => { petalosCont.innerHTML = ''; }, 2600);
+    const re = escena.getBoundingClientRect(), rf = el.querySelector('.flor__img').getBoundingClientRect();
+    const luz = document.createElement('span');
+    luz.className = 'halo';
+    luz.style.left = (rf.left + rf.width / 2 - re.left) + 'px';
+    luz.style.top = (rf.top + rf.height * .28 - re.top) + 'px';
+    petalosCont.appendChild(luz);
+    setTimeout(() => luz.remove(), 3200);
   }
 
   bUnirme.addEventListener('click', () => {
@@ -304,47 +274,30 @@
     unidas.add(seleccion); guardarUnidas(); pintarMias();
     const f = flores.get(seleccion);
     f.el.classList.add('acompanada');
-    lluviaDePetalos(f.el);
+    iluminar(f.el);
     pintarBoton(seleccion);
   });
 
   // Distribución equilibrada por planos (fondo → frente), adaptable a cualquier cantidad
   function distribuir(lista) {
     const ancho = escena.clientWidth || 800;
-    const maxFila = Math.max(2, Math.floor(ancho / (ancho < 600 ? 92 : 112)));
-    // Siempre al menos 2-3 planos para que el jardín tenga profundidad, aunque haya pocas peticiones
+    const maxFila = Math.max(2, Math.floor(ancho / (ancho < 600 ? 88 : 118)));
     const filas = Math.max(1, Math.ceil(lista.length / maxFila), Math.min(3, Math.ceil(lista.length / 3)));
     const porFila = Math.ceil(lista.length / filas);
-    const posiciones = [];
-    lista.forEach((p, i) => {
+    return lista.map((p, i) => {
       const fila = Math.floor(i / porFila);                          // 0 = frente (las más recientes)
       const enFila = Math.min(porFila, lista.length - fila * porFila);
       const k = i % porFila;
       const prof = filas === 1 ? 1 : 1 - fila / (filas - 1);         // 1 frente · 0 fondo
-      const desfase = fila % 2 ? .5 : 0;
       const semilla = [...p.clave].reduce((a, c) => a + c.charCodeAt(0), 0);
-      // filas pares: centradas en su espacio · filas impares: intercaladas entre las de adelante
-      const t = desfase ? (k + 1) / (enFila + 1) : (k + .5) / enFila;
+      const t = fila % 2 ? (k + 1) / (enFila + 1) : (k + .5) / enFila;
       const x = 8 + 84 * t + (azar(semilla, 3) - .5) * Math.min(4, 50 / enFila);
-      const y = filas === 1 ? 84 : 52 + prof * 38;
-      posiciones.push({ x: Math.max(6, Math.min(94, x)), y, prof, semilla });
+      const base = filas === 1 ? 97 : 76 + prof * 22;               // % desde arriba donde nace el tallo
+      return { x: Math.max(7, Math.min(93, x)), base, prof, semilla };
     });
-    return posiciones;
-  }
-
-  function pintarDeco() {
-    if (decoCont.childElementCount) return;
-    const sitios = [
-      [4, 66, .5, 1.2], [15, 58, .3, 1.6], [27, 62, .25, 1.4], [44, 57, .2, 1.8], [61, 60, .25, 1.5], [78, 57, .3, 1.6], [93, 64, .45, 1.2],
-      [10, 82, .6, .6], [52, 79, .5, .7], [88, 84, .6, .6],
-      [2, 99, 1.25, 2.4], [97, 101, 1.35, 2.6]
-    ];
-    decoCont.innerHTML = sitios.map(([x, y, s, b], i) =>
-      `<span class="deco" style="left:${x}%;top:${y}%;--s:${s};--b:${b}px;--retraso:${-i * .9}s">${svgDeco(i * 7 + 3)}</span>`).join('');
   }
 
   function cargarJardin(lista, primera) {
-    pintarDeco();
     const claves = new Set(lista.map(p => p.clave));
     flores.forEach((f, k) => { if (!claves.has(k)) { f.el.remove(); flores.delete(k); } });
     const pos = distribuir(lista);
@@ -355,7 +308,9 @@
         el.type = 'button'; el.className = 'flor' + (primera ? '' : ' brotar');
         el.setAttribute('role', 'listitem');
         el.setAttribute('aria-label', `Sostener en oración la petición de ${p.nombre}`);
-        el.innerHTML = `<span class="flor__planta">${svgPeticion(pos[i].semilla)}</span><span class="flor__nombre"></span>`;
+        const flor = FLORES[pos[i].semilla % FLORES.length];
+        el.style.setProperty('--alto', flor.alto);
+        el.innerHTML = `<span class="flor__nombre"></span><img class="flor__img" src="${flor.src}" alt="" width="${flor.w}" height="${flor.h}" decoding="async" draggable="false">`;
         el.querySelector('.flor__nombre').textContent = p.nombre;
         el.style.setProperty('--mecer', (5 + azar(pos[i].semilla, 4) * 3).toFixed(2) + 's');
         el.style.setProperty('--retraso', (-azar(pos[i].semilla, 5) * 6).toFixed(2) + 's');
@@ -368,11 +323,11 @@
       f.p = p;
       const q = pos[i];
       f.el.style.left = q.x + '%';
-      f.el.style.top = q.y + '%';
+      f.el.style.top = q.base + '%';
       f.el.style.zIndex = 10 + Math.round(q.prof * 80);
-      f.el.style.setProperty('--escala', (.72 + q.prof * .38).toFixed(2));
+      f.el.style.setProperty('--escala', (.62 + q.prof * .38).toFixed(2));
       f.el.style.setProperty('--prof', (q.prof - .5).toFixed(2));
-      f.el.style.setProperty('--desenfoque', ((1 - q.prof) * .6).toFixed(2) + 'px');
+      f.el.style.setProperty('--desenfoque', ((1 - q.prof) * 1.1).toFixed(2) + 'px');
       f.el.classList.toggle('lejana', q.prof < .34 && lista.length > 8);
     });
     const n = lista.length;
