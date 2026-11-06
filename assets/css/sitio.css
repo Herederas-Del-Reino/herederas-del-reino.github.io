@@ -852,6 +852,11 @@ p { margin: 0; }
 }
 /* Con la tarjeta debajo, el inicio crece: el fondo conserva su tamaño original
    para que el logotipo no se agrande detrás del título */
+/* Con la tarjeta debajo del mensaje, el paralaje la empujaría fuera del inicio y la cortaría:
+   en una sola columna el fondo, el mensaje y la tarjeta permanecen quietos y alineados */
+@media (max-width: 1319px) {
+  .hero__fondo, .hero__contenido, .hero__lateral { transform: none !important; }
+}
 @media (min-width: 701px) and (max-width: 1319px) {
   .hero { background: var(--marfil); }
   .hero__fondo { bottom: auto; height: calc(max(92svh, 680px) - 64px); }
