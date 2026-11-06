@@ -86,96 +86,29 @@
   .cj-confianza { position: sticky; top: 104px; }
 }
 
-/* ---------- Formulario ---------- */
-.cj-formulario { padding: clamp(22px, 4vw, 40px); border-radius: var(--radio-l); background: linear-gradient(160deg, rgba(255,255,255,.92), rgba(255,246,239,.8)); }
-.cj-aviso-recepcion {
-  display: flex; gap: 10px; margin: 0 0 22px; padding: 12px 16px; border-radius: 14px;
-  background: rgba(212,175,55,.14); border: 1px solid rgba(212,175,55,.4); color: #6A5216; font-size: .92rem;
-}
-.cj-campo { border: 0; padding: 0; margin: 0 0 26px; min-width: 0; }
-.cj-campo legend, .cj-etiqueta--titulo {
-  display: block; padding: 0; margin-bottom: 12px;
-  font: 600 1.2rem/1.3 var(--f-titulo); color: var(--vino);
-}
-.cj-etiqueta { display: block; margin-bottom: 8px; font-weight: 500; color: var(--tinta); }
-.cj-etiqueta small { font-weight: 400; color: var(--texto-suave); }
-.cj-ayuda { margin: -4px 0 12px; font-size: .92rem; color: var(--texto-suave); }
-
-.cj-opciones { display: grid; gap: 10px; }
-.cj-opcion {
-  position: relative; display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 12px 16px;
-  border-radius: 16px; border: 1px solid rgba(122,51,70,.18); background: rgba(255,255,255,.75); cursor: pointer;
-  transition: border-color .3s, background .3s, box-shadow .3s;
-}
-.cj-opcion:hover { border-color: rgba(122,51,70,.4); }
-.cj-opcion input {
-  appearance: none; -webkit-appearance: none; flex: none; width: 20px; height: 20px; margin: 0; border-radius: 50%;
-  border: 1.5px solid var(--vino-suave); background: #fff; display: grid; place-items: center; cursor: pointer;
-}
-.cj-opcion input::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--vino); transform: scale(0); transition: transform .25s ease; }
-.cj-opcion input:checked::after { transform: scale(1); }
-.cj-opcion:has(input:checked) { border-color: var(--vino-suave); background: rgba(244,214,222,.55); box-shadow: 0 6px 16px -12px rgba(122,51,70,.7); }
-.cj-opcion input:focus-visible { outline: 2px solid var(--vino); outline-offset: 3px; }
-.cj-opcion span { font-size: .98rem; line-height: 1.4; }
-@media (min-width: 620px) { .cj-opciones { grid-template-columns: 1fr 1fr; } }
-
-.cj-input {
-  width: 100%; min-height: 50px; padding: 12px 16px; border-radius: 14px;
-  border: 1px solid rgba(122,51,70,.22); background: #fff; color: var(--tinta);
-  font: 400 1rem/1.5 var(--f-texto); transition: border-color .3s, box-shadow .3s;
-}
-.cj-input:focus { outline: none; border-color: var(--vino-suave); box-shadow: 0 0 0 4px rgba(232,180,194,.45); }
-.cj-input[aria-invalid="true"] { border-color: #B3263E; }
-.cj-textarea { min-height: 180px; resize: vertical; }
-.cj-select { position: relative; }
-.cj-select select { appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer; }
-.cj-select::after {
-  content: ""; position: absolute; right: 18px; top: 50%; width: 9px; height: 9px; pointer-events: none;
-  border-right: 1.6px solid var(--vino); border-bottom: 1.6px solid var(--vino); transform: translateY(-70%) rotate(45deg);
-}
-.cj-contador { margin-top: 6px; text-align: right; font-size: .8rem; color: var(--texto-suave); }
-.cj-contador.cerca { color: #9A5B12; }
-
-.cj-revelado { margin-top: 14px; animation: revelarCampo .45s cubic-bezier(.2,.7,.2,1); }
-@keyframes revelarCampo { from { opacity: 0; transform: translateY(-6px); } }
-
-.cj-error { display: flex; gap: 6px; margin-top: 8px; font-size: .88rem; color: #A11F36; }
-.cj-error::before { content: "!"; flex: none; display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: #A11F36; color: #fff; font-size: .72rem; font-weight: 700; }
-
-.cj-privacidad { padding: 18px 18px 16px; border-radius: 18px; background: rgba(244,214,222,.4); border: 1px solid rgba(212,175,55,.3); }
-.cj-privacidad__titulo { display: flex; align-items: center; gap: 8px; font: 600 1.05rem/1.2 var(--f-titulo); color: var(--vino); margin-bottom: 10px; }
-.cj-privacidad__titulo svg { width: 18px; height: 18px; color: var(--dorado); }
-.cj-check { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: .95rem; line-height: 1.5; }
-.cj-check input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--vino); cursor: pointer; }
-
-.cj-trampa { position: absolute !important; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
-
-.cj-enviar { width: 100%; }
-.cj-enviar__cargando { display: none; width: 18px; height: 18px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; animation: girar .8s linear infinite; }
-.cj-enviar.enviando .cj-enviar__cargando { display: inline-block; }
-.cj-enviar[disabled] { opacity: .75; cursor: progress; transform: none; }
-@keyframes girar { to { transform: rotate(360deg); } }
-.cj-estado { min-height: 1.5em; margin-top: 12px; text-align: center; font-size: .92rem; color: var(--vino); }
-.cj-estado.error { color: #A11F36; }
-
-/* ---------- Confirmación ---------- */
-.cj-exito { text-align: center; padding: 10px 4px; outline: none; }
-.cj-exito:not([hidden]) { animation: aparecerExito .9s cubic-bezier(.2,.7,.2,1) both; }
-@keyframes aparecerExito { from { opacity: 0; transform: translateY(12px) scale(.98); } }
-.cj-exito__sello {
-  display: grid; place-items: center; width: 74px; height: 74px; margin: 0 auto 18px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #E8CF7A, #C9A23A 55%, #9E7E1E); color: #fff;
-  box-shadow: 0 0 0 7px rgba(255,255,255,.8), 0 0 0 8px rgba(212,175,55,.5), 0 14px 26px -10px rgba(122,51,70,.5);
-}
-.cj-exito__sello svg { width: 32px; height: 32px; }
-.cj-exito:not([hidden]) .cj-exito__sello { animation: latido 1.6s .5s ease-in-out 2; }
-@keyframes latido { 50% { transform: scale(1.08); } }
-.cj-exito h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); font-style: italic; }
-.cj-exito p { margin: 10px auto 0; max-width: 480px; color: var(--tinta); }
-.cj-exito__bendicion { font: italic 500 1.2rem/1.4 var(--f-marca); color: var(--vino-suave) !important; }
-.cj-exito__firma strong { display: block; color: var(--vino); }
-.cj-exito__id { font-size: .82rem; color: var(--texto-suave) !important; }
-.cj-exito .boton { margin-top: 22px; }
+/* ---------- Formulario de Google incrustado ----------
+   Google Forms no informa su altura al sitio: el marco toma la altura medida
+   del formulario según su ancho, para que no haya doble scroll.
+   Si se agregan o quitan preguntas, hay que volver a medir estas alturas. */
+.cj-formulario { padding: clamp(8px, 1.6vw, 18px); border-radius: var(--radio-l); background: linear-gradient(160deg, rgba(255,255,255,.92), rgba(255,246,239,.8)); }
+.cj-embebido { container-type: inline-size; border-radius: calc(var(--radio-l) - 10px); overflow: hidden; background: #F7E6E3; }
+.cj-embebido iframe { display: block; width: 100%; height: 2574px; border: 0; }
+@container (min-width: 300px) { .cj-embebido iframe { height: 2430px; } }
+@container (min-width: 320px) { .cj-embebido iframe { height: 2360px; } }
+@container (min-width: 340px) { .cj-embebido iframe { height: 2248px; } }
+@container (min-width: 360px) { .cj-embebido iframe { height: 2112px; } }
+@container (min-width: 380px) { .cj-embebido iframe { height: 2090px; } }
+@container (min-width: 400px) { .cj-embebido iframe { height: 1984px; } }
+@container (min-width: 460px) { .cj-embebido iframe { height: 1896px; } }
+@container (min-width: 480px) { .cj-embebido iframe { height: 1874px; } }
+@container (min-width: 500px) { .cj-embebido iframe { height: 1830px; } }
+@container (min-width: 520px) { .cj-embebido iframe { height: 1768px; } }
+@container (min-width: 560px) { .cj-embebido iframe { height: 1746px; } }
+@container (min-width: 580px) { .cj-embebido iframe { height: 1722px; } }
+@container (min-width: 640px) { .cj-embebido iframe { height: 1698px; } }
+@container (min-width: 680px) { .cj-embebido iframe { height: 1688px; } }
+@container (min-width: 720px) { .cj-embebido iframe { height: 1648px; } }
+.cj-formulario__alterno { margin: 12px 0 4px; text-align: center; font-size: .9rem; color: var(--texto-suave); }
 
 /* ---------- La Pastora responde ---------- */
 .cj-respuestas { background: linear-gradient(180deg, #FCEFEA, var(--rosa-empolvado)); }
@@ -195,7 +128,4 @@
 
 @media (max-width: 560px) {
   .cj-portada__foto figcaption { margin-inline: 10px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cj-revelado, .cj-exito:not([hidden]), .cj-exito:not([hidden]) .cj-exito__sello { animation: none; }
 }

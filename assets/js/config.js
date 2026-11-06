@@ -109,17 +109,13 @@ window.HR_CONFIG = {
   testimonios: [],
 
   /* ---------- Pregúntale a la Pastora ----------
-     La recepción de consultas permanece APAGADA mientras "endpoint" esté vacío:
-     el formulario se ve y se valida, pero no envía nada.
-     Actívala solo cuando el aviso de privacidad esté aprobado y el backend
-     configurado (guía: docs/preguntale-a-la-pastora.md). */
+     El formulario es un Google Form incrustado en consejeria/index.html.
+     Estos datos completan el aviso de privacidad (consejeria/privacidad/).
+     Mientras estén vacíos, el aviso se muestra como borrador. */
   consejeria: {
-    endpoint: "",                    // URL de la aplicación web de Google Apps Script (termina en /exec)
-    maxCaracteres: 3000,             // longitud máxima de la consulta (igual que en el backend)
-    // Datos del aviso de privacidad. Mientras estén vacíos, el aviso se muestra como borrador.
     responsable: "",                 // nombre legal del responsable del tratamiento
     correoPrivacidad: "",            // correo para ejercer derechos sobre los datos
-    conservacion: "",                // plazo de conservación aprobado, p. ej. "12 meses después de cerrar la consulta"
+    conservacion: "",                // plazo aprobado, p. ej. "12 meses después de responder la consulta"
     avisoAprobado: false             // cámbialo a true cuando el ministerio apruebe el aviso
   },
 
