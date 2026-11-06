@@ -795,6 +795,75 @@ p { margin: 0; }
 .pie__legal { margin-top: 36px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.14); font-size: .78rem; opacity: .75; }
 
 /* =====================================================================
+   PREGÚNTALE A LA PASTORA — tarjeta de acceso en el inicio
+   Una columna (móvil y tableta): debajo del mensaje principal.
+   Escritorio amplio: columna derecha del inicio, sin tocar el centro.
+   ===================================================================== */
+.hero__lateral { position: relative; z-index: 2; width: 100%; display: flex; justify-content: center; margin-top: clamp(64px, 9vw, 84px); }
+.consejo {
+  position: relative; width: min(100%, 420px); text-align: center;
+  padding: 70px clamp(20px, 2.2vw, 30px) 26px;
+  border-radius: 30px;
+  background:
+    radial-gradient(ellipse 80% 45% at 50% 0%, rgba(255,255,255,.95), rgba(255,255,255,0) 70%),
+    linear-gradient(172deg, rgba(255,251,247,.97), rgba(250,228,233,.95));
+  border: 1px solid rgba(212,175,55,.55);
+  box-shadow: 0 0 0 6px rgba(255,255,255,.42), 0 30px 60px -30px rgba(122,51,70,.6);
+}
+.consejo::before {            /* filete dorado interior */
+  content: ""; position: absolute; inset: 8px; border-radius: 23px; pointer-events: none;
+  border: 1px solid rgba(212,175,55,.22);
+}
+.consejo__sobre { position: absolute; top: -62px; left: 50%; width: 156px; transform: translateX(-50%); filter: drop-shadow(0 12px 14px rgba(122,51,70,.2)); }
+.consejo__sobre svg { display: block; width: 100%; height: auto; overflow: visible; }
+.consejo__carta { transform-box: fill-box; transform-origin: 50% 100%; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+.consejo.visible .consejo__carta { animation: cartaAsoma 1.6s .6s cubic-bezier(.2,.7,.2,1) both; }
+.consejo:hover .consejo__carta, .consejo:focus-within .consejo__carta { transform: translateY(-6px); }
+@keyframes cartaAsoma { from { transform: translateY(14px); } to { transform: none; } }
+.consejo__titulo { font: 600 clamp(1.55rem, 1.9vw, 2rem)/1.05 var(--f-titulo); color: var(--vino); }
+.consejo__titulo em {
+  display: flex; justify-content: center; align-items: flex-start; gap: 4px;
+  font: italic 600 1.55em/1 var(--f-titulo); color: var(--vino-suave); letter-spacing: -.01em;
+}
+.consejo__titulo em svg { width: .5em; height: .5em; margin-top: .02em; color: var(--vino-suave); }
+.consejo__pregunta {
+  margin: 14px auto 0; padding: 9px 16px; border-radius: 999px;
+  background: rgba(244,214,222,.78); color: var(--vino); font-weight: 500; font-size: .98rem; line-height: 1.35;
+}
+.consejo__texto { margin-top: 12px; font-size: .95rem; line-height: 1.5; color: var(--tinta); }
+.consejo__frase {
+  margin-top: 12px; padding-top: 18px; font: italic 500 1.12rem/1.35 var(--f-marca); color: var(--vino-suave);
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='14' viewBox='0 0 24 24' fill='none' stroke='%239C5466' stroke-width='2'><path d='M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z'/></svg>") center top / 16px 14px no-repeat,
+    linear-gradient(90deg, transparent, rgba(212,175,55,.7) 30%, transparent 44%, transparent 56%, rgba(212,175,55,.7) 70%, transparent) center 7px / 82% 1px no-repeat;
+}
+.consejo__boton {
+  margin-top: 18px; width: 100%; min-height: 54px; justify-content: center; padding-inline: 16px; white-space: nowrap;
+  --fondo: linear-gradient(135deg, #6E2A3C 0%, #9C4A5E 60%, #B8606F 110%);
+  border: 1px solid rgba(212,175,55,.6); font-size: 1.04rem;
+}
+.consejo__boton .consejo__flecha { width: 16px; height: 16px; margin-left: 4px; transition: transform .35s ease; }
+.consejo__boton:hover .consejo__flecha { transform: translateX(3px); }
+@media (min-width: 1320px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 600px) minmax(0, 1fr); column-gap: clamp(24px, 2.6vw, 48px); }
+  .hero__contenido { grid-column: 2; grid-row: 1; }
+  .hero__lateral { grid-column: 3; grid-row: 1; align-self: center; justify-content: flex-start; margin-top: 0; }
+  .consejo { width: min(100%, 400px); }
+}
+/* Con la tarjeta debajo, el inicio crece: el fondo conserva su tamaño original
+   para que el logotipo no se agrande detrás del título */
+@media (min-width: 701px) and (max-width: 1319px) {
+  .hero { background: var(--marfil); }
+  .hero__fondo { bottom: auto; height: calc(max(92svh, 680px) - 64px); }
+}
+/* El menú de escritorio solo muestra «Consejería» cuando hay espacio; en el menú móvil siempre aparece */
+@media (min-width: 1021px) and (max-width: 1279px) { .nav__consejeria { display: none; } }
+@media (max-width: 420px) {
+  .consejo { padding-inline: 18px; }
+  .consejo__titulo { font-size: 1.5rem; }
+}
+
+/* =====================================================================
    MOVIMIENTO REDUCIDO
    ===================================================================== */
 @media (prefers-reduced-motion: reduce) {

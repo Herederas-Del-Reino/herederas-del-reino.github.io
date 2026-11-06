@@ -106,5 +106,29 @@ window.HR_CONFIG = {
   /* ---------- Testimonios ----------
      Publica SOLO testimonios con autorización expresa de la persona.
      Ejemplo: { nombre: "Ana M.", pais: "Colombia", texto: "…" }  */
-  testimonios: []
+  testimonios: [],
+
+  /* ---------- Pregúntale a la Pastora ----------
+     La recepción de consultas permanece APAGADA mientras "endpoint" esté vacío:
+     el formulario se ve y se valida, pero no envía nada.
+     Actívala solo cuando el aviso de privacidad esté aprobado y el backend
+     configurado (guía: docs/preguntale-a-la-pastora.md). */
+  consejeria: {
+    endpoint: "",                    // URL de la aplicación web de Google Apps Script (termina en /exec)
+    maxCaracteres: 3000,             // longitud máxima de la consulta (igual que en el backend)
+    // Datos del aviso de privacidad. Mientras estén vacíos, el aviso se muestra como borrador.
+    responsable: "",                 // nombre legal del responsable del tratamiento
+    correoPrivacidad: "",            // correo para ejercer derechos sobre los datos
+    conservacion: "",                // plazo de conservación aprobado, p. ej. "12 meses después de cerrar la consulta"
+    avisoAprobado: false             // cámbialo a true cuando el ministerio apruebe el aviso
+  },
+
+  /* ---------- La Pastora responde ----------
+     Solo videos YA publicados en las redes oficiales de la pastora.
+     La galería permanece oculta mientras esta lista esté vacía.
+     Ejemplo:
+     { titulo: "¿Cómo perdonar cuando duele?", categoria: "Perdón y restauración",
+       red: "Instagram", url: "https://www.instagram.com/reel/…",
+       miniatura: "assets/img/ensenanzas/perdon.webp" }   ← vertical 9:16, opcional */
+  ensenanzas: []
 };
