@@ -113,6 +113,28 @@ window.HR_CONFIG = {
      Estos datos completan el aviso de privacidad (consejeria/privacidad/).
      Mientras estén vacíos, el aviso se muestra como borrador. */
   consejeria: {
+    /* El formulario de la página es propio, pero cada respuesta llega al
+       Google Form del ministerio (y a su hoja). Estos códigos son los de cada
+       pregunta del Google Form: si se borra o se cambia una pregunta allí,
+       hay que actualizarlos aquí (guía: docs/preguntale-a-la-pastora.md). */
+    googleForm: {
+      envio: "https://docs.google.com/forms/d/e/1FAIpQLSd5wpfnfChXNsFDs8vdb8wkiEpupyosBLXOxADdqyDX2Hc7Sg/formResponse",
+      editar: "https://docs.google.com/forms/d/1D1aD-RWy8OBPXG3_QddlYtJX8g8kBIqO20ASgTsi0pw/edit",
+      campos: {
+        identidad: "entry.247459331",   // ¿Cómo deseas compartir tu inquietud?
+        nombre: "entry.1723979380",     // ¿Cómo te llamas?
+        tema: "entry.182868789",        // ¿Sobre qué tema necesitas orientación?
+        consulta: "entry.153933767",    // Hija del Rey, ¿qué hay en tu corazón?
+        correo: "entry.954892756"       // Déjanos tu correo electrónico
+      },
+      // Deben coincidir EXACTAMENTE con las opciones del Google Form (incluidos los emojis)
+      opcionesIdentidad: {
+        anonima: "Prefiero permanecer en el anonimato 🤍",
+        nombre: "Deseo compartir mi nombre 🌷"
+      }
+    },
+    maxCaracteres: 3000,
+
     responsable: "Herederas del Reino, ministerio liderado por la pastora Jennyfer Vásquez de Amarales",
     correoPrivacidad: "",            // correo para ejercer derechos; mientras esté vacío se usa el Instagram oficial
     conservacion: "Conservamos tu consulta hasta 12 meses después de que sea respondida o cerrada",

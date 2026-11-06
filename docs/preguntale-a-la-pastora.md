@@ -1,6 +1,6 @@
 # Pregúntale a la Pastora · Guía de uso
 
-Espacio de consejería del sitio de Herederas del Reino. Las mujeres comparten una inquietud, con su nombre o de forma anónima, mediante el **formulario de Google del ministerio**, incrustado en la página `/consejeria/`. La pastora responde a las preguntas que elija con videos en sus propias redes.
+Espacio de consejería del sitio de Herederas del Reino. Las mujeres comparten una inquietud, con su nombre o de forma anónima, en el formulario de la página `/consejeria/`. El formulario tiene el diseño del sitio, pero **cada respuesta llega al Google Form del ministerio** y a su hoja de respuestas. La pastora responde a las preguntas que elija con videos en sus propias redes.
 
 Formulario: https://docs.google.com/forms/d/1D1aD-RWy8OBPXG3_QddlYtJX8g8kBIqO20ASgTsi0pw/edit
 
@@ -11,22 +11,36 @@ Formulario: https://docs.google.com/forms/d/1D1aD-RWy8OBPXG3_QddlYtJX8g8kBIqO20A
 | Pieza | Dónde |
 |---|---|
 | Tarjeta «Pregúntale a la Pastora» en el inicio | `index.html` (columna derecha; debajo del mensaje en tableta y celular) |
-| Página de consejería con el formulario incrustado | `consejeria/index.html` |
+| Página de consejería con el formulario | `consejeria/index.html` (diseño) y `assets/js/consejeria.js` (envío) |
+| Conexión con el Google Form | `assets/js/config.js` → `consejeria.googleForm` |
 | Aviso de privacidad (borrador) | `consejeria/privacidad/index.html`, datos en `assets/js/config.js` → `consejeria` |
 | Galería «La Pastora responde» | `assets/js/config.js` → `ensenanzas` (oculta mientras esté vacía) |
 
-## Recomendaciones para el formulario de Google
+## Cómo se conecta con el Google Form
 
-Estas mejoras se hacen dentro del formulario, en Google Forms (el sitio no puede cambiarlas):
+Cada pregunta del Google Form tiene un código (`entry.…`). El sitio envía cada respuesta con esos códigos, configurados en `assets/js/config.js` → `consejeria.googleForm`:
 
-1. **Marcar como obligatorias** «¿Cómo deseas compartir tu inquietud?», «¿Sobre qué tema necesitas orientación?» y «Hija del Rey, ¿qué hay en tu corazón?». Hoy ninguna lo es, así que pueden llegar respuestas vacías.
-2. Cambiar «¿Sobre qué tema necesitas orientación?» de respuesta corta a **opción múltiple** con: Mi relación con Dios · Familia y matrimonio · Perdón y restauración · Mis emociones y preocupaciones · Mi propósito y llamado · Oración y vida espiritual · Otra inquietud.
-3. En el correo: activar la **validación de respuesta → Texto → Dirección de correo electrónico**.
-4. Agregar la pregunta **«¿Nos autorizas a compartir una versión anónima de tu pregunta en las redes sociales de la pastora?»** (Sí / No, sin respuesta predeterminada). Sin esta autorización, ninguna pregunta debe usarse en un video.
-5. Agregar una **casilla obligatoria** de consentimiento: «He leído el aviso de privacidad y autorizo el tratamiento de mis datos para gestionar mi consulta», con el enlace al aviso: https://herederas-del-reino.github.io/consejeria/privacidad/
-6. En **Configuración → Respuestas**: mantener desactivado «Recopilar direcciones de correo electrónico» (si se activa, las anónimas dejarían de serlo) y desactivado «Limitar a 1 respuesta» (exige iniciar sesión).
-7. **Colores de la marca** (🎨 Personalizar tema): color del tema `#7A3346` (vino), fondo rosa claro, estilo de fuente «Elegante» o «Formal». Así el botón «Enviar» y la barra superior dejan el rojo de Google y combinan con el sitio.
-8. Personalizar el **mensaje de confirmación** (Configuración → Presentación) con: «¡Gracias por abrir tu corazón! Hija del Rey, hemos recibido tu mensaje con mucho cariño…».
+| Pregunta del Google Form | Código |
+|---|---|
+| ¿Cómo deseas compartir tu inquietud? | `entry.247459331` |
+| ¿Cómo te llamas? | `entry.1723979380` |
+| ¿Sobre qué tema necesitas orientación? | `entry.182868789` |
+| Hija del Rey, ¿qué hay en tu corazón? | `entry.153933767` |
+| Déjanos tu correo electrónico | `entry.954892756` |
+
+**Importante al editar el Google Form:**
+- Puedes cambiar el **texto** de las preguntas sin problema.
+- **No borres y vuelvas a crear** una pregunta: cambia su código y esas respuestas dejarían de llegar.
+- Las opciones de «¿Cómo deseas compartir tu inquietud?» deben seguir siendo exactamente «Prefiero permanecer en el anonimato 🤍» y «Deseo compartir mi nombre 🌷». Si las cambias, actualiza `opcionesIdentidad`.
+- **No marques preguntas como obligatorias** si el sitio no las envía siempre (nombre y correo son opcionales). Si una pregunta obligatoria llega vacía, Google rechaza la respuesta sin avisar.
+- Si agregas preguntas nuevas (por ejemplo, la autorización para compartir en redes), avisa para conectarlas al formulario del sitio.
+- Para obtener el código de una pregunta: Google Form → ⋮ → «Obtener enlace prellenado», llena la pregunta, copia el enlace y busca `entry.`.
+
+## Recomendaciones para el Google Form
+
+1. En **Configuración → Respuestas**: mantener desactivado «Recopilar direcciones de correo electrónico» y «Limitar a 1 respuesta» (ambas exigirían iniciar sesión y el sitio no podría enviar).
+2. El Google Form debe estar **aceptando respuestas** (pestaña Respuestas).
+3. Las validaciones (tema, longitud, correo válido, consentimiento) ya las hace el formulario del sitio.
 
 ## Avisos a la pastora y a la encargada de redes
 
@@ -64,9 +78,8 @@ Datos en `assets/js/config.js` → `consejeria`: responsable, canal de privacida
 
 Para borrar la consulta de una persona: elimina su respuesta en el formulario (Respuestas → Individual → 🗑) **y** la fila de la hoja vinculada. Aplica también el plazo de conservación definido en el aviso.
 
-## Si el formulario no aparece en la página
+## Si las respuestas no llegan
 
-- Debe estar **aceptando respuestas** (pestaña Respuestas).
-- No debe exigir iniciar sesión (Configuración → Respuestas).
-- Debajo del formulario hay un enlace para abrirlo en una pestaña nueva.
-- Si el formulario cambia de largo (preguntas nuevas), ajusta las alturas del marco en `assets/css/consejeria.css` (bloque «Formulario de Google incrustado»).
+- Revisa que el Google Form siga **aceptando respuestas**.
+- Revisa que no se haya borrado o recreado ninguna pregunta (sección «Cómo se conecta»).
+- Envía una consulta de prueba desde https://herederas-del-reino.github.io/consejeria/ y confirma que aparece en Respuestas.

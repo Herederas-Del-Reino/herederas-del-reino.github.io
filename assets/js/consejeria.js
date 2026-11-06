@@ -66,6 +66,115 @@
     });
   }
 
+  /* ---------- Formulario ----------
+     Diseño propio; cada respuesta se envía al Google Form del ministerio.
+     No guarda nada en el navegador ni pone datos en la URL. */
+  const form = $('#form-consulta');
+  const GF = (CJ.googleForm) || {};
+  const MAX = Number(CJ.maxCaracteres) || 3000;
+  const RE_CORREO = /^[^\s@<>()[\]\\,;:"]+@[^\s@<>()[\]\\,;:"]+\.[a-z]{2,}$/i;
+  const texto = $('#consulta-texto'), contador = $('#contador-consulta');
+  const estado = $('#form-estado'), boton = $('#enviar'), exito = $('#exito');
+  let enviando = false, enviado = false;
+
+  texto.maxLength = MAX;
+  const actualizarContador = () => {
+    contador.textContent = `${texto.value.length} / ${MAX}`;
+    contador.classList.toggle('cerca', texto.value.length > MAX * .9);
+  };
+  texto.addEventListener('input', actualizarContador); actualizarContador();
+
+  const valor = (nombre) => (form.elements[nombre] && form.elements[nombre].value) || '';
+  function sincronizar() {
+    const conNombre = valor('identidad') === 'nombre';
+    $('#bloque-nombre').hidden = !conNombre;
+    if (!conNombre) $('#nombre').value = '';
+    const conCorreo = valor('respuesta') === 'si';
+    $('#bloque-correo').hidden = !conCorreo;
+    if (!conCorreo) { $('#correo').value = ''; limpiarError('correo'); }
+  }
+  function mostrarError(id, mensaje, control) {
+    const p = $('#error-' + id); p.textContent = mensaje; p.hidden = false;
+    if (control) control.setAttribute('aria-invalid', 'true');
+  }
+  function limpiarError(id) {
+    const p = $('#error-' + id); if (p) { p.hidden = true; p.textContent = ''; }
+    const control = { tema: '#tema', consulta: '#consulta-texto', correo: '#correo', consentimiento: '#consentimiento' }[id];
+    if (control) $(control).removeAttribute('aria-invalid');
+  }
+  form.addEventListener('change', (e) => { sincronizar(); if (e.target.name) limpiarError(e.target.name); });
+  texto.addEventListener('input', () => limpiarError('consulta'));
+  $('#correo').addEventListener('input', () => limpiarError('correo'));
+
+  function validar() {
+    ['identidad', 'tema', 'consulta', 'respuesta', 'correo', 'consentimiento'].forEach(limpiarError);
+    const errores = [];
+    if (!valor('identidad')) { mostrarError('identidad', 'Elige cómo deseas compartir tu inquietud.'); errores.push(form.elements.identidad[0]); }
+    if (!$('#tema').value) { mostrarError('tema', 'Elige el tema sobre el que necesitas orientación.', $('#tema')); errores.push($('#tema')); }
+    const largo = texto.value.trim().length;
+    if (largo < 10) { mostrarError('consulta', 'Cuéntanos un poco más (al menos 10 caracteres).', texto); errores.push(texto); }
+    if (!valor('respuesta')) { mostrarError('respuesta', 'Indícanos si deseas recibir la respuesta en tu correo.'); errores.push(form.elements.respuesta[0]); }
+    else if (valor('respuesta') === 'si' && !RE_CORREO.test($('#correo').value.trim())) {
+      mostrarError('correo', 'Escribe un correo válido, por ejemplo nombre@correo.com.', $('#correo')); errores.push($('#correo'));
+    }
+    if (!$('#consentimiento').checked) { mostrarError('consentimiento', 'Para enviar tu consulta necesitamos tu autorización de tratamiento de datos.', $('#consentimiento')); errores.push($('#consentimiento')); }
+    return errores;
+  }
+
+  function cuerpo() {
+    const c = GF.campos || {}, op = GF.opcionesIdentidad || {};
+    const datos = new URLSearchParams();
+    const conNombre = valor('identidad') === 'nombre';
+    datos.append(c.identidad, conNombre ? op.nombre : op.anonima);
+    if (conNombre && $('#nombre').value.trim()) datos.append(c.nombre, $('#nombre').value.trim());
+    datos.append(c.tema, $('#tema').value);
+    datos.append(c.consulta, texto.value.trim());
+    if (valor('respuesta') === 'si') datos.append(c.correo, $('#correo').value.trim());
+    return datos;
+  }
+
+  function mostrarExito() {
+    enviado = true;
+    form.reset(); sincronizar(); actualizarContador();
+    form.hidden = true; exito.hidden = false;
+    exito.focus({ preventScroll: true });
+    $('.cj-formulario').scrollIntoView({ behavior: movimientoReducido ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (enviando || enviado) return;
+    estado.textContent = ''; estado.classList.remove('error');
+    const errores = validar();
+    if (errores.length) { errores[0].focus(); estado.textContent = 'Revisa los campos marcados.'; estado.classList.add('error'); return; }
+    if ($('#sitio-web').value) { mostrarExito(); return; }          // bot: no se envía nada
+    if (!GF.envio || !GF.campos) { estado.textContent = 'El formulario no está configurado. Inténtalo más tarde.'; estado.classList.add('error'); return; }
+    enviando = true; boton.disabled = true; boton.classList.add('enviando');
+    $('.cj-enviar__texto', boton).textContent = 'Enviando tu consulta…';
+    const control = new AbortController();
+    const espera = setTimeout(() => control.abort(), 20000);
+    try {
+      // Google Forms no permite leer su respuesta desde otro sitio: si la conexión
+      // se completa, la respuesta quedó registrada; si falla, se avisa y no se pierde el texto.
+      await fetch(GF.envio, { method: 'POST', mode: 'no-cors', body: cuerpo(), signal: control.signal, credentials: 'omit', referrerPolicy: 'no-referrer' });
+      mostrarExito();
+    } catch (err) {
+      estado.textContent = err.name === 'AbortError'
+        ? 'La conexión tardó demasiado y no pudimos confirmar el envío. Inténtalo de nuevo.'
+        : 'No pudimos enviar tu consulta. Revisa tu conexión a internet e inténtalo de nuevo.';
+      estado.classList.add('error');
+    } finally {
+      clearTimeout(espera); enviando = false; boton.disabled = false; boton.classList.remove('enviando');
+      $('.cj-enviar__texto', boton).textContent = 'Enviar mi consulta';
+    }
+  });
+
+  $('#otra-consulta').addEventListener('click', () => {
+    enviado = false; exito.hidden = true; form.hidden = false;
+    form.elements.identidad[0].focus({ preventScroll: true });
+    $('.cj-formulario').scrollIntoView({ behavior: movimientoReducido ? 'auto' : 'smooth', block: 'start' });
+  });
+
   /* ---------- La Pastora responde ---------- */
   const ensenanzas = (Array.isArray(C.ensenanzas) ? C.ensenanzas : []).filter(v => v && v.titulo && /^https:\/\//.test(v.url || ''));
   if (ensenanzas.length) {

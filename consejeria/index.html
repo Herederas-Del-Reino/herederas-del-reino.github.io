@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600;1,700&display=swap">
 <link rel="stylesheet" href="../assets/css/sitio.css?v=19">
-<link rel="stylesheet" href="../assets/css/consejeria.css?v=4">
+<link rel="stylesheet" href="../assets/css/consejeria.css?v=6">
 </head>
 <body class="pagina-consejeria">
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -131,17 +131,102 @@
         <p>Tu mensaje será revisado únicamente por las personas autorizadas del ministerio.</p>
         <p><a href="privacidad/">Lee el aviso de privacidad completo</a></p>
       </div>
-      <p class="cj-confianza__nota"><svg aria-hidden="true"><use href="#i-alerta"/></svg><span>Este espacio ofrece <strong>orientación espiritual</strong> y no sustituye la atención de profesionales de la salud, psicológica, legal ni de emergencias. Si tú o alguien más está en peligro, llama de inmediato a la <strong>línea de emergencias 123</strong>.</span></p>
     </aside>
 
     <div class="cj-formulario vidrio revelar" data-retraso="1">
-      <div class="cj-embebido">
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSd5wpfnfChXNsFDs8vdb8wkiEpupyosBLXOxADdqyDX2Hc7Sg/viewform?embedded=true"
-                title="Formulario Pregúntale a la Pastora" loading="lazy" referrerpolicy="strict-origin-when-cross-origin">Cargando el formulario…</iframe>
+      <form id="form-consulta" novalidate>
+        <fieldset class="cj-campo" id="campo-identidad">
+          <legend>¿Cómo deseas compartir tu inquietud?</legend>
+          <div class="cj-opciones">
+            <label class="cj-opcion"><input type="radio" name="identidad" value="anonima" required><span>Prefiero permanecer en el anonimato.</span></label>
+            <label class="cj-opcion"><input type="radio" name="identidad" value="nombre"><span>Deseo compartir mi nombre.</span></label>
+          </div>
+          <div class="cj-revelado" id="bloque-nombre" hidden>
+            <label class="cj-etiqueta" for="nombre">¿Cómo te llamas? <small>(opcional)</small></label>
+            <input class="cj-input" type="text" id="nombre" name="nombre" maxlength="80" autocomplete="given-name">
+          </div>
+          <p class="cj-error" id="error-identidad" role="alert" hidden></p>
+        </fieldset>
+
+        <div class="cj-campo">
+          <label class="cj-etiqueta cj-etiqueta--titulo" for="tema">¿Sobre qué tema necesitas orientación?</label>
+          <div class="cj-select">
+            <select class="cj-input" id="tema" name="tema" required aria-describedby="error-tema">
+              <option value="">Elige un tema…</option>
+              <option>Mi relación con Dios</option>
+              <option>Familia y matrimonio</option>
+              <option>Perdón y restauración</option>
+              <option>Mis emociones y preocupaciones</option>
+              <option>Mi propósito y llamado</option>
+              <option>Oración y vida espiritual</option>
+              <option>Otra inquietud</option>
+            </select>
+          </div>
+          <p class="cj-error" id="error-tema" role="alert" hidden></p>
+        </div>
+
+        <div class="cj-campo">
+          <label class="cj-etiqueta cj-etiqueta--titulo" for="consulta-texto">Hija del Rey, ¿qué hay en tu corazón?</label>
+          <p class="cj-ayuda" id="ayuda-consulta">Este es un espacio de escucha y respeto. Comparte solamente lo que te sientas cómoda contando.</p>
+          <textarea class="cj-input cj-textarea" id="consulta-texto" name="consulta" rows="7" required maxlength="3000" placeholder="Escribe aquí tu pregunta, duda o situación..." aria-describedby="ayuda-consulta contador-consulta error-consulta"></textarea>
+          <p class="cj-contador" id="contador-consulta" aria-live="polite">0 / 3000</p>
+          <p class="cj-error" id="error-consulta" role="alert" hidden></p>
+        </div>
+
+        <fieldset class="cj-campo" id="campo-respuesta">
+          <legend>¿Te gustaría recibir la respuesta en tu correo?</legend>
+          <div class="cj-opciones">
+            <label class="cj-opcion"><input type="radio" name="respuesta" value="si" required><span>Sí, me gustaría recibirla.</span></label>
+            <label class="cj-opcion"><input type="radio" name="respuesta" value="no"><span>No, prefiero consultar las redes sociales.</span></label>
+          </div>
+          <div class="cj-revelado" id="bloque-correo" hidden>
+            <label class="cj-etiqueta" for="correo">Correo electrónico</label>
+            <input class="cj-input" type="email" id="correo" name="correo" maxlength="120" autocomplete="email" inputmode="email" aria-describedby="error-correo">
+            <p class="cj-error" id="error-correo" role="alert" hidden></p>
+          </div>
+          <p class="cj-error" id="error-respuesta" role="alert" hidden></p>
+        </fieldset>
+
+        <div class="cj-campo cj-privacidad">
+          <p class="cj-privacidad__titulo"><svg aria-hidden="true"><use href="#i-candado"/></svg>Cuidamos tu confianza</p>
+          <p class="cj-ayuda">Tu mensaje será revisado únicamente por las personas autorizadas del ministerio. <a href="privacidad/" target="_blank" rel="noopener">Aviso de privacidad</a></p>
+          <label class="cj-check">
+            <input type="checkbox" id="consentimiento" name="consentimiento" required aria-describedby="error-consentimiento">
+            <span>He leído el <a href="privacidad/" target="_blank" rel="noopener">aviso de privacidad</a> y autorizo el tratamiento de mis datos para gestionar mi consulta.</span>
+          </label>
+          <p class="cj-error" id="error-consentimiento" role="alert" hidden></p>
+        </div>
+
+        <!-- Campo trampa para bots: las personas no lo ven ni lo llenan -->
+        <div class="cj-trampa" aria-hidden="true">
+          <label for="sitio-web">Deja este campo vacío</label>
+          <input type="text" id="sitio-web" name="sitio_web" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="boton boton--grande cj-boton cj-enviar" type="submit" id="enviar">
+          <span class="cj-enviar__texto">Enviar mi consulta</span>
+          <span class="cj-enviar__cargando" aria-hidden="true"></span>
+        </button>
+        <p class="cj-estado" id="form-estado" role="status" aria-live="polite"></p>
+      </form>
+
+      <!-- Agradecimiento: aparece solo después de enviar -->
+      <div class="cj-exito" id="exito" hidden tabindex="-1" aria-labelledby="titulo-exito" aria-live="polite">
+        <div class="cj-exito__sello" aria-hidden="true"><svg><use href="#i-corazon"/></svg></div>
+        <h2 id="titulo-exito">¡Gracias por abrir tu corazón!</h2>
+        <p>Hija del Rey, hemos recibido tu mensaje con mucho cariño.</p>
+        <p>Tu consulta será revisada por nuestro equipo de consejería.</p>
+        <p>Si compartiste tu correo, podremos enviarte el enlace cuando exista una respuesta disponible.</p>
+        <p class="cj-exito__bendicion">Que la Palabra de Dios siga iluminando tu camino.</p>
+        <p class="cj-exito__firma">Con amor, <strong>Herederas del Reino</strong></p>
+        <div class="acciones cj-exito__acciones">
+          <a class="boton" href="../">Volver al inicio</a>
+          <button class="boton boton--claro" type="button" id="otra-consulta">Enviar otra consulta</button>
+        </div>
       </div>
-      <p class="cj-formulario__alterno">¿No ves el formulario? <a href="https://docs.google.com/forms/d/e/1FAIpQLSd5wpfnfChXNsFDs8vdb8wkiEpupyosBLXOxADdqyDX2Hc7Sg/viewform" target="_blank" rel="noopener">Ábrelo en una pestaña nueva</a></p>
     </div>
   </div>
+  <p class="contenedor cj-nota-final">Pregúntale a la Pastora es un espacio de acompañamiento espiritual. Si atraviesas una situación de riesgo, busca también el apoyo de un profesional o comunícate con la línea 123.</p>
 </section>
 
 <!-- ================= LA PASTORA RESPONDE (oculta mientras no haya videos) ================= -->
@@ -177,7 +262,7 @@
   </div>
 </footer>
 
-<script src="../assets/js/config.js?v=21"></script>
-<script src="../assets/js/consejeria.js?v=3" defer></script>
+<script src="../assets/js/config.js?v=22"></script>
+<script src="../assets/js/consejeria.js?v=5" defer></script>
 </body>
 </html>
