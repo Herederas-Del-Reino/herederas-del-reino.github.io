@@ -113,10 +113,11 @@ window.HR_CONFIG = {
      Estos datos completan el aviso de privacidad (consejeria/privacidad/).
      Mientras estén vacíos, el aviso se muestra como borrador. */
   consejeria: {
-    responsable: "",                 // nombre legal del responsable del tratamiento
-    correoPrivacidad: "",            // correo para ejercer derechos sobre los datos
-    conservacion: "",                // plazo aprobado, p. ej. "12 meses después de responder la consulta"
-    avisoAprobado: false             // cámbialo a true cuando el ministerio apruebe el aviso
+    responsable: "Herederas del Reino, ministerio liderado por la pastora Jennyfer Vásquez de Amarales",
+    correoPrivacidad: "",            // correo para ejercer derechos; mientras esté vacío se usa el Instagram oficial
+    conservacion: "Conservamos tu consulta hasta 12 meses después de que sea respondida o cerrada",
+    actualizado: "6 de noviembre de 2026",
+    avisoAprobado: true              // false vuelve a mostrar el aviso como borrador
   },
 
   /* ---------- La Pastora responde ----------

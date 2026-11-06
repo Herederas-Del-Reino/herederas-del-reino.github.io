@@ -58,7 +58,7 @@ En `assets/js/config.js` → `ensenanzas`, agrega un bloque por video **ya publi
 
 ## Aviso de privacidad
 
-Completa en `assets/js/config.js` → `consejeria` el responsable, el correo de privacidad y el plazo de conservación, y cambia `avisoAprobado` a `true` después de que lo revise quien asesore legalmente al ministerio.
+Datos en `assets/js/config.js` → `consejeria`: responsable, canal de privacidad (mientras `correoPrivacidad` esté vacío se usa el Instagram oficial), plazo de conservación (12 meses tras responder o cerrar la consulta) y fecha de actualización. Si cambian, actualiza también la fecha.
 
 ## Eliminar datos
 

@@ -16,6 +16,7 @@
   .aviso__doc { width: min(100% - 2 * var(--gutter), 780px); margin: 0 auto; padding: clamp(24px, 5vw, 52px); }
   .aviso__logo { width: 190px; margin: 0 auto 18px; }
   .aviso h1 { text-align: center; font-size: clamp(2rem, 5vw, 2.8rem); }
+  .aviso__fecha { text-align: center; font-size: .85rem; color: var(--texto-suave); }
   .aviso h1 em { display: block; font-size: .6em; font-weight: 500; color: var(--vino-suave); }
   .aviso h2 { margin-top: 30px; font-size: 1.35rem; }
   .aviso p, .aviso li { margin-top: 10px; color: var(--tinta); line-height: 1.65; }
@@ -30,19 +31,21 @@
   <article class="aviso__doc vidrio">
     <img class="aviso__logo" src="../../assets/img/logo-oficial.webp" alt="Herederas del Reino" width="516" height="274">
     <h1>Aviso de privacidad <em>Pregúntale a la Pastora</em></h1>
+    <p class="aviso__fecha">Última actualización: <span data-dato="actualizado"></span></p>
     <p class="aviso__borrador" id="borrador" hidden><strong>Borrador pendiente de aprobación.</strong> Este aviso debe ser revisado y completado por el ministerio antes de habilitar la recepción de consultas. Los espacios resaltados están pendientes.</p>
 
     <p>En Herederas del Reino cuidamos la confianza de cada mujer que comparte su corazón con nosotras. Este aviso explica cómo tratamos los datos que nos envías a través del formulario «Pregúntale a la Pastora», conforme a la Ley 1581 de 2012 y sus normas reglamentarias en Colombia.</p>
 
     <h2>1. Responsable del tratamiento</h2>
-    <p><span data-dato="responsable"></span>. Contacto para asuntos de privacidad: <span data-dato="correoPrivacidad"></span>.</p>
+    <p><span data-dato="responsable"></span>.</p>
+    <p>Canal de atención para asuntos de privacidad: <span data-dato="correoPrivacidad"></span>.</p>
 
     <h2>2. Datos que recogemos</h2>
     <ul>
       <li>Tu nombre, solo si eliges compartirlo. Puedes escribir de forma anónima.</li>
       <li>El tema y el texto de tu consulta.</li>
       <li>Tu correo electrónico, solo si pides recibir el enlace de la respuesta.</li>
-      <li>Tus decisiones sobre la publicación anónima de tu pregunta y tu autorización de tratamiento.</li>
+      <li>Cuando el formulario lo pregunte, tu autorización de tratamiento de datos y tu decisión sobre la publicación anónima de tu pregunta.</li>
     </ul>
     <p>No pedimos documentos de identidad, teléfonos ni direcciones. Tu consulta puede incluir <strong>datos sensibles</strong>, como tus creencias religiosas o aspectos de tu vida personal o de salud. No estás obligada a compartirlos: escribe solo lo que te sientas cómoda contando.</p>
 
@@ -69,7 +72,8 @@
       <li>Revocar tu autorización y pedir la eliminación de tus datos o de tu consulta.</li>
       <li>Presentar quejas ante la Superintendencia de Industria y Comercio.</li>
     </ul>
-    <p>Para ejercerlos, escríbenos a <span data-dato="correoPrivacidad"></span> e indica el número de consulta que recibiste al enviarla (si lo tienes) y el correo que usaste, si dejaste uno. Si escribiste de forma anónima y sin correo, el número de consulta es la única manera de encontrar tu mensaje.</p>
+    <p>Para ejercerlos, escríbenos por <span data-dato="correoPrivacidad"></span>. Cuéntanos la fecha aproximada en que enviaste tu consulta, el tema y, si lo dejaste, el correo que usaste, para poder encontrarla. Si escribiste de forma anónima y sin correo, quizá no podamos identificar tu mensaje con certeza.</p>
+    <p>Responderemos las consultas sobre tus datos en un plazo máximo de diez (10) días hábiles y los reclamos en un plazo máximo de quince (15) días hábiles, como establece la ley.</p>
 
     <h2>7. Importante</h2>
     <p>Este espacio ofrece orientación espiritual. No sustituye la atención de profesionales de la salud, psicológica, legal ni de emergencias. Si tú o alguien más está en peligro, llama de inmediato a la línea de emergencias 123.</p>
@@ -77,16 +81,21 @@
     <div class="aviso__volver"><a class="boton boton--claro" href="../#consulta">Volver a Pregúntale a la Pastora</a></div>
   </article>
 </main>
-<script src="../../assets/js/config.js?v=20"></script>
+<script src="../../assets/js/config.js?v=21"></script>
 <script>
   (function () {
     var cj = (window.HR_CONFIG && window.HR_CONFIG.consejeria) || {};
-    var pendiente = { responsable: 'Pendiente: nombre legal del responsable', correoPrivacidad: 'Pendiente: correo de contacto para privacidad', conservacion: 'Pendiente: plazo de conservación aprobado por el ministerio' };
+    var ig = (window.HR_CONFIG && window.HR_CONFIG.instagram) || {};
+    var pendiente = { responsable: 'Pendiente: nombre legal del responsable', correoPrivacidad: 'Pendiente: canal de contacto para privacidad', conservacion: 'Pendiente: plazo de conservación aprobado por el ministerio', actualizado: '—' };
     document.querySelectorAll('[data-dato]').forEach(function (el) {
       var clave = el.getAttribute('data-dato'), valor = (cj[clave] || '').trim();
       if (valor) {
         if (clave === 'correoPrivacidad') { var a = document.createElement('a'); a.href = 'mailto:' + valor; a.textContent = valor; el.appendChild(a); }
         else el.textContent = valor;
+      } else if (clave === 'correoPrivacidad' && ig.url) {
+        // Sin correo de privacidad: mensaje directo a la cuenta oficial de Instagram
+        el.append('mensaje directo a nuestra cuenta oficial de Instagram ');
+        var b = document.createElement('a'); b.href = ig.url; b.target = '_blank'; b.rel = 'noopener'; b.textContent = '@' + ig.usuario; el.appendChild(b);
       } else { el.textContent = pendiente[clave]; el.className = 'pendiente'; }
     });
     document.getElementById('borrador').hidden = cj.avisoAprobado === true;
