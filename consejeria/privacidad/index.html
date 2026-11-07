@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' https://incompetech.com; connect-src 'self' https://docs.google.com https://*.googleusercontent.com; frame-src 'none'; object-src 'none'; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self' https://docs.google.com; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Aviso de privacidad · Pregúntale a la Pastora · Herederas del Reino</title>
 <meta name="description" content="Cómo cuidamos los datos que compartes en Pregúntale a la Pastora.">
 <meta name="robots" content="noindex">
@@ -32,8 +34,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Herederas">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="/assets/app/app.css?v=2">
-<script src="/assets/app/app.js?v=2"></script>
+<link rel="stylesheet" href="/assets/app/app.css?v=3">
+<script src="/assets/app/app.js?v=3"></script>
 </head>
 <body>
 <main class="aviso">
@@ -91,24 +93,6 @@
   </article>
 </main>
 <script src="../../assets/js/config.js?v=22"></script>
-<script>
-  (function () {
-    var cj = (window.HR_CONFIG && window.HR_CONFIG.consejeria) || {};
-    var ig = (window.HR_CONFIG && window.HR_CONFIG.instagram) || {};
-    var pendiente = { responsable: 'Pendiente: nombre legal del responsable', correoPrivacidad: 'Pendiente: canal de contacto para privacidad', conservacion: 'Pendiente: plazo de conservación aprobado por el ministerio', actualizado: '—' };
-    document.querySelectorAll('[data-dato]').forEach(function (el) {
-      var clave = el.getAttribute('data-dato'), valor = (cj[clave] || '').trim();
-      if (valor) {
-        if (clave === 'correoPrivacidad') { var a = document.createElement('a'); a.href = 'mailto:' + valor; a.textContent = valor; el.appendChild(a); }
-        else el.textContent = valor;
-      } else if (clave === 'correoPrivacidad' && ig.url) {
-        // Sin correo de privacidad: mensaje directo a la cuenta oficial de Instagram
-        el.append('mensaje directo a nuestra cuenta oficial de Instagram ');
-        var b = document.createElement('a'); b.href = ig.url; b.target = '_blank'; b.rel = 'noopener'; b.textContent = '@' + ig.usuario; el.appendChild(b);
-      } else { el.textContent = pendiente[clave]; el.className = 'pendiente'; }
-    });
-    document.getElementById('borrador').hidden = cj.avisoAprobado === true;
-  })();
-</script>
+<script src="../../assets/js/privacidad.js?v=1"></script>
 </body>
 </html>

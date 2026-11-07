@@ -25,11 +25,11 @@ En `index.html`, `consejeria/index.html` y `consejeria/privacidad/index.html` so
 
 ## Cómo se ve
 
-- **En el navegador** el sitio se ve igual que antes, con dos ayudas para instalar la app, solo en el inicio y en la Bienvenida:
-  - una invitación que aparece una vez (si se cierra, no vuelve en 30 días);
-  - un botón pequeño **«Instalar app»** abajo a la izquierda, que queda siempre disponible mientras la app no esté instalada. En Android y computador abre la instalación; en iPhone muestra los pasos.
-  
-  Ninguno de los dos aparece dentro de la app instalada ni en la página de consejería.
+- **En el navegador**, en el inicio, debajo de los botones principales, aparece la tarjeta destacada **«Gratis · Instala la app Herederas»**, siempre visible para quien aún no tiene la app:
+  - en Android y computador (Chrome, Edge, Samsung) abre la instalación directa;
+  - en iPhone, en navegadores sin instalación directa o dentro de Instagram, Facebook o WhatsApp, muestra los pasos para ese teléfono.
+
+  Al bajar por la página queda un botón pequeño **«Instalar app»** abajo a la izquierda. En la Bienvenida aparece ese botón y una invitación una sola vez. Nada de esto aparece dentro de la app instalada ni en la consejería.
 - **En la app instalada** aparece la barra inferior **Inicio · Bienvenida · Oración · Pastora**. En celular respeta el notch y la barra del iPhone. En computador y tableta es una barra flotante centrada.
 
 ## Cómo instalarla
@@ -54,8 +54,8 @@ Los envíos (Google Forms), la hoja del Muro de oración, la canción, el portal
 1. Las páginas, estilos y código **se cargan primero de internet**, así que los cambios normales se ven solos. GitHub Pages puede tardar hasta 10 minutos.
 2. Sigue usando `?v=` en los enlaces de CSS y JS como siempre.
 3. Si cambias `sw.js`, `assets/app/app.js` o `assets/app/app.css`:
-   - sube `VERSION` en `sw.js` (hoy `hr-app-v2`; la siguiente sería `hr-app-v3`);
-   - sube el `?v=` de `app.css` y `app.js` (hoy `?v=2`), tanto en las páginas como en la lista `ESENCIALES` de `sw.js` y en `herramientas/sincronizar-bienvenida.mjs`.
+   - sube `VERSION` en `sw.js` (hoy `hr-app-v3`; la siguiente sería `hr-app-v4`);
+   - sube el `?v=` de `app.css` y `app.js` (hoy `?v=3`), tanto en las páginas como en la lista `ESENCIALES` de `sw.js` y en `herramientas/sincronizar-bienvenida.mjs`.
 
    Así, quien tenga la app instalada verá «Hay una versión nueva de la app · Actualizar». En el navegador no aparece ningún aviso: la versión nueva se aplica sola en la siguiente página.
 
@@ -87,6 +87,18 @@ Luego se sube `VERSION` en `sw.js`.
 - **Computador:** en la app, menú ⋮ → Desinstalar.
 
 Si algo se ve viejo, basta cerrar y abrir la app. Si persiste: en el navegador, Configuración del sitio → Borrar datos.
+
+## Seguridad
+
+- **Política de seguridad (CSP)** en todas las páginas. Solo se permite código del propio sitio. Las únicas excepciones son las fuentes de Google, la hoja del Muro de oración (`docs.google.com` y `*.googleusercontent.com`), el envío al Google Form y la canción de incompetech. No hay scripts en línea ni `eval`. Si se agrega un servicio externo nuevo (por ejemplo, un video incrustado), hay que sumarlo a la política en el `<head>` de cada página.
+- **Política de referencia** `strict-origin-when-cross-origin`: los sitios externos no ven la dirección completa de la página.
+- **Protección contra páginas incrustadas** (clickjacking). Si otro sitio mete la página en un marco, el contenido no se muestra.
+- **Datos de las visitantes:**
+  - los nombres del muro y los textos dinámicos se muestran escapados, así que no pueden inyectar código;
+  - el formulario de consejería no guarda nada en el teléfono ni en la URL;
+  - el service worker nunca guarda envíos.
+- **Sin secretos en el repositorio:** los enlaces del Google Form y de la hoja publicada son públicos por naturaleza. Editarlos exige la cuenta del ministerio.
+- **Límite de un sitio sin servidor:** GitHub Pages no permite encabezados HTTP propios ni filtrar envíos automáticos al Google Form más allá de la trampa anti-bots del formulario. Si llegara spam, se puede activar en el Google Form la verificación con cuenta, aunque eso exigiría iniciar sesión.
 
 ## Límites conocidos
 

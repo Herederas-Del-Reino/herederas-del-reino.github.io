@@ -116,6 +116,60 @@ html.es-app .hr-aviso-app { bottom: calc(var(--hr-barra) + var(--hr-abajo) + 12p
   .hr-invitacion { left: auto; right: 20px; bottom: 20px; width: 400px; }
 }
 
+/* ---------- Invitación destacada en el inicio (debajo de los botones del hero) ---------- */
+.hr-instalar-hero {
+  position: relative; isolation: isolate; overflow: hidden;
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px;
+  width: min(100%, 470px); margin: 20px auto 0; padding: 12px 14px 12px 12px;
+  border: 1.5px solid transparent; border-radius: 26px; cursor: pointer; text-align: left;
+  background:
+    linear-gradient(120deg, #FFF8F4, #FCE6EC 45%, #FBE3D6) padding-box,
+    linear-gradient(120deg, #F3DF9A, var(--hr-dorado) 40%, #E8B4C2 75%, #F3DF9A) border-box;
+  box-shadow: 0 18px 38px -20px rgba(122, 51, 70, .65), 0 0 0 6px rgba(244, 214, 222, .35);
+  color: #5B4146; font-family: var(--hr-letra);
+  -webkit-tap-highlight-color: transparent;
+  animation: hr-respirar 4.5s ease-in-out infinite;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.hr-instalar-hero[hidden] { display: none; }
+.hr-instalar-hero::before {          /* destello que cruza la tarjeta */
+  content: ""; position: absolute; z-index: -1; top: 0; bottom: 0; left: -60%; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .75), transparent);
+  transform: skewX(-18deg); animation: hr-destello 5.5s ease-in-out infinite 1.2s;
+}
+.hr-instalar-hero:hover { transform: translateY(-2px); box-shadow: 0 22px 44px -20px rgba(122, 51, 70, .75), 0 0 0 7px rgba(244, 214, 222, .45); }
+.hr-instalar-hero:active { transform: scale(.985); }
+.hr-instalar-hero:focus-visible { outline: 2px solid var(--hr-vino); outline-offset: 4px; }
+.hr-instalar-hero__icono {
+  display: grid; place-items: center; width: 60px; height: 60px; border-radius: 18px; background: #fff;
+  box-shadow: 0 8px 18px -10px rgba(122, 51, 70, .7), 0 0 0 1.5px rgba(212, 175, 55, .55);
+}
+.hr-instalar-hero__icono img { width: 56px; height: 56px; border-radius: 16px; }
+.hr-instalar-hero__texto { display: grid; gap: 2px; min-width: 0; }
+.hr-instalar-hero__sello {
+  justify-self: start; padding: 2px 9px; border-radius: 999px; margin-bottom: 2px;
+  background: linear-gradient(90deg, #F3DF9A, var(--hr-dorado)); color: #5A3A12;
+  font-size: .64rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+}
+.hr-instalar-hero strong { color: var(--hr-vino); font: 600 1.08rem/1.2 'Playfair Display', Georgia, serif; }
+.hr-instalar-hero strong em { font-style: italic; color: #9C5466; }
+.hr-instalar-hero small { font-size: .8rem; line-height: 1.35; color: #6B4F55; }
+.hr-instalar-hero__accion {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 15px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--hr-vino), #9C5466 60%, #B9786A); color: #fff;
+  font-size: .86rem; font-weight: 600; box-shadow: 0 10px 20px -10px rgba(122, 51, 70, .9);
+}
+.hr-instalar-hero__accion svg { width: 18px; height: 18px; }
+@media (max-width: 420px) {
+  .hr-instalar-hero { grid-template-columns: auto 1fr; padding: 12px; gap: 12px; }
+  .hr-instalar-hero__accion { grid-column: 1 / -1; justify-content: center; }
+}
+@keyframes hr-destello { 0%, 60% { left: -60%; } 85%, 100% { left: 130%; } }
+@keyframes hr-respirar {
+  0%, 100% { box-shadow: 0 18px 38px -20px rgba(122, 51, 70, .65), 0 0 0 6px rgba(244, 214, 222, .35); }
+  50% { box-shadow: 0 18px 38px -20px rgba(122, 51, 70, .65), 0 0 0 10px rgba(244, 214, 222, .5); }
+}
+
 /* ---------- Botón sutil «Instalar app» (siempre disponible en el navegador) ---------- */
 .hr-instalar-mini {
   position: fixed; z-index: 58; left: max(14px, env(safe-area-inset-left)); bottom: calc(14px + var(--hr-abajo));
@@ -135,5 +189,6 @@ html.es-app .hr-aviso-app { bottom: calc(var(--hr-barra) + var(--hr-abajo) + 12p
 .hr-instalar-mini:focus-visible { outline: 2px solid var(--hr-vino); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hr-barra-app a, .hr-barra-app svg, .hr-barra-app a::before, .hr-aviso-app, .hr-invitacion, .hr-instalar-mini { transition: none; }
+  .hr-barra-app a, .hr-barra-app svg, .hr-barra-app a::before, .hr-aviso-app, .hr-invitacion, .hr-instalar-mini, .hr-instalar-hero { transition: none; }
+  .hr-instalar-hero, .hr-instalar-hero::before { animation: none; }
 }

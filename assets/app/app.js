@@ -3,7 +3,7 @@
    - Marca <html class="es-app"> cuando se abre desde el ícono instalado
    - Barra inferior: Inicio · Bienvenida · Oración · Pastora (solo en la app)
    - Registro del service worker y aviso «Hay una versión nueva»
-   - Invitación a instalar (Android/escritorio) y guía para iPhone
+   - Invitación a instalar: tarjeta en el inicio, botón flotante y pasos por teléfono
    - Aviso discreto cuando no hay conexión
    No guarda datos personales: solo recuerda si se cerró la invitación.
    ===================================================================== */
@@ -126,87 +126,129 @@
   }
 
   /* ---------- Invitación a instalar ----------
-     1. La tarjeta grande aparece una vez (y no vuelve en 30 días si se cierra).
-     2. Un botón pequeño «Instalar app» queda siempre disponible en el inicio y
-        en la Bienvenida mientras la app no esté instalada. */
-  function leerOculto() { try { return Number(localStorage.getItem(CLAVE_OCULTO)) || 0; } catch (_) { return 0; } }
-  function guardarOculto() { try { localStorage.setItem(CLAVE_OCULTO, String(Date.now())); } catch (_) {} }
-  var esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
+     - En el inicio: tarjeta destacada debajo de los botones principales,
+       visible para toda visitante que aún no tenga la app.
+     - Botón pequeño «Instalar app» flotante cuando esa tarjeta ya no se ve
+       (y siempre en la Bienvenida).
+     - Si el navegador permite instalar directo (Chrome, Edge, Samsung), abre
+       la instalación; si no, muestra los pasos para su teléfono. */
+  var ua = navigator.userAgent;
+  var esIOS = /iphone|ipad|ipod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+  var esAndroid = /android/i.test(ua);
+  var enRedSocial = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Line\/|WhatsApp|TikTok|musical_ly|Snapchat|Pinterest/i.test(ua);
   var paginaDeInvitacion = ruta === '/' || ruta.indexOf('/sitio/bienvenida/') === 0;
   var puedeOfrecer = !enApp && paginaDeInvitacion;
-  var tarjetaPermitida = function () { return Date.now() - leerOculto() > DIAS_OCULTO * 864e5; };
-  var eventoInstalar = null, invitacion = null, botonMini = null;
+  var eventoInstalar = null, invitacion = null, botonMini = null, tarjetaHero = null, heroVisible = false, yaInstalada = false;
 
-  function instalarAhora() {
-    if (!eventoInstalar) return;
-    var ev = eventoInstalar; eventoInstalar = null;
-    ev.prompt();
-    ev.userChoice.then(function (r) { if (r.outcome === 'accepted') quitarBotonMini(); else guardarOculto(); }).catch(function () {});
+  function leerOculto() { try { return Number(localStorage.getItem(CLAVE_OCULTO)) || 0; } catch (_) { return 0; } }
+  function guardarOculto() { try { localStorage.setItem(CLAVE_OCULTO, String(Date.now())); } catch (_) {} }
+  var tarjetaPermitida = function () { return Date.now() - leerOculto() > DIAS_OCULTO * 864e5; };
+
+  function pasos() {
+    var compartir = '<span class="hr-icono-texto">' + svg('compartir') + '</span>';
+    if (enRedSocial && esIOS) return 'Toca <b>⋯</b> y elige <b>«Abrir en Safari»</b>. Luego toca ' + compartir + ' <b>Compartir</b> → <b>«Agregar a pantalla de inicio»</b>.';
+    if (enRedSocial) return 'Toca <b>⋮</b> y elige <b>«Abrir en Chrome»</b> (o en el navegador). Luego toca <b>«Instalar app»</b> de nuevo.';
+    if (esIOS) return 'Toca ' + compartir + ' <b>Compartir</b> y luego <b>«Agregar a pantalla de inicio»</b>.';
+    if (esAndroid) return 'Abre el menú <b>⋮</b> del navegador y elige <b>«Instalar aplicación»</b> o <b>«Agregar a pantalla de inicio»</b>.';
+    return 'Ábrela en <b>Chrome</b> o <b>Edge</b> y toca el ícono de instalar en la barra de direcciones (o menú ⋮ → <b>«Instalar Herederas»</b>).';
   }
 
-  function mostrarInvitacion(modo, aPedido) {
-    if (invitacion || !puedeOfrecer || (!aPedido && !tarjetaPermitida())) return;
-    ocultarBotonMini();
-    var texto = modo === 'ios'
-      ? 'Toca <span class="hr-icono-texto">' + svg('compartir') + '</span> <b>Compartir</b> y luego <b>«Agregar a pantalla de inicio»</b>.'
-      : 'Tenla en tu celular con un solo toque, como cualquier app.';
+  function instalar() {
+    if (eventoInstalar) {
+      var ev = eventoInstalar; eventoInstalar = null;
+      ev.prompt();
+      ev.userChoice.then(function (r) { if (r.outcome === 'accepted') marcarInstalada(); }).catch(function () {});
+    } else {
+      mostrarInvitacion(true);
+    }
+  }
+
+  function mostrarInvitacion(aPedido) {
+    if (invitacion || !puedeOfrecer || yaInstalada) return;
+    if (!aPedido && !tarjetaPermitida()) return;
+    var directo = !!eventoInstalar;
     invitacion = crear(
       '<aside class="hr-invitacion" role="dialog" aria-label="Instalar la app Herederas del Reino">' +
         '<img src="/assets/app/iconos/icono-192.png" alt="" width="52" height="52">' +
-        '<div class="hr-invitacion__texto"><strong>Lleva Herederas del Reino contigo</strong><p>' + texto + '</p></div>' +
-        (modo === 'ios' ? '' : '<button type="button" class="hr-invitacion__instalar">Instalar app</button>') +
-        '<button type="button" class="hr-invitacion__cerrar" aria-label="Cerrar invitación">' + svg('cerrar') + '</button>' +
+        '<div class="hr-invitacion__texto"><strong>Lleva Herederas del Reino contigo</strong><p>' +
+          (directo ? 'Tenla en tu celular con un solo toque, como cualquier app.' : pasos()) + '</p></div>' +
+        (directo ? '<button type="button" class="hr-invitacion__instalar">Instalar app</button>' : '') +
+        '<button type="button" class="hr-invitacion__cerrar" aria-label="Cerrar">' + svg('cerrar') + '</button>' +
       '</aside>');
     document.body.appendChild(invitacion);
+    actualizarMini();
     requestAnimationFrame(function () { invitacion && invitacion.classList.add('visible'); });
     invitacion.querySelector('.hr-invitacion__cerrar').addEventListener('click', function () {
-      guardarOculto(); cerrarInvitacion(); mostrarBotonMini(modo);
+      if (!aPedido) guardarOculto();
+      cerrarInvitacion();
     });
     var boton = invitacion.querySelector('.hr-invitacion__instalar');
-    if (boton) boton.addEventListener('click', function () {
-      cerrarInvitacion(); instalarAhora(); mostrarBotonMini(modo);
-    });
+    if (boton) boton.addEventListener('click', function () { cerrarInvitacion(); instalar(); });
     if (aPedido) invitacion.querySelector('.hr-invitacion__cerrar').focus({ preventScroll: true });
   }
   function cerrarInvitacion() {
     if (!invitacion) return;
     var i = invitacion; invitacion = null; i.classList.remove('visible'); setTimeout(function () { i.remove(); }, 400);
+    actualizarMini();
   }
 
-  // Botón sutil y permanente
-  function mostrarBotonMini(modo) {
-    if (!puedeOfrecer || invitacion) return;
-    if (modo !== 'ios' && !eventoInstalar) return;          // el navegador aún no permite instalar
-    if (!botonMini) {
+  // Botón pequeño flotante: solo cuando la tarjeta del inicio no está a la vista
+  function actualizarMini() {
+    var ver = puedeOfrecer && !yaInstalada && !invitacion && !heroVisible;
+    if (ver && !botonMini) {
       botonMini = crear('<button type="button" class="hr-instalar-mini" aria-label="Instalar la app Herederas del Reino">' +
         '<img src="/assets/app/iconos/icono-192.png" alt="" width="26" height="26"><span>Instalar app</span></button>');
-      botonMini.addEventListener('click', function () {
-        if (modo === 'ios') mostrarInvitacion('ios', true);
-        else { instalarAhora(); ocultarBotonMini(); }
-      });
+      botonMini.addEventListener('click', instalar);
       document.body.appendChild(botonMini);
     }
-    botonMini.hidden = false;
-    requestAnimationFrame(function () { botonMini && botonMini.classList.add('visible'); });
+    if (!botonMini) return;
+    botonMini.hidden = !ver;
+    if (ver) requestAnimationFrame(function () { botonMini && botonMini.classList.add('visible'); });
+    else botonMini.classList.remove('visible');
   }
-  function ocultarBotonMini() { if (botonMini) { botonMini.classList.remove('visible'); botonMini.hidden = true; } }
-  function quitarBotonMini() { if (botonMini) { botonMini.remove(); botonMini = null; } }
+
+  function prepararTarjetaHero() {
+    tarjetaHero = document.querySelector('.hr-instalar-hero');
+    if (!tarjetaHero || !puedeOfrecer) return;
+    tarjetaHero.hidden = false;
+    tarjetaHero.addEventListener('click', instalar);
+    heroVisible = true;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) { heroVisible = e[0].isIntersecting; actualizarMini(); }).observe(tarjetaHero);
+    }
+  }
+
+  function marcarInstalada() {
+    yaInstalada = true; cerrarInvitacion();
+    if (tarjetaHero) tarjetaHero.hidden = true;
+    if (botonMini) { botonMini.remove(); botonMini = null; }
+  }
 
   addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault(); eventoInstalar = e;
-    if (!puedeOfrecer) return;
-    if (tarjetaPermitida()) setTimeout(function () { mostrarInvitacion('android'); }, 6000);
-    else alListo(function () { mostrarBotonMini('android'); });
   });
-  addEventListener('appinstalled', function () { cerrarInvitacion(); quitarBotonMini(); guardarOculto(); });
+  addEventListener('appinstalled', function () { guardarOculto(); marcarInstalada(); });
+
+  /* ---------- Protección: la página no se deja incrustar en otros sitios ---------- */
+  // Evita el «clickjacking»: dentro de un marco ajeno no se muestra nada.
+  if (window.top !== window.self) {
+    raiz.style.display = 'none';
+    try { window.top.location.replace(window.location.href); } catch (_) { /* el navegador puede impedirlo */ }
+  }
 
   /* ---------- Inicio ---------- */
   alListo(function () {
     if (enApp) crearBarra();
     registrar();
-    if (esIOS && puedeOfrecer) {
-      if (tarjetaPermitida()) setTimeout(function () { mostrarInvitacion('ios'); }, 6000);
-      else mostrarBotonMini('ios');
+    if (puedeOfrecer) {
+      prepararTarjetaHero();
+      actualizarMini();
+      // En la Bienvenida (sin tarjeta en el inicio) la invitación grande aparece una vez
+      if (!tarjetaHero) setTimeout(function () { mostrarInvitacion(false); }, 6000);
+      // Si la app ya está instalada en este teléfono, no se ofrece de nuevo
+      if (navigator.getInstalledRelatedApps) {
+        navigator.getInstalledRelatedApps().then(function (apps) { if (apps && apps.length) marcarInstalada(); }).catch(function () {});
+      }
     }
     addEventListener('offline', function () {
       mostrarAviso(svg('nube') + '<span>Sin conexión. Verás lo último que se guardó; los formularios no se pueden enviar.</span>', 'hr-aviso-conexion');

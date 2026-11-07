@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; media-src 'self' https://incompetech.com; connect-src 'self' https://docs.google.com https://*.googleusercontent.com; frame-src 'none'; object-src 'none'; worker-src 'self'; manifest-src 'self'; base-uri 'self'; form-action 'self' https://docs.google.com; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Herederas del Reino · Comunidad de mujeres a los pies de Jesús</title>
 <meta name="description" content="Herederas del Reino: una comunidad de mujeres que aman a Jesús. Devocional de madrugada, Entre Amigas, Salmos, jardín de oración y promesas de la Palabra. Con la Pastora Jennyfer de Amarales.">
 <meta name="theme-color" content="#FFF6EF">
@@ -38,8 +40,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Herederas">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="/assets/app/app.css?v=2">
-<script src="/assets/app/app.js?v=2"></script>
+<link rel="stylesheet" href="/assets/app/app.css?v=3">
+<script src="/assets/app/app.js?v=3"></script>
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -115,6 +117,16 @@
       <a class="boton boton--muro boton--grande" href="#muro"><svg aria-hidden="true"><use href="#i-corona"/></svg>Entrar al muro de oración</a>
       <a class="boton boton--claro" data-enlace="formulario" href="#" target="_blank" rel="noopener"><svg aria-hidden="true"><use href="#i-corazon"/></svg>Deja tu petición</a>
     </div>
+    <!-- Invitación a instalar la app (la muestra assets/app/app.js solo si se puede instalar) -->
+    <button type="button" class="hr-instalar-hero revelar" data-retraso="3" hidden>
+      <span class="hr-instalar-hero__icono"><img src="/assets/app/iconos/icono-192.png" alt="" width="56" height="56"></span>
+      <span class="hr-instalar-hero__texto">
+        <span class="hr-instalar-hero__sello">Gratis</span>
+        <strong>Instala la app <em>Herederas</em></strong>
+        <small>Tu espacio de fe y oración, a un toque en tu celular</small>
+      </span>
+      <span class="hr-instalar-hero__accion">Instalar<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg></span>
+    </button>
     <a class="orando revelar" data-retraso="3" href="#muro" aria-live="polite">
       <span class="orando__pulso" aria-hidden="true"></span>
       <span class="orando__texto" id="orando-texto">Uniendo nuestras oraciones…</span>
