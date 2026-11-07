@@ -25,7 +25,11 @@ En `index.html`, `consejeria/index.html` y `consejeria/privacidad/index.html` so
 
 ## Cómo se ve
 
-- **En el navegador** el sitio se ve igual que antes. Solo aparece, una vez, una invitación discreta a instalar la app (en el inicio y en la Bienvenida). Si se cierra, no vuelve a aparecer por 30 días.
+- **En el navegador** el sitio se ve igual que antes, con dos ayudas para instalar la app, solo en el inicio y en la Bienvenida:
+  - una invitación que aparece una vez (si se cierra, no vuelve en 30 días);
+  - un botón pequeño **«Instalar app»** abajo a la izquierda, que queda siempre disponible mientras la app no esté instalada. En Android y computador abre la instalación; en iPhone muestra los pasos.
+  
+  Ninguno de los dos aparece dentro de la app instalada ni en la página de consejería.
 - **En la app instalada** aparece la barra inferior **Inicio · Bienvenida · Oración · Pastora**. En celular respeta el notch y la barra del iPhone. En computador y tableta es una barra flotante centrada.
 
 ## Cómo instalarla
@@ -50,8 +54,8 @@ Los envíos (Google Forms), la hoja del Muro de oración, la canción, el portal
 1. Las páginas, estilos y código **se cargan primero de internet**, así que los cambios normales se ven solos. GitHub Pages puede tardar hasta 10 minutos.
 2. Sigue usando `?v=` en los enlaces de CSS y JS como siempre.
 3. Si cambias `sw.js`, `assets/app/app.js` o `assets/app/app.css`:
-   - sube `VERSION` en `sw.js` (por ejemplo `hr-app-v2`);
-   - sube el `?v=` de `app.css` y `app.js`, tanto en las páginas como en la lista `ESENCIALES` de `sw.js` y en `herramientas/sincronizar-bienvenida.mjs`.
+   - sube `VERSION` en `sw.js` (hoy `hr-app-v2`; la siguiente sería `hr-app-v3`);
+   - sube el `?v=` de `app.css` y `app.js` (hoy `?v=2`), tanto en las páginas como en la lista `ESENCIALES` de `sw.js` y en `herramientas/sincronizar-bienvenida.mjs`.
 
    Así, quien tenga la app instalada verá «Hay una versión nueva de la app · Actualizar».
 

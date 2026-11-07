@@ -9,15 +9,15 @@
    Al publicar cambios en este archivo, sube VERSION: la app mostrará
    «Hay una versión nueva» y limpiará la caché anterior.
    ===================================================================== */
-const VERSION = 'hr-app-v1';
+const VERSION = 'hr-app-v2';
 const CACHE_PAGINAS = `${VERSION}-paginas`;
 const CACHE_RECURSOS = `${VERSION}-recursos`;
 const MAX_RECURSOS = 180;
 
 const ESENCIALES = [
   '/offline.html',
-  '/assets/app/app.css?v=1',
-  '/assets/app/app.js?v=1',
+  '/assets/app/app.css?v=2',
+  '/assets/app/app.js?v=2',
   '/assets/app/offline.js',
   '/assets/app/iconos/icono-192.png',
   '/assets/img/logo-oficial.webp',

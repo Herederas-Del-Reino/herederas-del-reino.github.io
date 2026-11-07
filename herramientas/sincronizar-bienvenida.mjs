@@ -57,8 +57,8 @@ reemplazar('</head>', `<!-- App Herederas del Reino (agregado por herramientas/s
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Herederas">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="stylesheet" href="/assets/app/app.css?v=1">
-<script src="/assets/app/app.js?v=1"></script>
+<link rel="stylesheet" href="/assets/app/app.css?v=2">
+<script src="/assets/app/app.js?v=2"></script>
 </head>`, '</head>');
 html = html.replace('<!DOCTYPE html>', `<!DOCTYPE html>\n<!-- Copia de Herederas-Del-Reino/bienvenida (${version}). No editar aquí: editar el repositorio bienvenida y volver a sincronizar. -->`);
 writeFileSync(archivo, html);

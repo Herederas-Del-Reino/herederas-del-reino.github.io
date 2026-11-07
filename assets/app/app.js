@@ -122,16 +122,28 @@
     });
   }
 
-  /* ---------- Invitación a instalar ---------- */
+  /* ---------- Invitación a instalar ----------
+     1. La tarjeta grande aparece una vez (y no vuelve en 30 días si se cierra).
+     2. Un botón pequeño «Instalar app» queda siempre disponible en el inicio y
+        en la Bienvenida mientras la app no esté instalada. */
   function leerOculto() { try { return Number(localStorage.getItem(CLAVE_OCULTO)) || 0; } catch (_) { return 0; } }
   function guardarOculto() { try { localStorage.setItem(CLAVE_OCULTO, String(Date.now())); } catch (_) {} }
   var esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (/Macintosh/.test(navigator.userAgent) && navigator.maxTouchPoints > 1);
   var paginaDeInvitacion = ruta === '/' || ruta.indexOf('/sitio/bienvenida/') === 0;
-  var puedeInvitar = function () { return !enApp && paginaDeInvitacion && Date.now() - leerOculto() > DIAS_OCULTO * 864e5; };
-  var eventoInstalar = null, invitacion = null;
+  var puedeOfrecer = !enApp && paginaDeInvitacion;
+  var tarjetaPermitida = function () { return Date.now() - leerOculto() > DIAS_OCULTO * 864e5; };
+  var eventoInstalar = null, invitacion = null, botonMini = null;
 
-  function mostrarInvitacion(modo) {
-    if (invitacion || !puedeInvitar()) return;
+  function instalarAhora() {
+    if (!eventoInstalar) return;
+    var ev = eventoInstalar; eventoInstalar = null;
+    ev.prompt();
+    ev.userChoice.then(function (r) { if (r.outcome === 'accepted') quitarBotonMini(); else guardarOculto(); }).catch(function () {});
+  }
+
+  function mostrarInvitacion(modo, aPedido) {
+    if (invitacion || !puedeOfrecer || (!aPedido && !tarjetaPermitida())) return;
+    ocultarBotonMini();
     var texto = modo === 'ios'
       ? 'Toca <span class="hr-icono-texto">' + svg('compartir') + '</span> <b>Compartir</b> y luego <b>«Agregar a pantalla de inicio»</b>.'
       : 'Tenla en tu celular con un solo toque, como cualquier app.';
@@ -143,31 +155,56 @@
         '<button type="button" class="hr-invitacion__cerrar" aria-label="Cerrar invitación">' + svg('cerrar') + '</button>' +
       '</aside>');
     document.body.appendChild(invitacion);
-    requestAnimationFrame(function () { invitacion.classList.add('visible'); });
-    invitacion.querySelector('.hr-invitacion__cerrar').addEventListener('click', function () { guardarOculto(); cerrarInvitacion(); });
+    requestAnimationFrame(function () { invitacion && invitacion.classList.add('visible'); });
+    invitacion.querySelector('.hr-invitacion__cerrar').addEventListener('click', function () {
+      guardarOculto(); cerrarInvitacion(); mostrarBotonMini(modo);
+    });
     var boton = invitacion.querySelector('.hr-invitacion__instalar');
     if (boton) boton.addEventListener('click', function () {
-      if (!eventoInstalar) return cerrarInvitacion();
-      eventoInstalar.prompt();
-      eventoInstalar.userChoice.then(function (r) { if (r.outcome !== 'accepted') guardarOculto(); }).catch(function () {});
-      eventoInstalar = null; cerrarInvitacion();
+      cerrarInvitacion(); instalarAhora(); mostrarBotonMini(modo);
     });
+    if (aPedido) invitacion.querySelector('.hr-invitacion__cerrar').focus({ preventScroll: true });
   }
   function cerrarInvitacion() {
     if (!invitacion) return;
     var i = invitacion; invitacion = null; i.classList.remove('visible'); setTimeout(function () { i.remove(); }, 400);
   }
+
+  // Botón sutil y permanente
+  function mostrarBotonMini(modo) {
+    if (!puedeOfrecer || invitacion) return;
+    if (modo !== 'ios' && !eventoInstalar) return;          // el navegador aún no permite instalar
+    if (!botonMini) {
+      botonMini = crear('<button type="button" class="hr-instalar-mini" aria-label="Instalar la app Herederas del Reino">' +
+        '<img src="/assets/app/iconos/icono-192.png" alt="" width="26" height="26"><span>Instalar app</span></button>');
+      botonMini.addEventListener('click', function () {
+        if (modo === 'ios') mostrarInvitacion('ios', true);
+        else { instalarAhora(); ocultarBotonMini(); }
+      });
+      document.body.appendChild(botonMini);
+    }
+    botonMini.hidden = false;
+    requestAnimationFrame(function () { botonMini && botonMini.classList.add('visible'); });
+  }
+  function ocultarBotonMini() { if (botonMini) { botonMini.classList.remove('visible'); botonMini.hidden = true; } }
+  function quitarBotonMini() { if (botonMini) { botonMini.remove(); botonMini = null; } }
+
   addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault(); eventoInstalar = e;
-    setTimeout(function () { mostrarInvitacion('android'); }, 6000);
+    if (!puedeOfrecer) return;
+    if (tarjetaPermitida()) setTimeout(function () { mostrarInvitacion('android'); }, 6000);
+    else alListo(function () { mostrarBotonMini('android'); });
   });
-  addEventListener('appinstalled', function () { cerrarInvitacion(); guardarOculto(); });
+  addEventListener('appinstalled', function () { cerrarInvitacion(); quitarBotonMini(); guardarOculto(); });
 
   /* ---------- Inicio ---------- */
   alListo(function () {
     if (enApp) crearBarra();
     registrar();
-    if (esIOS && !enApp && !window.MSStream) setTimeout(function () { mostrarInvitacion('ios'); }, 6000);
+    if (esIOS && puedeOfrecer) {
+      if (tarjetaPermitida()) setTimeout(function () { mostrarInvitacion('ios'); }, 6000);
+      else mostrarBotonMini('ios');
+    }
     addEventListener('offline', function () {
       mostrarAviso(svg('nube') + '<span>Sin conexión. Verás lo último que se guardó; los formularios no se pueden enviar.</span>', 'hr-aviso-conexion');
     });
