@@ -1,0 +1,25 @@
+{
+  "id": "/",
+  "name": "Herederas del Reino",
+  "short_name": "Herederas",
+  "description": "Hija del Rey, este espacio es para ti: bienvenida, muro de oración, consejería y encuentros de Herederas del Reino.",
+  "lang": "es-CO",
+  "dir": "ltr",
+  "start_url": "/?origen=app",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FFF6EF",
+  "theme_color": "#FFF6EF",
+  "categories": ["lifestyle", "education", "social"],
+  "icons": [
+    { "src": "/assets/app/iconos/icono-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/app/iconos/icono-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/assets/app/iconos/icono-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/assets/app/iconos/icono-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Bienvenida", "short_name": "Bienvenida", "description": "Bienvenida a casa, Heredera", "url": "/sitio/bienvenida/", "icons": [{ "src": "/assets/app/iconos/icono-192.png", "sizes": "192x192" }] },
+    { "name": "Muro de oración", "short_name": "Oración", "url": "/#muro", "icons": [{ "src": "/assets/app/iconos/icono-192.png", "sizes": "192x192" }] },
+    { "name": "Pregúntale a la Pastora", "short_name": "Pastora", "url": "/consejeria/", "icons": [{ "src": "/assets/app/iconos/icono-192.png", "sizes": "192x192" }] }
+  ]
+}

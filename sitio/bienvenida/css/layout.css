@@ -1,0 +1,79 @@
+/* Estructura: barra, progreso, secciones del recorrido */
+.contenedor { width: min(100% - 2 * var(--gutter), var(--ancho)); margin-inline: auto; }
+.lectura { width: min(100% - 2 * var(--gutter), var(--lectura)); margin-inline: auto; }
+
+.momento {
+  position: relative; isolation: isolate;
+  padding: var(--esp-seccion) 0;
+  scroll-margin-top: var(--barra);
+  overflow-x: clip;          /* las flores decorativas nunca generan desplazamiento lateral */
+}
+.momento__cabecera { text-align: center; max-width: 640px; margin: 0 auto var(--esp-contenido); }
+.momento__numero { display: inline-block; vertical-align: middle; margin-right: 12px; font: italic 500 1.05rem/1 var(--f-editorial); color: var(--dorado-oscuro); letter-spacing: .08em; }
+.momento__cabecera .etiqueta { vertical-align: middle; }
+.momento__cabecera h2 { font-size: clamp(2rem, 5vw, 3.2rem); margin-top: 12px; text-wrap: balance; }
+.momento__cabecera h2 em { font-weight: 500; color: var(--vino-suave); }
+.momento__cabecera p { margin-top: var(--esp-titulo); color: var(--marron); }
+.momento__pie { display: flex; justify-content: center; margin-top: var(--esp-contenido); }
+
+/* Cabecera de composición en dos columnas: centrada en móvil, a la izquierda en escritorio */
+.momento__cabecera--lado { margin-bottom: 0; }
+
+/* Introducción dividida: título a un lado, texto al otro (escritorio) */
+.intro-dividida { display: grid; gap: var(--esp-titulo); margin-bottom: var(--esp-contenido); }
+.intro-dividida > .momento__cabecera { margin-bottom: 0; }
+
+/* Transición narrativa entre momentos: un filete con ornamento */
+.momento + .momento::before {
+  content: ""; position: absolute; top: -4px; left: 50%; width: 150px; height: 9px; transform: translateX(-50%); z-index: 2;
+  background:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='9' height='9'><rect x='1.8' y='1.8' width='5.4' height='5.4' fill='%23D4AF37' transform='rotate(45 4.5 4.5)'/></svg>") center / 9px 9px no-repeat,
+    linear-gradient(90deg, transparent, var(--dorado), transparent) center / 100% 1px no-repeat;
+}
+
+/* Barra superior compacta */
+.barra {
+  position: fixed; inset: 0 0 auto; z-index: 100; height: var(--barra-alta);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 0 var(--gutter);
+  border-bottom: 1px solid transparent;
+  transition: height .45s var(--suave), background .45s ease, box-shadow .45s ease, border-color .45s;
+}
+.barra.solida {
+  height: var(--barra);
+  background: rgba(255, 246, 239, .88); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--linea); box-shadow: 0 10px 30px -24px rgba(122, 51, 70, .5);
+}
+.barra__marca { display: flex; align-items: center; height: 100%; padding-block: 8px; text-decoration: none; flex: none; }
+.barra__logo { height: 100%; width: auto; }
+.barra__actual {
+  flex: 1; min-width: 0; text-align: right; opacity: 0; transition: opacity .45s;
+  font: italic 500 1.08rem/1 var(--f-editorial); color: var(--vino-suave); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.barra.solida .barra__actual { opacity: 1; }
+.barra:not(.solida) .progreso { opacity: 0; }
+.progreso { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: transparent; }
+.progreso span { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, var(--rosa-antiguo), var(--dorado)); transform-origin: 0 50%; transform: scaleX(0); }
+
+/* Índice del recorrido (menú) */
+.indice { border: 0; padding: 0; margin: 0; max-width: none; max-height: none; width: 100%; height: 100%; background: transparent; }
+.indice::backdrop { background: rgba(74, 51, 43, .35); backdrop-filter: blur(3px); }
+.indice__panel {
+  position: absolute; top: 0; right: 0; width: min(380px, 100%); height: 100%; overflow-y: auto;
+  background: var(--papel); padding: 24px 24px 32px; box-shadow: -20px 0 60px -30px rgba(74,51,43,.5);
+}
+.indice[open] .indice__panel { animation: deslizar .5s var(--suave); }
+@keyframes deslizar { from { transform: translateX(30px); opacity: 0; } }
+.indice h2 { font-size: 1.6rem; margin: 18px 0 18px; }
+.indice ol { list-style: none; padding: 0; margin: 0; counter-reset: paso; }
+.indice li { counter-increment: paso; }
+.indice a {
+  display: flex; align-items: baseline; gap: 14px; padding: 13px 8px; text-decoration: none; color: var(--marron-oscuro);
+  border-bottom: 1px solid var(--linea); border-radius: 0;
+}
+.indice a::before { content: counter(paso, decimal-leading-zero); font: italic 500 .95rem/1 var(--f-editorial); color: var(--dorado-oscuro); min-width: 24px; }
+.indice a[aria-current="true"] { color: var(--vino); font-weight: 500; }
+.indice a:hover { background: rgba(244, 214, 222, .4); }
+
+/* Puntos de navegación lateral (pantallas grandes) */
+.puntos { display: none; }

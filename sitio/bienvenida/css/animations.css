@@ -1,0 +1,32 @@
+/* Lenguaje de movimiento: aparición progresiva, opacidad y movimiento vertical mínimo */
+.aparecer { opacity: 0; transform: translateY(18px); transition: opacity var(--t-larga) var(--suave), transform var(--t-larga) var(--suave); }
+.aparecer.visible { opacity: 1; transform: none; }
+.aparecer[data-retraso="1"] { transition-delay: .15s; }
+.aparecer[data-retraso="2"] { transition-delay: .3s; }
+.aparecer[data-retraso="3"] { transition-delay: .45s; }
+
+@keyframes aparecerSuave { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes flotar { 50% { transform: translate(-6px, -10px) rotate(-5deg); } }
+@keyframes aletear { from { transform: perspective(300px) rotateY(0deg); } to { transform: perspective(300px) rotateY(60deg); } }
+
+/* Entrada cinematográfica de la puerta */
+.cargada .puerta__luz { animation: luzPuerta 3.2s .4s var(--suave) forwards; }
+@keyframes luzPuerta { to { opacity: .85; } }
+.cargada .puerta__img { animation: acercar 9s var(--suave) both; }
+@keyframes acercar { from { transform: scale(1.06); } to { transform: scale(1); } }
+
+/* Al comenzar: la cámara avanza hacia la luz de la puerta */
+.entrando .puerta__img { animation: cruzar 1.6s cubic-bezier(.6,0,.2,1) forwards; }
+@keyframes cruzar { to { transform: scale(1.9); filter: brightness(1.2); } }
+.entrando .puerta__luz { animation: none; opacity: 1; transition: opacity 1.2s; }
+.puerta__velo.activo { animation: velo 2.4s ease forwards; }
+@keyframes velo { 0% { opacity: 0; } 45% { opacity: 1; } 100% { opacity: 0; } }
+
+/* Movimiento reducido: todo el contenido visible sin desplazamientos */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  .aparecer { opacity: 1; transform: none; }
+  .mariposas, .tarjeta-vista__mariposa, .puerta__velo { display: none; }
+  .cargada .puerta__luz { opacity: .85; }
+}

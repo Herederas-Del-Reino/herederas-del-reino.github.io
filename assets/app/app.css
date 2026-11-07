@@ -1,0 +1,121 @@
+/* =====================================================================
+   Capa de app de Herederas del Reino
+   Solo agrega piezas nuevas (barra inferior, avisos, invitación).
+   La barra y los ajustes de espacio aparecen únicamente en la app
+   instalada (html.es-app); el sitio web se ve igual que siempre.
+   ===================================================================== */
+:root {
+  --hr-marfil: #FFF6EF;
+  --hr-rosa-empolvado: #F4D6DE;
+  --hr-rosa-antiguo: #E8B4C2;
+  --hr-durazno: #F6D3C2;
+  --hr-dorado: #D4AF37;
+  --hr-dorado-suave: rgba(212, 175, 55, .38);
+  --hr-vino: #7A3346;
+  --hr-marron: #8A6A62;
+  --hr-barra: 64px;
+  --hr-abajo: env(safe-area-inset-bottom, 0px);
+  --hr-letra: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* ---------- Barra inferior ---------- */
+.hr-barra-app {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 120;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  height: calc(var(--hr-barra) + var(--hr-abajo));
+  padding: 0 max(8px, env(safe-area-inset-right)) var(--hr-abajo) max(8px, env(safe-area-inset-left));
+  background: rgba(255, 246, 239, .93);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2); backdrop-filter: blur(16px) saturate(1.2);
+  border-top: 1px solid var(--hr-dorado-suave);
+  box-shadow: 0 -10px 28px -20px rgba(122, 51, 70, .55);
+  font-family: var(--hr-letra);
+}
+.hr-barra-app a {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  min-height: 48px; color: var(--hr-marron); text-decoration: none;
+  font-size: .7rem; font-weight: 500; letter-spacing: .03em;
+  -webkit-tap-highlight-color: transparent; transition: color .25s ease;
+}
+.hr-barra-app svg { width: 25px; height: 25px; transition: transform .3s ease; }
+.hr-barra-app a::before {
+  content: ""; position: absolute; top: 0; left: 50%; width: 28px; height: 3px; border-radius: 0 0 4px 4px;
+  background: linear-gradient(90deg, #E9CF7A, var(--hr-dorado)); transform: translateX(-50%) scaleX(0);
+  transition: transform .3s ease;
+}
+.hr-barra-app a[aria-current="page"] { color: var(--hr-vino); font-weight: 600; }
+.hr-barra-app a[aria-current="page"]::before { transform: translateX(-50%) scaleX(1); }
+.hr-barra-app a[aria-current="page"] svg { transform: translateY(-1px); fill: rgba(232, 180, 194, .35); }
+.hr-barra-app a:active svg { transform: scale(.9); }
+.hr-barra-app a:focus-visible { outline: 2px solid var(--hr-vino); outline-offset: -6px; border-radius: 14px; }
+/* Tableta y escritorio (app instalada): barra flotante centrada */
+@media (min-width: 900px) {
+  .hr-barra-app {
+    left: 50%; right: auto; bottom: calc(14px + var(--hr-abajo)); width: 460px; height: var(--hr-barra);
+    padding: 0 10px; transform: translateX(-50%);
+    border: 1px solid var(--hr-dorado-suave); border-radius: 22px;
+    box-shadow: 0 18px 40px -22px rgba(122, 51, 70, .6);
+  }
+  html.es-app .hr-aviso-app { bottom: calc(var(--hr-barra) + 28px); }
+}
+
+/* Espacio para la barra en cada página de la app */
+html.es-app body { padding-bottom: calc(var(--hr-barra) + var(--hr-abajo)); }
+html.es-app { scroll-padding-bottom: calc(var(--hr-barra) + var(--hr-abajo)); }
+/* Que la app nunca se mueva de lado (las mariposas y la luz del inicio salen unos píxeles del borde) */
+html.es-app, html.es-app body { overflow-x: clip; }
+/* Portal de bienvenida: el botón de música sube por encima de la barra */
+html.es-app .musica { bottom: calc(var(--hr-barra) + var(--hr-abajo) + 12px); }
+
+/* ---------- Avisos (versión nueva / sin conexión) ---------- */
+.hr-aviso-app {
+  position: fixed; left: 50%; z-index: 130; bottom: calc(16px + var(--hr-abajo));
+  display: flex; align-items: center; gap: 12px; width: max-content; max-width: calc(100% - 28px);
+  padding: 10px 12px 10px 16px; border-radius: 16px;
+  background: rgba(255, 251, 247, .97); color: var(--hr-vino);
+  border: 1px solid var(--hr-dorado-suave); box-shadow: 0 14px 34px -16px rgba(122, 51, 70, .55);
+  font: 500 .88rem/1.35 var(--hr-letra);
+  opacity: 0; transform: translate(-50%, 12px); transition: opacity .35s ease, transform .35s ease;
+}
+html.es-app .hr-aviso-app { bottom: calc(var(--hr-barra) + var(--hr-abajo) + 12px); }
+.hr-aviso-app.visible { opacity: 1; transform: translate(-50%, 0); }
+.hr-aviso-app svg { width: 20px; height: 20px; flex: none; }
+.hr-aviso-app button {
+  flex: none; min-height: 40px; padding: 8px 16px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--hr-vino); color: #fff; font: 600 .85rem var(--hr-letra);
+}
+.hr-aviso-app button:disabled { opacity: .7; cursor: default; }
+
+/* ---------- Invitación a instalar ---------- */
+.hr-invitacion {
+  position: fixed; z-index: 60; left: 12px; right: 12px; bottom: calc(12px + var(--hr-abajo));
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
+  padding: 14px 12px 14px 14px; border-radius: 22px;
+  background: linear-gradient(135deg, rgba(255, 251, 247, .98), rgba(252, 239, 234, .98));
+  border: 1px solid var(--hr-dorado-suave); box-shadow: 0 22px 48px -22px rgba(122, 51, 70, .6);
+  color: #5B4146; font-family: var(--hr-letra);
+  opacity: 0; transform: translateY(18px); transition: opacity .4s ease, transform .4s ease;
+}
+.hr-invitacion.visible { opacity: 1; transform: none; }
+.hr-invitacion img { width: 52px; height: 52px; border-radius: 14px; box-shadow: 0 6px 16px -8px rgba(122, 51, 70, .55); }
+.hr-invitacion strong { display: block; color: var(--hr-vino); font: 600 1rem/1.25 'Playfair Display', Georgia, serif; }
+.hr-invitacion p { margin: 3px 0 0; font-size: .84rem; line-height: 1.4; }
+.hr-invitacion b { color: var(--hr-vino); font-weight: 600; }
+.hr-icono-texto svg { width: 17px; height: 17px; vertical-align: -3px; color: #2F7BF6; }
+.hr-invitacion__instalar {
+  grid-column: 2 / 3; justify-self: start; min-height: 42px; padding: 9px 20px; border: 0; border-radius: 999px; cursor: pointer;
+  background: var(--hr-vino); color: #fff; font: 600 .88rem var(--hr-letra);
+  box-shadow: 0 10px 22px -12px rgba(122, 51, 70, .8);
+}
+.hr-invitacion__cerrar {
+  grid-column: 3; grid-row: 1; align-self: start; width: 40px; height: 40px; margin: -6px -4px 0 0;
+  display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: var(--hr-marron); cursor: pointer;
+}
+.hr-invitacion__cerrar svg { width: 20px; height: 20px; }
+.hr-invitacion__instalar:focus-visible, .hr-invitacion__cerrar:focus-visible, .hr-aviso-app button:focus-visible { outline: 2px solid var(--hr-vino); outline-offset: 3px; }
+@media (min-width: 700px) {
+  .hr-invitacion { left: auto; right: 20px; bottom: 20px; width: 400px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hr-barra-app a, .hr-barra-app svg, .hr-barra-app a::before, .hr-aviso-app, .hr-invitacion { transition: none; }
+}

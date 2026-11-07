@@ -1,0 +1,54 @@
+/* Tokens de diseño — Herederas del Reino */
+:root {
+  /* Paleta oficial */
+  --marfil: #FFF6EF;
+  --rosa-empolvado: #F4D6DE;
+  --rosa-antiguo: #E8B4C2;
+  --durazno: #F3C7B5;
+  --dorado: #D4AF37;
+  --beige: #E7DCC6;
+  --marron: #6B4B3E;
+
+  /* Variaciones de luminosidad (sombras y profundidad) */
+  --marron-oscuro: #4A332B;
+  --marron-suave: #8A6B5E;
+  --vino: #7A3346;              /* títulos y botones del sitio principal */
+  --vino-logo: #5A1C29;         /* color del logotipo oficial */
+  --malva: #C98E9C;             /* placa del logotipo (sitio principal) */
+  --rosa-claro: #FCEFEA;        /* fondos rosados del sitio principal */
+  --blanco-vidrio: rgba(255, 250, 246, .72);
+  --vino-suave: #9C5466;
+  --dorado-oscuro: #9E7E1E;
+  --papel: #FFFBF7;
+  --linea: rgba(107, 75, 62, .14);
+  --linea-dorada: rgba(212, 175, 55, .45);
+
+  /* Tipografía */
+  --f-titulo: 'Playfair Display', Georgia, serif;
+  --f-editorial: 'Cormorant Garamond', Georgia, serif;
+  --f-texto: 'DM Sans', system-ui, sans-serif;
+
+  /* Escala */
+  --radio: 22px;
+  --radio-l: 34px;
+  --sombra: 0 24px 60px -24px rgba(122, 51, 70, .35);      /* mismas sombras del sitio principal */
+  --sombra-suave: 0 10px 30px -12px rgba(107, 75, 62, .22);
+  --ancho: 1120px;
+  --lectura: 680px;
+  --gutter: clamp(16px, 5vw, 40px);
+  --barra: 60px;
+  --barra-alta: 78px;
+
+  /* Sistema de espaciado (móvil → escritorio) */
+  --esp-seccion: clamp(48px, 6.5vw, 84px);   /* padding vertical de cada momento */
+  --esp-titulo: clamp(12px, 1.6vw, 20px);    /* título → descripción */
+  --esp-contenido: clamp(22px, 3vw, 36px);   /* cabecera → contenido / imagen */
+  --esp-bloque: clamp(14px, 2.2vw, 28px);    /* componentes relacionados */
+  --esp-columnas: clamp(28px, 5vw, 64px);    /* separación entre columnas */
+
+  /* Movimiento */
+  --suave: cubic-bezier(.22, .7, .2, 1);
+  --t-corta: 300ms;
+  --t-media: 700ms;
+  --t-larga: 1200ms;
+}

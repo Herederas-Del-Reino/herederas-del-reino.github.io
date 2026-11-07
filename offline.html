@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sin conexión · Herederas del Reino</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFF6EF">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/assets/app/app.css?v=1">
+<script src="/assets/app/app.js?v=1"></script>
+<style>
+  body { margin: 0; min-height: 100svh; display: grid; place-items: center; padding: 28px 22px; box-sizing: border-box;
+    background: radial-gradient(circle at 50% 30%, #FFFBF7, #FFF6EF 55%, #FBEAE6); color: #5B4146;
+    font-family: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center; }
+  main { max-width: 420px; }
+  img { width: min(260px, 70vw); height: auto; }
+  h1 { margin: 26px 0 10px; color: #7A3346; font: 600 1.6rem/1.2 'Playfair Display', Georgia, serif; }
+  p { margin: 0 0 12px; line-height: 1.6; }
+  .versiculo { margin-top: 20px; color: #7A3346; font: italic 1.08rem/1.5 'Cormorant Garamond', Georgia, serif; }
+  button { margin-top: 18px; min-height: 46px; padding: 10px 26px; border: 0; border-radius: 999px; cursor: pointer;
+    background: #7A3346; color: #fff; font: 600 .95rem 'DM Sans', system-ui, sans-serif; box-shadow: 0 12px 24px -14px rgba(122,51,70,.85); }
+  button:focus-visible { outline: 2px solid #7A3346; outline-offset: 3px; }
+</style>
+</head>
+<body>
+<main>
+  <img src="/assets/img/logo-oficial.webp" alt="Herederas del Reino" width="516" height="274">
+  <h1>Estás sin conexión</h1>
+  <p>Esta página aún no está guardada en tu celular. Cuando vuelva el internet, aquí estaremos.</p>
+  <p>Las páginas que ya visitaste siguen disponibles desde la barra de abajo.</p>
+  <p class="versiculo">«Jehová es mi pastor; nada me faltará.»<br>Salmos 23:1 (RVR1960)</p>
+  <button type="button" id="reintentar">Intentar de nuevo</button>
+</main>
+<script src="/assets/app/offline.js"></script>
+</body>
+</html>
