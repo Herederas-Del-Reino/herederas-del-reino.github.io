@@ -61,8 +61,8 @@
 /* Espacio para la barra en cada página de la app */
 html.es-app body { padding-bottom: calc(var(--hr-barra) + var(--hr-abajo)); }
 html.es-app { scroll-padding-bottom: calc(var(--hr-barra) + var(--hr-abajo)); }
-/* Que la app nunca se mueva de lado (las mariposas y la luz del inicio salen unos píxeles del borde) */
-html.es-app, html.es-app body { overflow-x: clip; }
+/* Que la página nunca se mueva de lado (las mariposas y la luz del inicio salen unos píxeles del borde) */
+html, body { overflow-x: clip; }
 /* Portal de bienvenida: el botón de música sube por encima de la barra */
 html.es-app .musica { bottom: calc(var(--hr-barra) + var(--hr-abajo) + 12px); }
 
