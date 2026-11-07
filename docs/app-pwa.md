@@ -57,7 +57,7 @@ Los envíos (Google Forms), la hoja del Muro de oración, la canción, el portal
    - sube `VERSION` en `sw.js` (hoy `hr-app-v2`; la siguiente sería `hr-app-v3`);
    - sube el `?v=` de `app.css` y `app.js` (hoy `?v=2`), tanto en las páginas como en la lista `ESENCIALES` de `sw.js` y en `herramientas/sincronizar-bienvenida.mjs`.
 
-   Así, quien tenga la app instalada verá «Hay una versión nueva de la app · Actualizar».
+   Así, quien tenga la app instalada verá «Hay una versión nueva de la app · Actualizar». En el navegador no aparece ningún aviso: la versión nueva se aplica sola en la siguiente página.
 
 ## Actualizar la Bienvenida dentro de la app
 

@@ -97,6 +97,9 @@
   /* ---------- Service worker y actualizaciones ---------- */
   var actualizando = false;
   function avisarVersionNueva(trabajador) {
+    // En el navegador no se pregunta nada: la versión nueva se activa sola
+    // y se verá en la próxima página. El aviso solo existe en la app instalada.
+    if (!enApp) { trabajador.postMessage('ACTUALIZAR'); return; }
     var a = mostrarAviso('<span>Hay una versión nueva de la app.</span><button type="button">Actualizar</button>', 'hr-aviso-version');
     a.querySelector('button').addEventListener('click', function () {
       actualizando = true; this.disabled = true; this.textContent = 'Actualizando…';
