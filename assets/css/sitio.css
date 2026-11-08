@@ -863,6 +863,8 @@ p { margin: 0; }
 }
 /* El menú de escritorio solo muestra «Consejería» cuando hay espacio; en el menú móvil siempre aparece */
 @media (min-width: 1021px) and (max-width: 1279px) { .nav__consejeria { display: none; } }
+/* «La Pastora» (módulo Conoce a nuestra Pastora): igual, solo se oculta donde el menú de escritorio no tiene espacio */
+@media (min-width: 1021px) and (max-width: 1099px) { .nav__pastora { display: none; } }
 @media (max-width: 420px) {
   .consejo { padding-inline: 18px; }
   .consejo__titulo { font-size: 1.5rem; }
