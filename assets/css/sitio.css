@@ -129,8 +129,8 @@ p { margin: 0; }
   border-radius: 999px; background: #F3D98B; color: #5A2534; font-size: .74rem; font-weight: 700;
 }
 .nav__contador[hidden] { display: none; }
-.nav__muro-movil { display: none; min-height: 42px; padding: 8px 16px; font-size: .92rem; margin-left: auto; }
-@media (max-width: 1020px) { .nav__muro-movil { display: inline-flex; } }
+.nav__muro-movil { display: none; min-height: 42px; padding: 8px 16px; font-size: .92rem; margin-left: auto; white-space: nowrap; }
+@media (max-width: 1299px) { .nav__muro-movil { display: inline-flex; } }
 
 /* Franja en vivo del inicio */
 .orando {
@@ -184,20 +184,24 @@ p { margin: 0; }
 }
 .nav.solida { background: rgba(255, 246, 239, .86); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--linea); }
 .nav__barra { display: flex; align-items: center; justify-content: space-between; gap: 20px; height: 72px; }
+.nav .nav__barra { width: min(100% - 2 * var(--gutter), 1320px); } /* el menú tiene un poco más de aire que el contenido */
 .marca { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--vino); }
 .marca img { width: 42px; height: auto; border-radius: 10px; box-shadow: 0 6px 14px -8px rgba(122,51,70,.6); }
 .marca span { font: 600 1.15rem/1 var(--f-marca); letter-spacing: .16em; text-transform: uppercase; }
 .marca small { display: block; font-size: .62rem; letter-spacing: .34em; margin-top: 4px; color: var(--vino-suave); }
-.nav__enlaces { display: flex; align-items: center; gap: clamp(12px, 1.6vw, 26px); list-style: none; margin: 0; padding: 0; }
+.nav__enlaces { display: flex; align-items: center; gap: clamp(16px, 1.45vw, 24px); list-style: none; margin: 0; padding: 0; }
 .nav__enlaces a {
-  color: var(--tinta); text-decoration: none; font-size: .9rem; letter-spacing: .03em; position: relative; padding: 6px 0;
+  color: var(--tinta); text-decoration: none; font-size: .88rem; letter-spacing: .025em; position: relative; padding: 6px 0;
+  white-space: nowrap; transition: color .3s ease;
 }
+.nav__enlaces a:not(.boton):hover { color: var(--vino); }
+.nav__enlaces li:last-child { margin-left: clamp(4px, .6vw, 10px); } /* el Muro respira un poco más, sin apretar al resto */
 .nav__enlaces a::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--dorado);
   transform: scaleX(0); transition: transform .35s ease;
 }
 .nav__enlaces a:hover::after, .nav__enlaces a[aria-current="true"]::after { transform: scaleX(1); }
-.nav__enlaces .boton { min-height: 42px; padding: 8px 18px; color: #fff; font-size: .9rem; font-weight: 500; }
+.nav__enlaces .boton { min-height: 42px; padding: 8px 16px 8px 18px; gap: 8px; color: #fff; font-size: .88rem; font-weight: 500; }
 .nav__enlaces .boton::after { display: none; }
 .nav__menu {
   display: none; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--linea);
@@ -205,21 +209,37 @@ p { margin: 0; }
 }
 .nav__menu svg { width: 22px; height: 22px; }
 
-@media (max-width: 1020px) {
-  .nav__menu { display: grid; }
+@media (max-width: 1299px) {
+  .nav__menu { display: grid; flex: none; }
   .nav__enlaces {
-    position: fixed; inset: 72px 12px auto; flex-direction: column; align-items: stretch; gap: 0;
-    padding: 12px; border-radius: var(--radio);
-    background: rgba(255, 246, 239, .97); box-shadow: var(--sombra); backdrop-filter: blur(14px);
+    position: fixed; inset: 76px 12px auto auto; width: min(380px, 100% - 24px); flex-direction: column; align-items: stretch; gap: 0;
+    max-height: calc(100svh - 92px); overflow-y: auto; overscroll-behavior: contain;
+    padding: 10px; border-radius: var(--radio);
+    background: rgba(255, 249, 244, .98); box-shadow: var(--sombra), inset 0 0 0 1px rgba(212, 175, 55, .3); backdrop-filter: blur(14px);
     opacity: 0; transform: translateY(-10px); pointer-events: none; transition: opacity .3s, transform .3s;
   }
   .nav.abierta .nav__enlaces { opacity: 1; transform: none; pointer-events: auto; }
   .nav.abierta { background: rgba(255, 246, 239, .96); }
-  .nav__enlaces a { display: block; padding: 13px 14px; font-size: 1rem; border-radius: 12px; }
+  .nav__enlaces li + li:not(:last-child) { border-top: 1px solid rgba(212, 175, 55, .18); }
+  .nav__enlaces a { display: block; padding: 12px 14px; font-size: 1rem; letter-spacing: .02em; border-radius: 12px; }
   .nav__enlaces a::after { display: none; }
   .nav__enlaces a:hover { background: var(--rosa-empolvado); }
-  .nav__enlaces li:last-child { padding-top: 8px; }
-  .nav__enlaces .boton { width: 100%; min-height: 48px; }
+  .nav__enlaces li:last-child { padding-top: 10px; margin-left: 0; }
+  .nav__enlaces .boton { display: flex; width: 100%; min-height: 48px; }
+}
+@media (max-width: 440px) {
+  .nav__barra { gap: 10px; }
+  .marca { gap: 9px; min-width: 0; }
+  .marca span { font-size: 1rem; letter-spacing: .1em; }
+  .marca small { letter-spacing: .26em; }
+  .nav__muro-movil { padding: 8px 12px; gap: 6px; }
+  .nav__menu { width: 44px; height: 44px; }
+}
+@media (max-width: 374px) {
+  .marca img { width: 36px; }
+  .marca span { font-size: .9rem; letter-spacing: .07em; }
+  .marca small { font-size: .56rem; letter-spacing: .2em; }
+  .nav__muro-movil svg { display: none; }
 }
 
 /* =====================================================================
@@ -861,10 +881,7 @@ p { margin: 0; }
   .hero { background: var(--marfil); }
   .hero__fondo { bottom: auto; height: calc(max(92svh, 680px) - 64px); }
 }
-/* El menú de escritorio solo muestra «Consejería» cuando hay espacio; en el menú móvil siempre aparece */
-@media (min-width: 1021px) and (max-width: 1279px) { .nav__consejeria { display: none; } }
-/* «La Pastora» (módulo Conoce a nuestra Pastora): igual, solo se oculta donde el menú de escritorio no tiene espacio */
-@media (min-width: 1021px) and (max-width: 1099px) { .nav__pastora { display: none; } }
+/* El menú de escritorio (desde 1300 px) muestra todas las opciones en una sola línea; por debajo se usa el menú desplegable */
 @media (max-width: 420px) {
   .consejo { padding-inline: 18px; }
   .consejo__titulo { font-size: 1.5rem; }
