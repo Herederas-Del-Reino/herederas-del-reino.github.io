@@ -45,14 +45,16 @@ window.HR_CONFIG = {
     palabraConfidencial: "confidencial"
   },
 
-  /* ---------- Encuentros (hora de Colombia, UTC-5) ---------- */
+  /* ---------- Encuentros (hora de España peninsular) ----------
+     Las horas se escriben en hora de España; el sitio las convierte sola a cada país
+     y aplica el horario de verano. diasSemana: 0 = domingo … 6 = sábado. */
   encuentros: [
     {
-      id: "devocional",
-      titulo: "Devocional de Madrugada",
-      descripcion: "Comenzamos el día en la Presencia de Dios.",
-      dias: "Martes", diasSemana: [2],
-      hora: "05:00",
+      id: "berea",
+      titulo: "Berea",
+      descripcion: "Juntas en el estudio de la Palabra.",
+      dias: "Lunes y Viernes", diasSemana: [1, 5],
+      hora: "20:00",
       icono: "biblia"
     },
     {
@@ -64,15 +66,29 @@ window.HR_CONFIG = {
       icono: "amigas"
     },
     {
-      id: "salmos",
-      titulo: "Salmos",
-      descripcion: "Juntas en adoración a través de la Palabra.",
-      dias: "Viernes", diasSemana: [5],
-      hora: "20:00",
-      icono: "corona"
+      id: "devocional",
+      titulo: "Devocional de Madrugada",
+      descripcion: "Comenzamos el día en la Presencia de Dios.",
+      dias: "Martes", diasSemana: [2],
+      hora: "05:00",
+      icono: "amanecer"
     }
   ],
-  zonaHorariaBase: "America/Bogota",
+  zonaHorariaBase: "Europe/Madrid",
+  nombreZonaBase: "Hora España",
+  // Países de la tabla «Horarios internacionales» (zonas IANA; el horario de verano se calcula solo)
+  paises: [
+    { nombre: "España", zona: "Europe/Madrid", bandera: "b-esp" },
+    { nombre: "Colombia", zona: "America/Bogota", bandera: "b-col" },
+    { nombre: "Venezuela", zona: "America/Caracas", bandera: "b-ven" },
+    { nombre: "Argentina", zona: "America/Argentina/Buenos_Aires", bandera: "b-arg" },
+    { nombre: "México", zona: "America/Mexico_City", bandera: "b-mex" },
+    { nombre: "Perú", zona: "America/Lima", bandera: "b-per" },
+    { nombre: "Chile", zona: "America/Santiago", bandera: "b-chl" },
+    { nombre: "EE. UU. (Florida)", zona: "America/New_York", bandera: "b-usa" },
+    { nombre: "Ecuador", zona: "America/Guayaquil", bandera: "b-ecu" },
+    { nombre: "Brasil", zona: "America/Sao_Paulo", bandera: "b-bra" }
+  ],
 
   /* ---------- Nuestros libros ----------
      Para agregar un libro: copia un bloque, cambia los datos y pon la portada

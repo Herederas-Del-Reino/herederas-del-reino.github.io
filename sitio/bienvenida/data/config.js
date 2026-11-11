@@ -11,13 +11,13 @@ export const CONFIG = {
   // Enlace oficial de Zoom para los encuentros (vacío = el botón no se muestra)
   zoom: "https://us06web.zoom.us/j/81703764228?pwd=gxlIYXBBEyshMWWFtRuOfMq1eVA2za.1",
 
-  // Encuentros confirmados (hora de Colombia). Cambia o agrega aquí.
+  // Encuentros confirmados (hora de España). Cambia o agrega aquí.
   encuentros: [
-    { nombre: "Devocional de Madrugada", detalle: "Comenzamos el día en la presencia de Dios.", cuando: "Martes · 5:00 a. m." },
+    { nombre: "Berea", detalle: "Juntas en el estudio de la Palabra.", cuando: "Lunes y Viernes · 8:00 p. m." },
     { nombre: "Entre Amigas", detalle: "Un espacio para compartir, crecer y apoyarnos.", cuando: "Miércoles · 6:00 p. m." },
-    { nombre: "Salmos", detalle: "Juntas en adoración a través de la Palabra.", cuando: "Viernes · 8:00 p. m." },
+    { nombre: "Devocional de Madrugada", detalle: "Comenzamos el día en la presencia de Dios.", cuando: "Martes · 5:00 a. m." },
   ],
-  zonaHoraria: "Hora de Colombia",
+  zonaHoraria: "Hora de España",
 
   // Pastora: deja "mensaje" vacío hasta tener un mensaje de bienvenida aprobado por ella.
   pastora: {

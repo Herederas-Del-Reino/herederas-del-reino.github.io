@@ -896,3 +896,36 @@ p { margin: 0; }
   .revelar { opacity: 1; transform: none; }
   .mariposas { display: none; }
 }
+
+
+/* ---------- Horarios internacionales (tabla generada desde config.js) ---------- */
+.horarios-int { margin-top: 40px; padding: clamp(20px, 3vw, 32px); border-radius: var(--radio-l); background: rgba(255,255,255,.55); border: 1px solid var(--linea); box-shadow: var(--sombra); }
+.horarios-int__titulo { display: flex; align-items: center; gap: 10px; justify-content: center; font-size: clamp(1.35rem, 2.6vw, 1.75rem); margin-bottom: 18px; text-align: center; }
+.horarios-int__titulo svg { width: 24px; height: 24px; flex: none; }
+.horarios-int__tabla { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 14px; }
+.horarios-tabla { width: 100%; min-width: 520px; border-collapse: collapse; font-size: .95rem; background: #fffaf8; }
+.horarios-tabla thead th { background: var(--vino); color: #fff; font: 600 1rem/1.2 var(--f-titulo); padding: 12px 10px; text-align: center; }
+.horarios-tabla thead th:first-child { text-align: left; padding-left: 16px; }
+.horarios-tabla thead small { display: block; font-size: .74rem; font-weight: 400; opacity: .85; margin-top: 2px; }
+.horarios-tabla tbody th { text-align: left; font-weight: 600; color: var(--tinta); padding: 10px 10px 10px 16px; white-space: nowrap; }
+.horarios-tabla tbody th .bandera { width: 24px; height: 16px; vertical-align: -3px; margin-right: 10px; border-radius: 3px; }
+.horarios-tabla tbody th em { margin-left: 8px; font-style: normal; font-size: .68rem; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--vino-suave); padding: 2px 8px; border-radius: 999px; }
+.horarios-tabla td { text-align: center; padding: 10px; color: var(--vino); font-weight: 600; white-space: nowrap; }
+.horarios-tabla td small { display: block; font-weight: 400; font-size: .74rem; color: var(--texto-suave); }
+.horarios-tabla tbody tr + tr > * { border-top: 1px solid var(--linea); }
+.horarios-tabla tbody tr:nth-child(even) { background: rgba(244,214,222,.25); }
+.horarios-tabla tr.es-tuya { background: rgba(212,175,55,.16) !important; }
+.horarios-int__nota { text-align: center; margin-top: 14px; font-size: .84rem; color: var(--texto-suave); }
+
+@media (max-width: 560px) {
+  .horarios-int { padding: 18px 10px; }
+  .horarios-tabla { min-width: 0; font-size: .8rem; }
+  .horarios-tabla thead th { font-size: .8rem; padding: 10px 4px; }
+  .horarios-tabla thead th:first-child { padding-left: 8px; }
+  .horarios-tabla thead small { font-size: .62rem; }
+  .horarios-tabla tbody th { white-space: normal; padding: 8px 4px 8px 8px; font-size: .78rem; line-height: 1.25; }
+  .horarios-tabla tbody th .bandera { width: 18px; height: 12px; margin-right: 6px; vertical-align: -2px; }
+  .horarios-tabla tbody th em { display: table; margin: 4px 0 0; font-size: .56rem; padding: 1px 6px; }
+  .horarios-tabla td { padding: 8px 2px; white-space: nowrap; font-size: .74rem; }
+  .horarios-tabla td small { font-size: .64rem; }
+}

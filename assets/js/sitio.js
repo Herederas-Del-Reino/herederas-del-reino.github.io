@@ -120,32 +120,51 @@
   $$('[data-mariposas]').forEach(crearMariposas);
 
   /* =====================================================================
-     ENCUENTROS — horarios en Colombia, España, Argentina y hora local
+     ENCUENTROS — horas oficiales en España (C.zonaHorariaBase). Cada país se
+     calcula con su zona IANA, así el horario de verano se aplica solo.
      ===================================================================== */
-  const ICONOS_ENCUENTRO = { biblia: 'i-biblia', amigas: 'i-amigas', corona: 'i-corona' };
-  const OFFSET_BOGOTA = -5; // Colombia no tiene horario de verano
-  const zonaUsuaria = Intl.DateTimeFormat().resolvedOptions().timeZone || C.zonaHorariaBase;
+  const ICONOS_ENCUENTRO = { biblia: 'i-biblia', amigas: 'i-amigas', corona: 'i-corona', amanecer: 'i-amanecer' };
+  const ZONA_BASE = C.zonaHorariaBase || 'Europe/Madrid';
+  const zonaUsuaria = Intl.DateTimeFormat().resolvedOptions().timeZone || ZONA_BASE;
+  const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  const WD = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
 
+  function partes(instante, zona) {
+    const p = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+      timeZone: zona, hourCycle: 'h23', weekday: 'short', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit',
+    }).formatToParts(instante).map((x) => [x.type, x.value]));
+    return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, min: +p.minute, wd: WD[p.weekday] };
+  }
+  function desfaseZona(zona, instante) {
+    const p = partes(instante, zona);
+    return Date.UTC(p.y, p.m - 1, p.d, p.h, p.min) - Math.floor(instante.getTime() / 60000) * 60000;
+  }
+  // Instante que corresponde a una hora de reloj en la zona indicada
+  function enZona(y, m, d, hh, mm, zona) {
+    const g = Date.UTC(y, m - 1, d, hh, mm);
+    const t1 = g - desfaseZona(zona, new Date(g));
+    return new Date(g - desfaseZona(zona, new Date(t1)));
+  }
   function proximaOcurrencia(e, ahora = new Date()) {
     const [hh, mm] = e.hora.split(':').map(Number);
-    const bog = new Date(ahora.getTime() + OFFSET_BOGOTA * 3600e3); // reloj de Bogotá en campos UTC
-    for (let d = 0; d < 8; d++) {
-      const dia = new Date(Date.UTC(bog.getUTCFullYear(), bog.getUTCMonth(), bog.getUTCDate() + d));
+    const b = partes(ahora, ZONA_BASE);
+    for (let d = -1; d < 9; d++) {
+      const dia = new Date(Date.UTC(b.y, b.m - 1, b.d + d));
       if (!e.diasSemana.includes(dia.getUTCDay())) continue;
-      const instante = new Date(Date.UTC(dia.getUTCFullYear(), dia.getUTCMonth(), dia.getUTCDate(), hh - OFFSET_BOGOTA, mm));
+      const instante = enZona(dia.getUTCFullYear(), dia.getUTCMonth() + 1, dia.getUTCDate(), hh, mm, ZONA_BASE);
       if (instante.getTime() + 60 * 60e3 > ahora.getTime()) return instante; // en curso cuenta hasta 1 h
     }
     return null;
   }
   function horaEn(instante, zona) {
     return new Intl.DateTimeFormat('es-CO', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: zona }).format(instante)
-      .replace(/ /g, ' ');
+      .replace(/\s/g, ' ');
   }
   function fechaClave(instante, zona) {
     return new Intl.DateTimeFormat('en-CA', { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: zona }).format(instante);
   }
   function desfaseDia(instante, zona) {
-    const a = new Date(fechaClave(instante, zona)), b = new Date(fechaClave(instante, C.zonaHorariaBase));
+    const a = new Date(fechaClave(instante, zona)), b = new Date(fechaClave(instante, ZONA_BASE));
     const d = Math.round((a - b) / 864e5);
     return d > 0 ? ' (+1)' : d < 0 ? ' (−1)' : '';
   }
@@ -160,18 +179,20 @@
     return 'Próximo: ' + new Intl.DateTimeFormat('es-CO', { weekday: 'long', timeZone: zonaUsuaria }).format(instante);
   }
   function nombreZona(zona) {
-    return (zona.split('/').pop() || zona).replace(/_/g, ' ');
+    const p = (C.paises || []).find((x) => x.zona === zona);
+    return p ? p.nombre : (zona.split('/').pop() || zona).replace(/_/g, ' ');
   }
+  const PAISES_TARJETA = [['b-esp', 'ESP', 'Europe/Madrid'], ['b-col', 'COL', 'America/Bogota'], ['b-arg', 'ARG', 'America/Argentina/Buenos_Aires']];
 
   function pintarEncuentros(yaVisibles = false) {
     const lista = $('#lista-encuentros');
     lista.innerHTML = C.encuentros.map((e, i) => {
       const inst = proximaOcurrencia(e);
-      const base = horaEn(inst, C.zonaHorariaBase);
-      const enLocal = zonaUsuaria !== C.zonaHorariaBase && !['America/Bogota', 'America/Lima', 'America/Guayaquil'].includes(zonaUsuaria);
+      const base = horaEn(inst, ZONA_BASE);
+      const enLocal = zonaUsuaria !== ZONA_BASE;
       return `
       <article class="encuentro vidrio revelar${yaVisibles ? ' visible' : ''}" data-retraso="${Math.min(i, 3)}">
-        <div class="encuentro__icono">${icono(ICONOS_ENCUENTRO[e.icono])}</div>
+        <div class="encuentro__icono">${icono(ICONOS_ENCUENTRO[e.icono] || 'i-biblia')}</div>
         <div>
           <h3>${esc(e.titulo)}</h3>
           <p class="encuentro__desc">${esc(e.descripcion)}</p>
@@ -180,20 +201,39 @@
         <div class="encuentro__cuando">
           <p class="encuentro__dia">${icono('i-calendario').replace('<svg', '<svg width="20" height="20"')}${esc(e.dias)}</p>
           <p class="encuentro__hora">${base}</p>
-          <p class="encuentro__tuya">${enLocal ? `En tu hora (${esc(nombreZona(zonaUsuaria))}): <strong>${horaEn(inst, zonaUsuaria)}${desfaseDia(inst, zonaUsuaria)}</strong>` : 'Hora de Colombia'}</p>
+          <p class="encuentro__tuya">${enLocal ? `En tu hora (${esc(nombreZona(zonaUsuaria))}): <strong>${horaEn(inst, zonaUsuaria)}${desfaseDia(inst, zonaUsuaria)}</strong>` : esc(C.nombreZonaBase || 'Hora España')}</p>
         </div>
         <div class="encuentro__paises" aria-label="Horario por país">
-          <span><svg class="bandera" aria-hidden="true"><use href="#b-col"/></svg>COL: ${base}</span>
-          <span><svg class="bandera" aria-hidden="true"><use href="#b-esp"/></svg>ESP: ${horaEn(inst, 'Europe/Madrid')}${desfaseDia(inst, 'Europe/Madrid')}</span>
-          <span><svg class="bandera" aria-hidden="true"><use href="#b-arg"/></svg>ARG: ${horaEn(inst, 'America/Argentina/Buenos_Aires')}${desfaseDia(inst, 'America/Argentina/Buenos_Aires')}</span>
+          ${PAISES_TARJETA.map(([b, n, z]) => `<span><svg class="bandera" aria-hidden="true"><use href="#${b}"/></svg>${n}: ${horaEn(inst, z)}${desfaseDia(inst, z)}</span>`).join('')}
         </div>
       </article>`;
     }).join('');
     $$('.encuentro', lista).forEach(el => activarInclinacion(el, 3));
     observarRevelados(lista);
   }
+
+  // Tabla «Horarios internacionales» calculada para la semana en curso
+  function pintarTablaHorarios() {
+    const caja = $('#tabla-horarios');
+    if (!caja || !C.paises) return;
+    const inst = C.encuentros.map((e) => proximaOcurrencia(e));
+    const mayus = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+    caja.innerHTML = `<table class="horarios-tabla">
+      <caption class="sr">Horarios equivalentes de los encuentros en cada país</caption>
+      <thead><tr><th scope="col">País</th>${C.encuentros.map((e) => `<th scope="col">${esc(e.titulo)}<small>${esc(e.dias)}</small></th>`).join('')}</tr></thead>
+      <tbody>${C.paises.map((p) => `<tr${p.zona === zonaUsuaria ? ' class="es-tuya"' : ''}>
+        <th scope="row"><svg class="bandera" aria-hidden="true"><use href="#${p.bandera}"/></svg>${esc(p.nombre)}${p.zona === zonaUsuaria ? '<em>Tu país</em>' : ''}</th>
+        ${inst.map((t) => {
+          const dB = partes(t, ZONA_BASE).wd, dP = partes(t, p.zona).wd;
+          return `<td>${horaEn(t, p.zona)}${dB !== dP ? `<small>(${mayus(DIAS[dP])})</small>` : ''}</td>`;
+        }).join('')}
+      </tr>`).join('')}</tbody>
+    </table>`;
+  }
+
   pintarEncuentros();
-  setInterval(() => pintarEncuentros($('#lista-encuentros .visible') !== null), 60e3); // refresca "Hoy · en 2 h"
+  pintarTablaHorarios();
+  setInterval(() => { pintarEncuentros($('#lista-encuentros .visible') !== null); pintarTablaHorarios(); }, 60e3); // refresca "Hoy · en 2 h"
 
   /* =====================================================================
      JARDÍN DE ORACIÓN — cada petición es una flor con una pequeña corona
