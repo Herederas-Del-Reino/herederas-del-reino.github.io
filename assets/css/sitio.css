@@ -929,3 +929,46 @@ p { margin: 0; }
   .horarios-tabla td { padding: 8px 2px; white-space: nowrap; font-size: .74rem; }
   .horarios-tabla td small { font-size: .64rem; }
 }
+
+/* =====================================================================
+   WHATSAPP DE LA PASTORA (botón flotante del inicio)
+   ===================================================================== */
+.whatsapp-flotante {
+  position: fixed; z-index: 57; right: max(16px, env(safe-area-inset-right)); bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  display: block; border-radius: 50%; text-decoration: none; transition: transform .3s ease;
+}
+.whatsapp-flotante:hover { transform: translateY(-3px); }
+.whatsapp-flotante:focus-visible { outline: 3px solid var(--vino); outline-offset: 4px; }
+.whatsapp-flotante__icono {
+  position: relative; width: 60px; height: 60px; border-radius: 50%;
+  display: grid; place-items: center; color: #fff;
+  background: linear-gradient(145deg, #2EDB6E, #1DAA55);
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(212, 175, 55, .75), 0 16px 30px -10px rgba(122, 51, 70, .6);
+}
+.whatsapp-flotante__icono svg { width: 33px; height: 33px; }
+.whatsapp-flotante__icono::after {
+  content: ""; position: absolute; inset: -4px; border-radius: 50%;
+  border: 2px solid rgba(37, 211, 102, .55); animation: whatsapp-latido 2.6s ease-out infinite;
+}
+@keyframes whatsapp-latido { from { transform: scale(1); opacity: .9; } to { transform: scale(1.45); opacity: 0; } }
+/* Etiqueta: aparece al pasar el cursor o con el teclado (en el celular la lee el lector de pantalla) */
+.whatsapp-flotante__texto {
+  position: absolute; right: calc(100% + 14px); top: 50%; transform: translate(8px, -50%);
+  display: flex; flex-direction: column; padding: 8px 16px; border-radius: 14px; white-space: nowrap;
+  background: rgba(255, 249, 244, .97); border: 1px solid rgba(212, 175, 55, .55); box-shadow: var(--sombra-suave);
+  color: var(--vino); font: 600 .92rem/1.25 var(--f-texto);
+  opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease;
+}
+.whatsapp-flotante__texto small { font: 600 .64rem/1.3 var(--f-texto); letter-spacing: .18em; text-transform: uppercase; color: #1DAA55; }
+.whatsapp-flotante:hover .whatsapp-flotante__texto, .whatsapp-flotante:focus-visible .whatsapp-flotante__texto { opacity: 1; transform: translate(0, -50%); }
+@media (max-width: 700px) {
+  .whatsapp-flotante { right: max(14px, env(safe-area-inset-right)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .whatsapp-flotante__icono { width: 58px; height: 58px; }
+  .whatsapp-flotante__icono svg { width: 32px; height: 32px; }
+}
+/* En la app instalada: por encima de la barra inferior */
+html.es-app .whatsapp-flotante { bottom: calc(var(--hr-barra, 64px) + env(safe-area-inset-bottom, 0px) + 14px); }
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-flotante, .whatsapp-flotante__texto { transition: none; }
+  .whatsapp-flotante__icono::after { animation: none; }
+}

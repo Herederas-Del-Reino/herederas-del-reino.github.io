@@ -21,7 +21,7 @@ window.HR_CONFIG = {
   },
   // Número de WhatsApp con indicativo y sin espacios ni "+", p. ej. "573001234567".
   // Mientras esté vacío, el botón de WhatsApp no se muestra.
-  whatsapp: "",
+  whatsapp: "34656600768", // Pastora Jennyfer: +34 656 60 07 68
 
   /* ---------- Formulario y hoja de oración ---------- */
   formularioOracion: "https://docs.google.com/forms/d/1RDzBU8FyOKMrvH_dZsYgSBcgDusPadXHiQlIaFUqkN4/viewform",
