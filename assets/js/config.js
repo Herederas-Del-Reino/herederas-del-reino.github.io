@@ -96,6 +96,21 @@ window.HR_CONFIG = {
      Usa solo información confirmada del libro. */
   libros: [
     {
+      // destacado: se muestra primero, a lo ancho, con el detalle dorado de lanzamiento
+      destacado: true,
+      sello: "Nuevo lanzamiento · Preventa",
+      tipo: "Nuevo libro",
+      titulo: "¿Cómo reconstruirme?",
+      subtitulo: "Del dolor al propósito de Dios",
+      autora: "Jennyfer Vásquez de Amarales",
+      descripcion: "Proceso real, una fe verdadera y una mujer nueva. Ya está en preventa: reserva hoy tu ejemplar.",
+      portada: "assets/img/libros/como-reconstruirme.webp",
+      ancho: 440, alto: 691,
+      // Mientras no haya tienda, la reserva se hace por WhatsApp con la Pastora
+      enlace: "https://wa.me/34656600768?text=Hola%20Pastora%20Jennyfer%2C%20quiero%20reservar%20mi%20ejemplar%20de%20%C2%AB%C2%BFC%C3%B3mo%20reconstruirme%3F%C2%BB.",
+      boton: "Reserva tu ejemplar"
+    },
+    {
       tipo: "Libro",
       titulo: "Transformada por su Voz",
       subtitulo: "Del Quebranto al Propósito",

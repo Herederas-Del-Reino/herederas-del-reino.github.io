@@ -490,7 +490,8 @@
      ===================================================================== */
   const listaLibros = $('#libros-lista');
   listaLibros.innerHTML = (C.libros || []).map((l, i) => `
-    <article class="libro revelar" data-retraso="${i % 3}">
+    <article class="libro${l.destacado ? ' libro--destacado' : ''} revelar" data-retraso="${i % 3}">
+      ${l.sello ? `<span class="libro__sello">${esc(l.sello)}</span>` : ''}
       <a class="libro__portada" href="${esc(l.enlace)}" target="_blank" rel="noopener" aria-label="${esc(l.boton)}: ${esc(l.titulo)}">
         <span class="libro__3d">
           <img src="${esc(l.portada)}" alt="Portada de ${esc(l.titulo)}" width="${l.ancho}" height="${l.alto}" loading="lazy" decoding="async">
@@ -503,7 +504,7 @@
         ${l.subtitulo ? `<p class="libro__subtitulo">${esc(l.subtitulo)}</p>` : ''}
         ${l.autora ? `<p class="libro__autora">${esc(l.autora)}</p>` : ''}
         <p class="libro__descripcion">${esc(l.descripcion)}</p>
-        <a class="boton boton--muro" href="${esc(l.enlace)}" target="_blank" rel="noopener">${icono('i-biblia')}${esc(l.boton)}</a>
+        <a class="boton ${l.destacado ? 'boton--dorado libro__reservar' : 'boton--muro'}" href="${esc(l.enlace)}" target="_blank" rel="noopener">${icono(l.destacado ? 'i-whatsapp' : 'i-biblia')}${esc(l.boton)}</a>
       </div>
     </article>`).join('');
   $$('.libro__portada', listaLibros).forEach(el => activarInclinacion(el, 10));

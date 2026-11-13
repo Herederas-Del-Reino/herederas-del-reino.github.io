@@ -640,6 +640,44 @@ p { margin: 0; }
 .libro__subtitulo { margin-top: 6px; font: 500 1.08rem/1.3 var(--f-marca); color: var(--marron); letter-spacing: .02em; }
 .libro__autora { margin-top: 10px; font: 500 .78rem/1.3 var(--f-texto); letter-spacing: .2em; text-transform: uppercase; color: var(--vino-suave); }
 .libro__descripcion { margin: 14px 0 20px; color: var(--tinta); font-size: .98rem; }
+/* Libro destacado (nuevo lanzamiento): a lo ancho, con marco y detalles dorados */
+.libro--destacado {
+  position: relative; grid-column: 1 / -1; overflow: hidden;
+  grid-template-columns: auto minmax(0, 560px); justify-content: center; gap: clamp(28px, 5vw, 64px);
+  padding: clamp(40px, 5vw, 56px) clamp(24px, 4vw, 48px) clamp(28px, 4vw, 44px);
+  border: 2px solid transparent;
+  background:
+    linear-gradient(160deg, #FFFDF9, #FFF4EC 55%, #FBE6E4) padding-box,
+    linear-gradient(135deg, #F3D98B, #C79A3A 30%, #FFF1C9 50%, #B8862B 72%, #F3D98B) border-box;
+  box-shadow: 0 26px 60px -28px rgba(122, 51, 70, .55), 0 0 0 6px rgba(212, 175, 55, .1);
+}
+.libro--destacado::after {   /* destello dorado que cruza la tarjeta */
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 236, 179, .45) 50%, transparent 60%);
+  transform: translateX(-110%); animation: libro-destello 6s ease-in-out infinite;
+}
+@keyframes libro-destello { 0%, 55% { transform: translateX(-110%); } 85%, 100% { transform: translateX(110%); } }
+.libro__sello {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%); z-index: 2; white-space: nowrap;
+  padding: 7px 20px 8px; border-radius: 0 0 16px 16px;
+  background: linear-gradient(135deg, #B8862B, #E2C46A 45%, #F7E3A1 55%, #C79A3A);
+  color: #4A2A1E; font: 600 .7rem/1 var(--f-texto); letter-spacing: .26em; text-transform: uppercase;
+  box-shadow: 0 8px 18px -10px rgba(122, 51, 70, .6);
+}
+.libro--destacado .libro__3d { width: clamp(170px, 18vw, 230px); box-shadow: 2px 0 0 #EFE6DD, 4px 1px 0 #E5DACF, 6px 2px 0 #DCCFC3, 0 0 0 1px rgba(212,175,55,.5), 24px 30px 44px -16px rgba(74,51,43,.6); }
+.libro--destacado .libro__tipo { background: linear-gradient(135deg, #F7E3A1, #E2C46A); color: #5A2534; }
+.libro--destacado h3 {
+  font-size: clamp(2rem, 3.8vw, 2.9rem);
+  background: linear-gradient(135deg, #7A3346 10%, #9C4A5E 45%, #B8862B 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.libro--destacado .libro__subtitulo { font-size: 1.2rem; }
+.libro__reservar { font-weight: 600; box-shadow: 0 12px 26px -12px rgba(184, 134, 43, .9); }
+.libro__reservar svg { color: #4A2A1E; }
+@media (prefers-reduced-motion: reduce) { .libro--destacado::after { animation: none; display: none; } }
+@media (max-width: 620px) {
+  .libro--destacado { padding-top: 52px; }
+  .libro__sello { font-size: .62rem; letter-spacing: .18em; padding-inline: 14px; }
+}
 @media (max-width: 620px) {
   .libro { grid-template-columns: 1fr; text-align: center; justify-items: center; }
   .libro__3d { width: 170px; transform: rotateY(10deg); }
